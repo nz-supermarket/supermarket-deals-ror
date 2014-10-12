@@ -21,3 +21,7 @@ module SupermarketDealsRor
     # config.i18n.default_locale = :de
   end
 end
+
+config.generators do |g|
+  g.fixture_replacement :factory_girl, dir: "spec/factories"
+end
