@@ -40,6 +40,6 @@ Rails.application.configure do
   config.gem "rspec-rails", :lib => false, :version => ">=1.2.2"
   config.gem "webrat", :lib => false, :version => ">=0.4.3"
   config.gem "cucumber", :lib => false, :version => ">=0.2.2"
-  config.gem "thoughtbot-factory_girl", :lib => "factory_girl",  :version => ">=0.1.0"
+  config.gem "factory_girl", :lib => false, :version => ">=0.1.0"
   config.gem "pickle", :lib => false, :version => ">= 0.1.21"
 end
