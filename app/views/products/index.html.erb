@@ -1,0 +1,33 @@
+<h1>Listing products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Volume</th>
+      <th>Sku</th>
+      <th>Special</th>
+      <th>Normal</th>
+      <th>Diff</th>
+      <th>Aisle</th>
+      <th>Discount</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.volume %></td>
+        <td><%= product.sku %></td>
+        <td><%= number_to_currency(product.special, unit: 'NZ$' %></td>
+        <td><%= number_to_currency(product.normal, unit: 'NZ$' %></td>
+        <td><%= number_to_currency(product.diff, unit: 'NZ$' %></td>
+        <td><%= product.aisle %></td>
+        <td><%= number_to_percentage(product.discount, precision: 0) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

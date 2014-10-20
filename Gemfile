@@ -49,13 +49,15 @@ group :development, :test do
   gem 'spring', '1.1.3'
 
   # Test uses
-  gem 'cucumber', '1.3.17'
-  gem 'cucumber-rails', '1.4.2'
-  gem 'pickle', '0.4.11'
-  gem 'rspec-rails', '3.1.0'
-  gem 'webrat', '0.7.3'
-  gem 'factory_girl_rails', '4.4.1'
-  gem 'factory_girl_rspec', '2.1.0'
+  gem 'cucumber'
+  gem 'cucumber-rails', :require => false
+  gem 'pickle'
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'factory_girl', '~> 4.4.0'
+  gem 'factory_girl_rails'
+  gem 'factory_girl_rspec'
+  gem 'database_cleaner'
 
   # Automated testing with guard
   gem 'guard-cucumber', '1.4.1'
