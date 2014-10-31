@@ -3,14 +3,16 @@ class CreateProducts < ActiveRecord::Migration
     create_table :products do |t|
       t.string :name
       t.string :volume
-      t.integer :sku
-      t.decimal :special, precision: 6, scale: 2
-      t.decimal :normal, precision: 6, scale: 2
-      t.decimal :diff, precision: 6, scale: 2
+      t.integer :sku, null: false
+      t.decimal :special, precision: 8, scale: 3
+      t.decimal :normal, precision: 8, scale: 3
+      t.decimal :diff, precision: 8, scale: 3
       t.string :aisle
-      t.decimal :discount, precision: 5, scale: 2
+      t.decimal :discount, precision: 6, scale: 3
 
       t.timestamps
     end
+
+    add_index :products, :sku, unique: true
   end
 end
