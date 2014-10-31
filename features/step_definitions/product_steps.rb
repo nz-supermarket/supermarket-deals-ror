@@ -45,7 +45,6 @@ Then(/^products should have (\d+) item$/) do |count|
 end
 
 Then(/^I should have \[(.*?), (.*?)\]$/) do |key, value|
-    binding.pry
   if value.include? "NZ$" or value.include? '%'
     actual = Product.all.select{ |a| ('%.2f' % a[key.to_sym]) == value.gsub("NZ$",'').gsub("%",'') }.first[key.to_sym]
     actual = '%.2f' % actual
