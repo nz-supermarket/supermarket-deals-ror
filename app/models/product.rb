@@ -1,11 +1,22 @@
 class Product < ActiveRecord::Base
+  extend ActiveModel::Callbacks
 
-	# attr_accessor :name, :volume, :sku, :special, :normal, :diff, :aisle, :discount
+  after_create :set_diff
+  after_create :set_discount
 
-	def after_create 
-		@diff ||= (self.normal - self.special)
-		@discount ||= ((self.diff / self.normal) * 100)
-		self.save
-	end
+
+  private
+
+  def set_diff
+    binding.pry
+    self.diff = (self.normal - self.special)
+    self.save
+  end
+
+  def set_discount
+    binding.pry
+    self.discount = ((self.diff / self.normal) * 100)
+    self.save
+  end
 
 end
