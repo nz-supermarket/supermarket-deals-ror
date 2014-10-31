@@ -9,6 +9,10 @@ require 'pickle'
 require "#{Rails.root}/spec/factories"  
 require "#{Rails.root}/features/support/paths"  
 
+# Add this to load Capybara integration:
+require 'capybara/rspec'
+require 'capybara/rails'
+
 # Capybara defaults to CSS3 selectors rather than XPath.
 # If you'd prefer to use XPath, just uncomment this line and adjust any
 # selectors in your step definitions to use the XPath syntax.
