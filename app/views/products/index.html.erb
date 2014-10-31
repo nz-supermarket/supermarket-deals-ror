@@ -15,16 +15,16 @@
   </thead>
 
   <tbody>
-    <% @products.each do |product| %>
+    <% @products.each_with_index do |product, index| %>
       <tr>
-        <td><%= product.name %></td>
-        <td><%= product.volume %></td>
-        <td><%= product.sku %></td>
-        <td><%= number_to_currency(product.special, unit: 'NZ$' %></td>
-        <td><%= number_to_currency(product.normal, unit: 'NZ$' %></td>
-        <td><%= number_to_currency(product.diff, unit: 'NZ$' %></td>
-        <td><%= product.aisle %></td>
-        <td><%= number_to_percentage(product.discount, precision: 0) %></td>
+        <td id="name<%= index %>"><%= product.name %></td>
+        <td id="volume<%= index %>"><%= product.volume %></td>
+        <td id="sku<%= index %>"><%= product.sku %></td>
+        <td id="special<%= index %>"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
+        <td id="normal<%= index %>"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
+        <td id="diff<%= index %>"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
+        <td id="aisle<%= index %>"><%= product.aisle %></td>
+        <td id="discount<%= index %>"><%= number_to_percentage(product.discount, precision: 2) %></td>
       </tr>
     <% end %>
   </tbody>
