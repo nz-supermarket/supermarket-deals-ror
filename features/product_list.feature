@@ -24,8 +24,12 @@ Scenario: Multiple Products Existence
     | Seafood Bar Fish Fillets Tarakihi Skinned & Boned | per kg | 293285 | NZ$25.00 | NZ$29.99 | NZ$4.99 | Meat & Seafood, Fresh Fish |  16.64% |
   And products should have 3 item
 
- Scenario: Diff and Discount Calculation
-   Given product exists with name: "Milk", special: "2.99", normal: "4.99"
-   When I go to the home page
-   Then product's diff must be "NZ$2.00"
-   And product's discount must be "NZ$40.08"
+Scenario: Diff and Discount Calculation Automation
+  Given product exists with name: "Milk", special: "2.99", normal: "4.99"
+  When I go to the home page
+  Then product's diff must be "NZ$2.00"
+  And product's discount must be "40.08%"
+  And I should see "NZ$2.99"
+  And I should see "NZ$4.99"
+  And I should see "NZ$2.00"
+  And I should see "40.08%"
