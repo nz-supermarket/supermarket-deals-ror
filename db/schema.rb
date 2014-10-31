@@ -11,22 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141018063905) do
+ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "products", force: true do |t|
-    t.string   "name"
-    t.string   "volume"
-    t.integer  "sku"
-    t.decimal  "special",    precision: 6, scale: 2
-    t.decimal  "normal",     precision: 6, scale: 2
-    t.decimal  "diff",       precision: 6, scale: 2
-    t.string   "aisle"
-    t.decimal  "discount",   precision: 5, scale: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
 end
