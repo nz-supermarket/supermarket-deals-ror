@@ -18,3 +18,17 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+case @environment
+when 'production'
+  every :monday, :at => '5am' do
+    command "echo start fetching price"
+    rake "fetch_price"
+    command "echo finish fetching price"
+  end
+when 'development'
+  every :monday, :at => '5am' do
+    command "echo start fetching price"
+    rake "fetch_price"
+    command "echo finish fetching price"
+  end
+end
