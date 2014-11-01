@@ -82,4 +82,10 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+
+
+# Add this to load Capybara integration:
+require 'capybara/rspec'
+require 'capybara/rails'
+
 end

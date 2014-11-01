@@ -1,0 +1,17 @@
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+th .asc {
+  background-image: url(/images/up_arrow.gif);
+}
+
+th .desc {
+  background-image: url(/images/down_arrow.gif);
+}

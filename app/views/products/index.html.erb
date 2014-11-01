@@ -1,0 +1,35 @@
+<h1>Listing products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th><%= sortable "Index".downcase %></th>
+      <th><%= sortable "Name".downcase %></th>
+      <th><%= sortable "Volume".downcase %></th>
+      <th><%= sortable "Sku".downcase %></th>
+      <th><%= sortable "Special".downcase %></th>
+      <th><%= sortable "Normal".downcase %></th>
+      <th><%= sortable "Diff".downcase, "Difference" %></th>
+      <th><%= sortable "Aisle".downcase %></th>
+      <th><%= sortable "Discount".downcase %></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each_with_index do |product, index| %>
+      <tr>
+        <td id="index<%= index %>"><%= product.id %></td>
+        <td id="name<%= index %>"><%= product.name %></td>
+        <td id="volume<%= index %>"><%= product.volume %></td>
+        <td id="sku<%= index %>"><%= product.sku %></td>
+        <td id="special<%= index %>"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
+        <td id="normal<%= index %>"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
+        <td id="diff<%= index %>"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
+        <td id="aisle<%= index %>"><%= product.aisle %></td>
+        <td id="discount<%= index %>"><%= number_to_percentage(product.discount, precision: 2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
