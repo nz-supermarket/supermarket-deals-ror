@@ -4,6 +4,7 @@ class Product < ActiveRecord::Base
   after_create :set_diff
   after_create :set_discount
 
+  alias_attribute :index, :id
 
   private
 
