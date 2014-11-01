@@ -35,7 +35,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'unicorn'
 
 # Use whenever for automated cron jobs
-# gem 'whenever'
+gem 'whenever'
 
 group :development, :test do
   # debugger
