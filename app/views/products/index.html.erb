@@ -30,22 +30,6 @@
       </div>
     </thead>
 
-    <tbody>
-      <% @products.each do |product| %>
-        <div class="row">
-          <tr>
-            <!-- <td id="index<%#= index %>"><%= product.id %></td> -->
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.name %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.volume %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.sku %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.aisle %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_percentage(product.discount, precision: 2) %></td>
-          </tr>
-        </div>
-      <% end %>
     </tbody>
   </table>
 </div>
