@@ -1,35 +1,52 @@
-<h1>Listing products</h1>
+<div class="row"></div>
+<div class="row">
+  <h1>Cheapest Price for Supermarket Product<br/></h1>
+  <h2>Since <%= ((Time.now - Time.at(1414321201)).to_i / 604800).round %> Week Ago</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th><%= sortable "Index".downcase %></th>
-      <th><%= sortable "Name".downcase %></th>
-      <th><%= sortable "Volume".downcase %></th>
-      <th><%= sortable "Sku".downcase %></th>
-      <th><%= sortable "Special".downcase %></th>
-      <th><%= sortable "Normal".downcase %></th>
-      <th><%= sortable "Diff".downcase, "Difference" %></th>
-      <th><%= sortable "Aisle".downcase %></th>
-      <th><%= sortable "Discount".downcase %></th>
-    </tr>
-  </thead>
+  <h5>
+  <p>With this list, you should be able to gauge an item that you are purchasing at it's lowest price.<br/>
+  You can now sort the list by any column in ascending or descending order. <br/>
+  More improvements will be added in time. </p>
+  <p>In the discount column, if the price difference is more than 30% of it's original price, it will be highlighted in green, more than 50% with yellow.</p>
 
-  <tbody>
-    <% @products.each_with_index do |product, index| %>
-      <tr>
-        <td id="index<%= index %>"><%= product.id %></td>
-        <td id="name<%= index %>"><%= product.name %></td>
-        <td id="volume<%= index %>"><%= product.volume %></td>
-        <td id="sku<%= index %>"><%= product.sku %></td>
-        <td id="special<%= index %>"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
-        <td id="normal<%= index %>"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
-        <td id="diff<%= index %>"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
-        <td id="aisle<%= index %>"><%= product.aisle %></td>
-        <td id="discount<%= index %>"><%= number_to_percentage(product.discount, precision: 2) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <p>If you like this compilation, please donate to<br/>
+  bitcoin address: 1JuNraU9vZyFxVqmUbTMJFFFFvzj1SHC48<br/>
+  paypal address: daniel.ltw@gmail.com</p></h5>
 
+  <table>
+    <thead>
+      <div class="row">
+        <tr>
+          <!-- <th><%#= sortable "Index".downcase %></th> -->
+          <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= sortable "Name".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Volume".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Sku".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Special".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Normal".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Diff".downcase, "Difference" %></th>
+          <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= sortable "Aisle".downcase %></th>
+          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Discount".downcase %></th>
+        </tr>
+      </div>
+    </thead>
+
+    <tbody>
+      <% @products.each do |product| %>
+        <div class="row">
+          <tr>
+            <!-- <td id="index<%#= index %>"><%= product.id %></td> -->
+            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.name %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.volume %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.sku %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
+            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.aisle %></td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_percentage(product.discount, precision: 2) %></td>
+          </tr>
+        </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 <br>
