@@ -20,6 +20,10 @@ gem 'rails_12factor', group: :production
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
+# Pagination / Infinite Scrolling
+gem 'will_paginate', '~> 3.0.7'
+gem 'will_paginate-bootstrap', '~> 1.0.1'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
