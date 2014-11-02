@@ -30,7 +30,19 @@
       </div>
     </thead>
 
+    <tbody id="#product-list">
+      <div id="static-pagination">
+          <%= will_paginate %>
+      </div>
+      <div class="page-delimiter first-page" data-page="<%= params[:page] || 1 %>">
+      <%= render @products %>
     </tbody>
   </table>
+
+  <% if @products.next_page %>
+    <div id="infinite-scrolling">
+      <%= will_paginate %>
+    </div>
+  <% end %>
 </div>
 <br>
