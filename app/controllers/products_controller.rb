@@ -5,7 +5,8 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.order(sort_column + " " + sort_direction)
+    @counter = ((Time.now - Time.at(1414321201)).to_i / 604800).round
+    @products = Product.paginate(page: params[:page], per_page: 50).order(sort_column + " " + sort_direction)
   end
 
   # GET /products/1

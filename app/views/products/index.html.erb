@@ -1,7 +1,7 @@
 <div class="row"></div>
 <div class="row">
   <h1>Cheapest Price for Supermarket Product<br/></h1>
-  <h2>Since <%= ((Time.now - Time.at(1414321201)).to_i / 604800).round %> Week Ago</h2>
+  <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
 
   <h5>
   <p>With this list, you should be able to gauge an item that you are purchasing at it's lowest price.<br/>
@@ -30,23 +30,19 @@
       </div>
     </thead>
 
-    <tbody>
-      <% @products.each do |product| %>
-        <div class="row">
-          <tr>
-            <!-- <td id="index<%#= index %>"><%= product.id %></td> -->
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.name %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.volume %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= product.sku %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.special, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.normal, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_currency(product.diff, unit: 'NZ$', precision: 2) %></td>
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= product.aisle %></td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= number_to_percentage(product.discount, precision: 2) %></td>
-          </tr>
-        </div>
-      <% end %>
+    <tbody id="#product-list">
+      <div id="static-pagination">
+          <%= will_paginate %>
+      </div>
+      <div class="page-delimiter first-page" data-page="<%= params[:page] || 1 %>">
+      <%= render @products %>
     </tbody>
   </table>
+
+  <% if @products.next_page %>
+    <div id="infinite-scrolling">
+      <%= will_paginate %>
+    </div>
+  <% end %>
 </div>
 <br>
