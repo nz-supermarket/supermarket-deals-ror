@@ -17,6 +17,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 gem 'rails_12factor', group: :production
 
+# used for rake countdown task
+gem 'nokogiri', '~> 1.6.3.1'
+
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
