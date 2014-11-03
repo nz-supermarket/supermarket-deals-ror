@@ -257,6 +257,7 @@ DEPENDENCIES
   guard-rspec (= 4.3.1)
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri (~> 1.6.3.1)
   pg (= 0.17.1)
   pickle
   pry-byebug (= 2.0.0)
