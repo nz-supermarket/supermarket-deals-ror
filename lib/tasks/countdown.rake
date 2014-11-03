@@ -4,6 +4,8 @@ task :fetch_prices => :environment do
   require "nokogiri"
   require "open-uri"
 
+  @string_builder = ""
+
   (0..50).each do |i|
     grab_from_aisle(i)
   end
@@ -65,22 +67,39 @@ def process_item(item, aisle)
     product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$")
     product.aisle = aisle + ', ' + product.name
 
-    puts "Created product with sku: " + product.sku.to_s + ". "
+    logger "Created product with sku: " + product.sku.to_s + ". "
   else
-    puts "Product exist with sku: " + product.sku.to_s + ". "
+    logger "Product exist with sku: " + product.sku.to_s + ". "
 
-    if product.normal > item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$").to_d
-      string = "Updated normal price from " + product.normal + " to "
+    current_normal = item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$").to_d
+    if product.normal > current_normal and current_normal != 0.0
+      string = "Updated normal price from " + product.normal.to_d.to_s + " to "
       product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip
-      puts string + product.normal + ". "
+      logger (string + product.normal.to_d.to_s + ". ")
     end
 
-    if product.special > item.at_css("span.special-price").child.text.strip.delete("$").to_d
-      string = "Updated special price from " + product.special + " to "
+    current_special = item.at_css("span.special-price").child.text.strip.delete("$").to_d
+    if product.special > current_special and current_special != 0.0
+      string = "Updated special price from " + product.special.to_d.to_s + " to "
       product.special = item.at_css("span.special-price").child.text.strip
-      puts string + product.special + ". "
+      logger (string + product.special.to_d.to_s + ". ")
     end
   end
 
   product.save
+end
+
+def logger string
+  if string.include? "exist"
+    unless @string_builder.include? "exist"
+      @string_builder = string
+    else
+      @string_builder = @string_builder.gsub('. ', '')
+      @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
+    end
+  else
+    puts @string_builder
+    @string_builder = ""
+    puts string
+  end
 end
