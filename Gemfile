@@ -16,6 +16,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
+# used for rake countdown task
+gem 'nokogiri', '~> 1.6.3.1'
+
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
