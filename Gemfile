@@ -23,6 +23,9 @@ gem 'nokogiri', '~> 1.6.3.1'
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
+# Analytics with New Relic
+gem 'newrelic_rpm'
+
 # Pagination / Infinite Scrolling
 gem 'will_paginate', '~> 3.0.7'
 gem 'will_paginate-bootstrap', '~> 1.0.1'
