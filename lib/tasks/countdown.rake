@@ -63,8 +63,8 @@ def process_item(item, aisle)
     if item.at_css("span.special-price").nil?
       return
     end
-    product.special = item.at_css("span.special-price").child.text.strip.delete("$")
-    product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$")
+    product.special = extract_price item,"special-price"
+    product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
     logger "Created product with sku: " + product.sku.to_s + ". "
@@ -76,6 +76,8 @@ def process_item(item, aisle)
       string = "Updated normal price from " + product.normal.to_d.to_s + " to "
       product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip
       logger (string + product.normal.to_d.to_s + ". ")
+      current_special = extract_price(item,"special-price").to_d
+        product.special = extract_price item,"special-price"
     end
 
     current_special = item.at_css("span.special-price").child.text.strip.delete("$").to_d
@@ -83,6 +85,8 @@ def process_item(item, aisle)
       string = "Updated special price from " + product.special.to_d.to_s + " to "
       product.special = item.at_css("span.special-price").child.text.strip
       logger (string + product.special.to_d.to_s + ". ")
+      current_normal = extract_price(item,"was-price").to_d
+        product.normal = extract_price item,"was-price"
     end
   end
 
