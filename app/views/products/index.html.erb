@@ -1,5 +1,5 @@
 <div class="row"></div>
-<div class="row">
+<div class="row" ng-app="table" ng-controller="tableCtrl">
   <h1>Cheapest Price for Supermarket Product<br/></h1>
   <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
 
@@ -12,37 +12,22 @@
   <p>If you like this compilation, please donate to<br/>
   bitcoin address: 1JuNraU9vZyFxVqmUbTMJFFFFvzj1SHC48<br/>
   paypal address: daniel.ltw@gmail.com</p></h5>
-
-  <table>
-    <thead>
-      <div class="row">
-        <tr>
-          <!-- <th><%#= sortable "Index".downcase %></th> -->
-          <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= sortable "Name".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Volume".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Sku".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Special".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Normal".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Diff".downcase, "Difference" %></th>
-          <th class="col-xs-3 col-sm-3 col-md-3 col-lg-3"><%= sortable "Aisle".downcase %></th>
-          <th class="col-xs-1 col-sm-1 col-md-1 col-lg-1"><%= sortable "Discount".downcase %></th>
-        </tr>
-      </div>
-    </thead>
-
+<div class="row spacer"></div>
+  <table ng-table="tableParams" show-filter="true" class="table">
     <tbody id="#product-list">
-      <div id="static-pagination">
-          <%= will_paginate %>
-      </div>
-      <div class="page-delimiter first-page" data-page="<%= params[:page] || 1 %>">
-      <%= render @products %>
+        <div class="row">
+          <tr ng:repeat="product in $data">
+            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">{{ product.name }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Volume'" sortable="'volume'">{{ product.volume }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }">{{ product.sku }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Special'" sortable="'special'">{{ product.special | currency : 'NZ$' : 2 }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Normal'" sortable="'normal'">{{ product.normal | currency : 'NZ$' : 2 }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Difference'" sortable="'diff'">{{ product.diff | currency : 'NZ$' : 2 }}</td>
+            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-title="'Aisle'" sortable="'aisle'" filter="{ 'aisle': 'text' }">{{ product.aisle }}</td>
+            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Discount'" sortable="'discount'">{{ product.discount | number : 2 }}%</td>
+          </tr>
+        </div>
     </tbody>
   </table>
-
-  <% if @products.next_page %>
-    <div id="infinite-scrolling">
-      <%= will_paginate %>
-    </div>
-  <% end %>
 </div>
 <br>
