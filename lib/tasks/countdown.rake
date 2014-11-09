@@ -71,26 +71,34 @@ def process_item(item, aisle)
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
 
-    current_normal = item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$").to_d
-    if product.normal > current_normal and current_normal != 0.0
-      string = "Updated normal price from " + product.normal.to_d.to_s + " to "
-      product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip
-      logger (string + product.normal.to_d.to_s + ". ")
+    begin
       current_special = extract_price(item,"special-price").to_d
+      if product.special > current_special and current_special != 0.0
+        string = "Updated special price from " + product.special.to_d.to_s + " to "
         product.special = extract_price item,"special-price"
+        logger (string + product.special.to_d.to_s + ". ")
+      end
+
+      product.save
+    rescue => e
+      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
     end
 
-    current_special = item.at_css("span.special-price").child.text.strip.delete("$").to_d
-    if product.special > current_special and current_special != 0.0
-      string = "Updated special price from " + product.special.to_d.to_s + " to "
-      product.special = item.at_css("span.special-price").child.text.strip
-      logger (string + product.special.to_d.to_s + ". ")
+    begin
       current_normal = extract_price(item,"was-price").to_d
+      if product.normal > current_normal and current_normal != 0.0
+        string = "Updated normal price from " + product.normal.to_d.to_s + " to "
         product.normal = extract_price item,"was-price"
+        logger (string + product.normal.to_d.to_s + ". ")
+      end
+
+      product.save
+    rescue => e
+      logger("Something is wrong with to normal price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   end
+end
 
-  product.save
 def extract_price item,fetch_param
   begin
     price = ""
