@@ -87,6 +87,18 @@ def process_item(item, aisle)
   end
 
   product.save
+def extract_price item,fetch_param
+  begin
+    price = ""
+    if fetch_param.include? "was"
+      price = item.at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
+    elsif fetch_param.include? "special"
+      price = item.at_css("span.special-price").child.text.strip.delete("$")
+    end
+    price
+  rescue => e
+    logger "Unable to extract price, will ignore: #{e}" 
+  end
 end
 
 def logger string
