@@ -3,6 +3,9 @@ supermarket-deals-ror
 
 Giving a go at creating a web application version of my [supermarket deals project](https://github.com/Daniel-ltw/countdown-nz-deals-parser#countdown-nz-deals-parser). 
 
+Current Ruby on Rails version of this implementation is @ [deals-supermarket](https://deals-supermarket.herokuapp.com). 
+Raise an issue in this project, if you found bugs or have suggestions. 
+
 Currently will start this project from scratch. 
 Automation in the web application should remove any manual labour needed. 
 Few features I could think of right now in comparasion to the old project: 
