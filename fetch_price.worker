@@ -2,3 +2,4 @@ runtime "ruby"
 stack "ruby-2.1"
 gemfile "Gemfile"
 exec "lib/tasks/fetch_price.rb"
+remote
