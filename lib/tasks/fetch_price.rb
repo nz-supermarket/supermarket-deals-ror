@@ -1,5 +1,16 @@
 require "nokogiri"
 require "open-uri"
+require "active_record"
+require 'iron_worker_ng'
+require 'pg'
+require 'models/product'
+
+def setup_database
+  puts "Database connection details: #{params['database'].inspect}"
+  return unless params['database']
+  # estabilsh database connection
+  ActiveRecord::Base.establish_connection(params['database'])
+end
 
 def logger string
   if string.include? "exist"
@@ -100,6 +111,7 @@ def grab_from_aisle(aisleNo)
   end
 end
 
+setup_database
 @string_builder = ""
 
 (0..50).each do |i|
