@@ -4,6 +4,8 @@ task :fetch_prices => :environment do
   require "nokogiri"
   require "open-uri"
 
+  @string_builder = ""
+
   (0..50).each do |i|
     grab_from_aisle(i)
   end
@@ -61,26 +63,67 @@ def process_item(item, aisle)
     if item.at_css("span.special-price").nil?
       return
     end
-    product.special = item.at_css("span.special-price").child.text.strip.delete("$")
-    product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$")
+    product.special = extract_price item,"special-price"
+    product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
-    puts "Created product with sku: " + product.sku.to_s + ". "
+    logger "Created product with sku: " + product.sku.to_s + ". "
   else
-    puts "Product exist with sku: " + product.sku.to_s + ". "
+    logger "Product exist with sku: " + product.sku.to_s + ". "
 
-    if product.normal > item.at_css("span.was-price").child.text.gsub("was",'').strip.delete("$").to_d
-      string = "Updated normal price from " + product.normal + " to "
-      product.normal = item.at_css("span.was-price").child.text.gsub("was",'').strip
-      puts string + product.normal + ". "
+    begin
+      current_special = extract_price(item,"special-price").to_d
+      if product.special > current_special and current_special != 0.0
+        string = "Updated special price from " + product.special.to_d.to_s + " to "
+        product.special = extract_price item,"special-price"
+        logger (string + product.special.to_d.to_s + ". ")
+      end
+
+      product.save
+    rescue => e
+      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
     end
 
-    if product.special > item.at_css("span.special-price").child.text.strip.delete("$").to_d
-      string = "Updated special price from " + product.special + " to "
-      product.special = item.at_css("span.special-price").child.text.strip
-      puts string + product.special + ". "
+    begin
+      current_normal = extract_price(item,"was-price").to_d
+      if product.normal > current_normal and current_normal != 0.0
+        string = "Updated normal price from " + product.normal.to_d.to_s + " to "
+        product.normal = extract_price item,"was-price"
+        logger (string + product.normal.to_d.to_s + ". ")
+      end
+
+      product.save
+    rescue => e
+      logger("Something is wrong with to normal price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   end
+end
 
-  product.save
+def extract_price item,fetch_param
+  begin
+    price = ""
+    if fetch_param.include? "was"
+      price = item.at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
+    elsif fetch_param.include? "special"
+      price = item.at_css("span.special-price").child.text.strip.delete("$")
+    end
+    price
+  rescue => e
+    logger "Unable to extract price, will ignore: #{e}" 
+  end
+end
+
+def logger string
+  if string.include? "exist"
+    unless @string_builder.include? "exist"
+      @string_builder = string
+    else
+      @string_builder = @string_builder.gsub('. ', '')
+      @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
+    end
+  else
+    puts @string_builder
+    @string_builder = ""
+    puts string
+  end
 end

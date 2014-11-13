@@ -1,21 +1,18 @@
 class Product < ActiveRecord::Base
   extend ActiveModel::Callbacks
 
-  after_create :set_diff
-  after_create :set_discount
+  after_save :set_diff, :set_discount
 
   alias_attribute :index, :id
 
   private
 
   def set_diff
-    self.diff = (self.normal - self.special)
-    self.save
+    update_column(:diff, (self.normal - self.special))
   end
 
   def set_discount
-    self.discount = ((self.diff / self.normal) * 100)
-    self.save
+    update_column(:discount, ((self.diff / self.normal) * 100))
   end
 
 end
