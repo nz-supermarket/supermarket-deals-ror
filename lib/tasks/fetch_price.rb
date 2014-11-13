@@ -6,10 +6,8 @@ require 'pg'
 require 'models/product'
 
 def setup_database
-  puts "Database connection details: #{params['database'].inspect}"
-  return unless params['database']
   # estabilsh database connection
-  ActiveRecord::Base.establish_connection(params['database'])
+  ActiveRecord::Base.establish_connection("postgres://btcnwffglpxemh:gU6r2ip4OGJM4JmZG7koN5K7Pv@ec2-54-225-182-133.compute-1.amazonaws.com:5432/dajuov22mvtg4k")
 end
 
 def logger string
