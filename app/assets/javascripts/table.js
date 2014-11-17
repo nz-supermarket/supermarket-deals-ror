@@ -5,7 +5,7 @@ var tableCtrl = function($scope, $filter, ngTableParams) {
 
   $scope.tableParams = new ngTableParams({
         page: 1,            // show first page
-        count: 100,          // count per page
+        count: 50,          // count per page
         filter: {
             name: ''       // initial filter
         }, 
