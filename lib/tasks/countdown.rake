@@ -67,7 +67,7 @@ def process_item(item, aisle)
     product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
-    logger "Created product with sku: " + product.sku.to_s + ". "
+    logger "Created product with sku: " + product.sku.to_s + ". " if product.save
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
 
