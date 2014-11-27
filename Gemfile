@@ -42,8 +42,10 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Pass ruby object to javascript object
-gem 'gon', '~> 5.2.3'
+# datatable
+gem 'jquery-datatables-rails', '~> 3.1.0'
+gem 'ajax-datatables-rails', '~> 0.2.1'
+gem 'jquery-ui-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -57,8 +59,8 @@ gem 'whenever'
 group :development, :test do
   # debugger
   gem 'pry-byebug', '2.0.0'
-  
-  # Use Capistrano for deployment 
+
+  # Use Capistrano for deployment
   gem 'capistrano', '3.2.1'
   gem 'capistrano-rails', '1.1.2'
 
@@ -80,4 +82,3 @@ group :development, :test do
   gem 'guard-cucumber', '1.4.1'
   gem 'guard-rspec', '4.3.1'
 end
-
