@@ -22,10 +22,6 @@ gem 'nokogiri', '~> 1.6.3.1'
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
-# Pagination / Infinite Scrolling
-gem 'will_paginate', '~> 3.0.7'
-gem 'will_paginate-bootstrap', '~> 1.0.1'
-
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -35,8 +31,11 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Pass ruby object to javascript object
-gem 'gon', '~> 5.2.3'
+# datatable
+gem 'jquery-datatables-rails', '~> 3.1.0'
+gem 'ajax-datatables-rails', '~> 0.2.1'
+gem 'jquery-ui-rails'
+gem 'will_paginate'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
