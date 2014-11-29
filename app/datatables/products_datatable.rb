@@ -22,9 +22,9 @@ class ProductsDatatable
         product.name, 
         product.volume, 
         product.sku, 
-        product.special, 
-        product.normal, 
-        product.diff,
+        number_to_currency(product.special, unit: "NZ$", delimiter: ","), 
+        number_to_currency(product.normal, unit: "NZ$", delimiter: ","), 
+        number_to_currency(product.diff, unit: "NZ$", delimiter: ","),
         product.aisle, 
         product.discount
       ]
