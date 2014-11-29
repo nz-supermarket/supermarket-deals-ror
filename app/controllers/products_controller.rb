@@ -6,6 +6,10 @@ class ProductsController < ApplicationController
   def index
     @counter = ((Time.now - Time.at(1414321201)).to_i / 604800).round
     @table_size = Product.all.count
+    respond_to do |format|
+      format.html
+      format.json { render json: ProductsDatatable.new(view_context) }
+    end
   end
 
   # GET /products/1
