@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @counter = ((Time.now - Time.at(1414321201)).to_i / 604800).round
+    @table_size = Product.all.count
   end
 
   # GET /products/1
