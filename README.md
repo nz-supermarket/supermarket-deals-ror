@@ -17,4 +17,4 @@ Few features I could think of right now in comparison to the old project:
 
 #### Further Plans (after the initial)
 * Might be looking into data warehousing product prices from New Zealand supermarkets (would include vast varieties of supermarket). 
-* Might also include historical chart regarding product prices. 
+* Might also include historical chart regarding product prices, better price trend view for each product. 
