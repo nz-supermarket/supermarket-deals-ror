@@ -1,5 +1,5 @@
 class ProductsDatatable
-  delegate :params, :h, :link_to, :number_to_currency, to: :@view
+  delegate :params, :h, :link_to, :number_to_currency, :number_to_percentage, to: :@view
   
   def initialize(view)
     @view = view
