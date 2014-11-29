@@ -44,7 +44,6 @@ gem 'jbuilder', '~> 2.0'
 
 # datatable
 gem 'jquery-datatables-rails', '~> 3.1.0'
-gem 'ajax-datatables-rails', '~> 0.2.1'
 gem 'jquery-ui-rails'
 
 # Use ActiveModel has_secure_password
