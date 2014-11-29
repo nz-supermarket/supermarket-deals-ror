@@ -8,7 +8,7 @@ Raise an issue in this project, if you found bugs or have suggestions.
 
 Currently will start this project from scratch. 
 Automation in the web application should remove any manual labour needed. 
-Few features I could think of right now in comparasion to the old project: 
+Few features I could think of right now in comparison to the old project: 
 * better sorting
 * better searching
 * better view & display (mobile and desktop compatibility)
