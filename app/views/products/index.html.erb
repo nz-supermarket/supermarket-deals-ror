@@ -1,32 +1,36 @@
 <div class="row"></div>
-<div class="row" ng-app="table" ng-controller="tableCtrl">
+<div class="row">
   <h1>Cheapest Price for Supermarket Product<br/></h1>
   <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
+  <h3>With a total of <%= @table_size %> products. </h3>
+  
+  <div class="row spacer"></div>
 
   <h5>
   <p>With this list, you should be able to gauge an item that you are purchasing at it's lowest price.<br/>
   You can now sort the list by any column in ascending or descending order. <br/>
+  Filter is added for columns name, sku and aisle. You can input in the search field to display what you are searching for. <br/>
   More improvements will be added in time. </p>
-  <p>In the discount column, if the price difference is more than 30% of it's original price, it will be highlighted in green, more than 50% with yellow.</p>
 
   <p>If you like this compilation, please donate to<br/>
   bitcoin address: 1JuNraU9vZyFxVqmUbTMJFFFFvzj1SHC48<br/>
   paypal address: daniel.ltw@gmail.com</p></h5>
-<div class="row spacer"></div>
-  <table ng-table="tableParams" show-filter="true" class="table">
-    <tbody id="#product-list">
-        <div class="row">
-          <tr ng:repeat="product in $data">
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-title="'Name'" sortable="'name'" filter="{ 'name': 'text' }">{{ product.name }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Volume'" sortable="'volume'">{{ product.volume }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'SKU'" sortable="'sku'" filter="{ 'sku': 'text' }">{{ product.sku }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Special'" sortable="'special'">{{ product.special | currency : 'NZ$' : 2 }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Normal'" sortable="'normal'">{{ product.normal | currency : 'NZ$' : 2 }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Difference'" sortable="'diff'">{{ product.diff | currency : 'NZ$' : 2 }}</td>
-            <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3" data-title="'Aisle'" sortable="'aisle'" filter="{ 'aisle': 'text' }">{{ product.aisle }}</td>
-            <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1" data-title="'Discount'" sortable="'discount'">{{ product.discount | number : 2 }}%</td>
-          </tr>
-        </div>
+  <div class="row spacer"></div>
+  <table id="products" class="display" data-source="<%= products_url(format: "json") %>">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Volume</th>
+        <th>SKU</th>
+        <th>Special Price</th>
+        <th>Normal Price</th>
+        <th>Difference</th>
+        <th>Aisle</th>
+        <th>Discount</th>
+      </tr>
+    </thead>
+    <tbody>
     </tbody>
   </table>
 </div>

@@ -1,13 +1,15 @@
 class ProductsController < ApplicationController
-  helper_method :sort_column, :sort_direction
   before_action :set_product, only: [:show]
 
   # GET /products
   # GET /products.json
   def index
     @counter = ((Time.now - Time.at(1414321201)).to_i / 604800).round
-    @products = Product.all
-    gon.products = @products
+    @table_size = Product.all.count
+    respond_to do |format|
+      format.html
+      format.json { render json: ProductsDatatable.new(view_context) }
+    end
   end
 
   # GET /products/1
