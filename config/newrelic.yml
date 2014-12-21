@@ -222,3 +222,8 @@ staging:
   <<: *default_settings
   monitor_mode: true
   app_name: My Application (Staging)
+
+dokku:
+  <<: *default_settings
+  monitor_mode: true
+  app_name: supermarket.technikality.info
