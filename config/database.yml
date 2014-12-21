@@ -27,3 +27,11 @@ production:
   pool: 5
   timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
+
+dokku:
+  adapter: <%= ENV['DB_SCHEME'] %>
+  pool: 5
+  timeout: 5000
+  url: <%= ENV['DB_PATH'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
