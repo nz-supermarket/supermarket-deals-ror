@@ -29,7 +29,7 @@ production:
   url: <%= ENV['DATABASE_URL'] %>
 
 dokku:
-  adapter: <%= ENV['DB_SCHEME'] %>
+  adapter: postgresql
   pool: 5
   timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
