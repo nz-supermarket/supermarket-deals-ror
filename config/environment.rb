@@ -6,5 +6,5 @@ Rails.application.initialize!
 
 Rails.application.configure do
   # Remote Logging on Paper Trail
-  config.logger = RemoteSyslogLogger.new('logs2.papertrailapp.com', 53786, :program => "rails-#{RAILS_ENV}")
+  config.logger = RemoteSyslogLogger.new('logs2.papertrailapp.com', 53786, :program => "rails-#{ENV['RAILS_ENV']}")
 end
