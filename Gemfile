@@ -55,6 +55,9 @@ gem 'unicorn'
 # Use whenever for automated cron jobs
 gem 'whenever'
 
+# Remote Logging with PaperTrail
+gem 'remote_syslog_logger'
+
 group :development, :test do
   # debugger
   gem 'pry-byebug', '2.0.0'
