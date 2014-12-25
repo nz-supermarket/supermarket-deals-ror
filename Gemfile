@@ -20,8 +20,9 @@ gem 'rails_12factor', group: :production
 # used for rake countdown task
 gem 'nokogiri', '~> 1.6.3.1'
 
-# IronWorker
-gem 'iron_worker_ng'
+# scheduled background task
+gem 'clockwork'
+gem 'sidekiq'
 
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
