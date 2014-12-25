@@ -24,6 +24,9 @@ gem 'nokogiri', '~> 1.6.3.1'
 gem 'clockwork'
 gem 'sidekiq'
 
+# IronWorker
+gem 'iron_worker_ng'
+
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
 
