@@ -35,7 +35,7 @@ def extract_price item,fetch_param
     end
     price
   rescue => e
-    logger "Unable to extract price, will ignore: #{e}" 
+    logger "Unable to extract price, will ignore: #{e}"
   end
 end
 
@@ -62,11 +62,11 @@ def process_item(item, aisle)
     product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
-    if !product.save
+    if product.save
+      logger "Created product with sku: " + product.sku.to_s + ". "
+    else
       logger("Something is wrong with creating "  + product.to_yaml)
     end
-
-    logger "Created product with sku: " + product.sku.to_s + ". "
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
 
@@ -80,7 +80,7 @@ def process_item(item, aisle)
 
       product.save
     rescue => e
-      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
+      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
 
     begin
