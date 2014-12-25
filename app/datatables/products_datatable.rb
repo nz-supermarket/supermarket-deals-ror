@@ -1,6 +1,6 @@
 class ProductsDatatable
   delegate :params, :h, :link_to, :number_to_currency, :number_to_percentage, to: :@view
-  
+
   def initialize(view)
     @view = view
   end
@@ -18,14 +18,14 @@ class ProductsDatatable
   def data
     products.map do |product|
       [
-        product.id, 
-        product.name, 
-        product.volume, 
-        product.sku, 
-        number_to_currency(product.special, unit: "NZ$", delimiter: ","), 
-        number_to_currency(product.normal, unit: "NZ$", delimiter: ","), 
+        product.id,
+        product.name,
+        product.volume,
+        product.sku,
+        number_to_currency(product.special, unit: "NZ$", delimiter: ","),
+        number_to_currency(product.normal, unit: "NZ$", delimiter: ","),
         number_to_currency(product.diff, unit: "NZ$", delimiter: ","),
-        product.aisle, 
+        product.aisle,
         number_to_percentage(product.discount, precision: 2)
       ]
     end
@@ -39,8 +39,13 @@ class ProductsDatatable
     products = Product.order("#{sort_column} #{sort_direction}")
     products = products.page(page).per_page(per_page)
     if params[:sSearch].present?
-      params[:sSearch] = params[:sSearch].downcase if !params[:sSearch].match(/\d+/)
-      products = products.where("LOWER(name) like :search or LOWER(aisle) like :search or sku::text like :search", search: "%#{params[:sSearch]}%")
+      params[:sSearch] = params[:sSearch] if !params[:sSearch].match(/\d+/)
+      params[:sSearch] = params[:sSearch].split(' ').map{ |i| i = "%" + i + "%"}
+      search = ""
+      params[:sSearch].each{|i| search = search + i + "," }
+      search = search.gsub(/\,$/, '').gsub(',', '|')
+      binding.pry
+      products = products.where("name ~* :search or aisle ~* :search or sku::text ~ :search", search: "#{search}")
     end
     products
   end
