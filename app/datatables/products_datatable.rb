@@ -39,13 +39,11 @@ class ProductsDatatable
     products = Product.order("#{sort_column} #{sort_direction}")
     products = products.page(page).per_page(per_page)
     if params[:sSearch].present?
-      params[:sSearch] = params[:sSearch] if !params[:sSearch].match(/\d+/)
+      params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
       params[:sSearch] = params[:sSearch].split(' ').map{ |i| i = "%" + i + "%"}
-      search = ""
-      params[:sSearch].each{|i| search = search + i + "," }
-      search = search.gsub(/\,$/, '').gsub(',', '|')
-      binding.pry
-      products = products.where("name ~* :search or aisle ~* :search or sku::text ~ :search", search: "#{search}")
+      params[:sSearch].each do |text|
+        products = products.where("lower(name) similar to :search or lower(aisle) similar to :search or sku::text ~ :search", search: "#{text}")
+      end
     end
     products
   end
