@@ -17,6 +17,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 gem 'rails_12factor', group: :production
 
+# dependencies
+gem 'foreman'
+
 # used for rake countdown task
 gem 'nokogiri', '~> 1.6.3.1'
 

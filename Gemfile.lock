@@ -83,6 +83,7 @@ GEM
     database_cleaner (1.3.0)
     debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
+    dotenv (1.0.2)
     erubis (2.7.0)
     execjs (2.2.2)
     factory_girl (4.4.0)
@@ -93,6 +94,9 @@ GEM
     factory_girl_rspec (2.1.0)
       factory_girl (>= 2.0)
       rspec (>= 2.0)
+    foreman (0.76.0)
+      dotenv (~> 1.0.2)
+      thor (~> 0.19.1)
     gherkin (2.12.2)
       multi_json (~> 1.3)
     guard (2.7.0)
@@ -277,6 +281,7 @@ DEPENDENCIES
   factory_girl (~> 4.4.0)
   factory_girl_rails
   factory_girl_rspec
+  foreman
   guard-cucumber (= 1.4.1)
   guard-rspec (= 4.3.1)
   iron_worker_ng
