@@ -15,9 +15,20 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
+gem 'rails_12factor', group: :production
+
+# dependencies
+gem 'foreman'
 
 # used for rake countdown task
 gem 'nokogiri', '~> 1.6.3.1'
+
+# scheduled background task
+gem 'clockwork'
+gem 'sidekiq'
+
+# IronWorker
+gem 'iron_worker_ng'
 
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
@@ -45,11 +56,14 @@ gem 'unicorn'
 # Use whenever for automated cron jobs
 gem 'whenever'
 
+# Remote Logging with PaperTrail
+gem 'remote_syslog_logger'
+
 group :development, :test do
   # debugger
   gem 'pry-byebug', '2.0.0'
-  
-  # Use Capistrano for deployment 
+
+  # Use Capistrano for deployment
   gem 'capistrano', '3.2.1'
   gem 'capistrano-rails', '1.1.2'
 
@@ -71,4 +85,3 @@ group :development, :test do
   gem 'guard-cucumber', '1.4.1'
   gem 'guard-rspec', '4.3.1'
 end
-
