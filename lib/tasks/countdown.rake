@@ -67,10 +67,10 @@ def process_item(item, aisle)
       product.special = extract_price item,"special-price"
       product.normal = extract_price item,"was-price"
       product.aisle = aisle + ', ' + product.name
-
+      
       logger "Created product with sku: " + product.sku.to_s + ". " if product.save
     rescue => e
-      logger("Something is wrong with to creating product for "  + product.sku.to_s + ", will ignore: #{e}")
+      logger("Something is wrong with creating product for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
@@ -85,7 +85,7 @@ def process_item(item, aisle)
 
       product.save
     rescue => e
-      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}")
+      logger("Something is wrong with special price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
 
     begin
@@ -98,7 +98,7 @@ def process_item(item, aisle)
 
       product.save
     rescue => e
-      logger("Something is wrong with to normal price for "  + product.sku.to_s + ", will ignore: #{e}")
+      logger("Something is wrong with normal price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   end
 end
