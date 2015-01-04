@@ -69,7 +69,7 @@ def process_item(item, aisle)
       product.aisle = aisle + ', ' + product.name
 
       logger "Created product with sku: " + product.sku.to_s + ". " if product.save
-    rescue
+    rescue => e
       logger("Something is wrong with to creating product for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   else
