@@ -64,4 +64,15 @@ class ProductsDatatable
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
   end
+
+  private
+  def discount_handler value
+    if value.to_d > 50
+      content_tag(:div, value, class: "yellow")
+    elsif value.to_d > 30
+      content_tag(:div, value, class: "green")
+    else
+      value
+    end
+  end
 end
