@@ -26,7 +26,7 @@ class ProductsDatatable
         number_to_currency(product.normal, unit: "NZ$", delimiter: ","), 
         number_to_currency(product.diff, unit: "NZ$", delimiter: ","),
         product.aisle, 
-        number_to_percentage(product.discount, precision: 2)
+        discount_handler(number_to_percentage(product.discount, precision: 2))
       ]
     end
   end
