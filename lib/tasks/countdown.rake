@@ -58,19 +58,19 @@ def process_item(item, aisle)
 
   if product.id.nil?
     # product does not exist
-    product.volume = parent.elements.at_css("span.volume-size").text.strip
-    product.name = parent.elements.at_css("span.description").text.strip.gsub(product.volume,'')
-    if item.at_css("span.special-price").nil?
-      return
-    end
-    product.special = extract_price item,"special-price"
-    product.normal = extract_price item,"was-price"
-    product.aisle = aisle + ', ' + product.name
+    begin
+      product.volume = parent.elements.at_css("span.volume-size").text.strip
+      product.name = parent.elements.at_css("span.description").text.strip.gsub(product.volume,'')
+      if item.at_css("span.special-price").nil?
+        return
+      end
+      product.special = extract_price item,"special-price"
+      product.normal = extract_price item,"was-price"
+      product.aisle = aisle + ', ' + product.name
 
-    if product.save
-      logger "Created product with sku: " + product.sku.to_s + ". "
-    else
-      logger("Something is wrong with creating "  + product.to_yaml)
+      logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+    rescue
+      logger("Something is wrong with to creating product for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
