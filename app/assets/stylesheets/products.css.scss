@@ -2,6 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$green: rgb(0,255,0);
+$yellow: rgb(255,255,0);
+
 th .current {
   padding-right: 12px;
   background-repeat: no-repeat;
@@ -19,4 +22,12 @@ th .desc {
 div .spacer {
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+td.highlight-green {
+  background-color: $green !important;
+}
+
+td.highlight-yellow {
+  background-color: $yellow !important;
 }
