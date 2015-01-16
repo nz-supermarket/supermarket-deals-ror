@@ -1,5 +1,5 @@
 desc 'Fetch product prices'
-task :fetch_prices => :environment do
+task :fetch_offer_prices => :environment do
 
   require "nokogiri"
   require "open-uri"
