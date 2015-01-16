@@ -33,6 +33,25 @@ task :fetch_offer_prices => :environment do
   end
 end
 
+desc 'Fetch normal product prices'
+task :fetch_prices => :environment do
+
+  require "nokogiri"
+  require "open-uri"
+
+  @string_builder = ""
+
+  aisles = generate_aisle(home_doc_fetch)
+
+  aisles.each_with_index do |aisle, index|
+    grab_browse_aisle(aisle)
+    sleep rand(1..30)
+    if (index % 10) == 0
+      sleep rand(50..200)
+    end
+  end
+end
+
 def grab_deals_aisle(aisleNo)
   url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s
   doc = Nokogiri::HTML(open(url))
