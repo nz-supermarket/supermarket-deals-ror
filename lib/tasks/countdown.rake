@@ -7,29 +7,33 @@ task :fetch_offer_prices => :environment do
   @string_builder = ""
 
   (0..50).each do |i|
-    grab_from_aisle(i)
+    grab_deals_aisle(i)
+    sleep rand(1..20)
   end
 
   sleep rand(50..70)
 
   (51..100).each do |i|
-    grab_from_aisle(i)
+    grab_deals_aisle(i)
+    sleep rand(1..20)
   end
 
   sleep rand(200..300)
 
   (101..200).each do |i|
-    grab_from_aisle(i)
+    grab_deals_aisle(i)
+    sleep rand(1..20)
   end
 
   sleep rand(50..70)
 
   (201..300).each do |i|
-    grab_from_aisle(i)
+    grab_deals_aisle(i)
+    sleep rand(1..20)
   end
 end
 
-def grab_from_aisle(aisleNo)
+def grab_deals_aisle(aisleNo)
   url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s
   doc = Nokogiri::HTML(open(url))
 
