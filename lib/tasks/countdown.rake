@@ -67,10 +67,9 @@ def grab_deals_aisle(aisleNo)
   end
 end
 
-def grab_browse_aisle(aisleNo)
-  url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FBrowseAisle%2F" + aisleNo.to_s
+def grab_browse_aisle(aisle)
+  url = HOME_URL + FILTERS + aisle
   doc = Nokogiri::HTML(open(url))
-  binding.pry
 
   if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
     return
