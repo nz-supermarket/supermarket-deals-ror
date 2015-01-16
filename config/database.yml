@@ -22,14 +22,8 @@ test: &test
   database: deals_test
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  timeout: 5000
-  url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  database: deals_production
 
-dokku:
-  adapter: postgresql
-  pool: 5
-  timeout: 5000
-  url: <%= ENV['DATABASE_URL'] %>
+cucumber:
+  <<: *test
