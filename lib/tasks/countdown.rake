@@ -1,4 +1,4 @@
-desc 'Fetch product prices'
+desc 'Fetch deals product prices'
 task :fetch_offer_prices => :environment do
 
   require "nokogiri"
