@@ -151,3 +151,18 @@ def logger string
     puts string
   end
 end
+
+def generate_aisle doc
+  aisle_array = []
+
+  links = doc.at_css("div.navigation-node.navigation-root").css("a.navigation-link")
+
+  links.each do |link|
+    value = link.attributes["href"].value
+    if value.split("/").count >= 5
+      aisle_array << value
+    end
+  end
+
+  aisle_array
+end
