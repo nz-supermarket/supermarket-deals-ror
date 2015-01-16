@@ -1,46 +1,41 @@
-desc 'Fetch product prices'
-task :fetch_prices => :environment do
+require "nokogiri"
+require "open-uri"
+require "active_record"
+require 'iron_worker_ng'
+require 'pg'
+require 'models/product'
 
-  require "nokogiri"
-  require "open-uri"
+def setup_database
+  # estabilsh database connection
+  ActiveRecord::Base.establish_connection("postgres://btcnwffglpxemh:gU6r2ip4OGJM4JmZG7koN5K7Pv@ec2-54-225-182-133.compute-1.amazonaws.com:5432/dajuov22mvtg4k")
+end
 
-  @string_builder = ""
-
-  (0..50).each do |i|
-    grab_from_aisle(i)
-  end
-
-  sleep rand(50..70)
-
-  (51..100).each do |i|
-    grab_from_aisle(i)
-  end
-
-  sleep rand(200..300)
-
-  (101..200).each do |i|
-    grab_from_aisle(i)
-  end
-
-  sleep rand(50..70)
-
-  (201..300).each do |i|
-    grab_from_aisle(i)
+def logger string
+  if string.include? "exist"
+    unless @string_builder.include? "exist"
+      @string_builder = string
+    else
+      @string_builder = @string_builder.gsub('. ', '')
+      @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
+    end
+  else
+    puts @string_builder
+    @string_builder = ""
+    puts string
   end
 end
 
-def grab_from_aisle(aisleNo)
-  url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s
-  doc = Nokogiri::HTML(open(url))
-
-  if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
-    return
-  end
-
-  aisle = doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
-
-  doc.css("div.price-container").each do |item|
-    process_item(item, aisle)
+def extract_price item,fetch_param
+  begin
+    price = ""
+    if fetch_param.include? "was"
+      price = item.at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
+    elsif fetch_param.include? "special"
+      price = item.at_css("span.special-price").child.text.strip.delete("$")
+    end
+    price
+  rescue => e
+    logger "Unable to extract price, will ignore: #{e}"
   end
 end
 
@@ -85,7 +80,7 @@ def process_item(item, aisle)
 
       product.save
     rescue => e
-      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
+      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
 
     begin
@@ -103,31 +98,42 @@ def process_item(item, aisle)
   end
 end
 
-def extract_price item,fetch_param
-  begin
-    price = ""
-    if fetch_param.include? "was"
-      price = item.at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
-    elsif fetch_param.include? "special"
-      price = item.at_css("span.special-price").child.text.strip.delete("$")
-    end
-    price
-  rescue => e
-    logger "Unable to extract price, will ignore: #{e}" 
+def grab_from_aisle(aisleNo)
+  url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s
+  doc = Nokogiri::HTML(open(url))
+
+  if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
+    return
+  end
+
+  aisle = doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
+
+  doc.css("div.price-container").each do |item|
+    process_item(item, aisle)
   end
 end
 
-def logger string
-  if string.include? "exist"
-    unless @string_builder.include? "exist"
-      @string_builder = string
-    else
-      @string_builder = @string_builder.gsub('. ', '')
-      @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
-    end
-  else
-    puts @string_builder
-    @string_builder = ""
-    puts string
-  end
+setup_database
+@string_builder = ""
+
+(0..50).each do |i|
+  grab_from_aisle(i)
+end
+
+sleep rand(50..70)
+
+(51..100).each do |i|
+  grab_from_aisle(i)
+end
+
+sleep rand(200..300)
+
+(101..200).each do |i|
+  grab_from_aisle(i)
+end
+
+sleep rand(50..70)
+
+(201..300).each do |i|
+  grab_from_aisle(i)
 end

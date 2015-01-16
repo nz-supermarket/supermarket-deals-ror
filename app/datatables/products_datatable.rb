@@ -39,8 +39,11 @@ class ProductsDatatable
     products = Product.order("#{sort_column} #{sort_direction}")
     products = products.page(page).per_page(per_page)
     if params[:sSearch].present?
-      params[:sSearch] = params[:sSearch].downcase if !params[:sSearch].match(/\d+/)
-      products = products.where("LOWER(name) like :search or LOWER(aisle) like :search or sku::text like :search", search: "%#{params[:sSearch]}%")
+      params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
+      params[:sSearch] = params[:sSearch].split(' ').map{ |i| i = "%" + i + "%"}
+      params[:sSearch].each do |text|
+        products = products.where("lower(name) similar to :search or lower(aisle) similar to :search or sku::text ~ :search", search: "#{text}")
+      end
     end
     products
   end
