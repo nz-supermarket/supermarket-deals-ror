@@ -48,6 +48,22 @@ def grab_deals_aisle(aisleNo)
   end
 end
 
+def grab_browse_aisle(aisleNo)
+  url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FBrowseAisle%2F" + aisleNo.to_s
+  doc = Nokogiri::HTML(open(url))
+  binding.pry
+
+  if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
+    return
+  end
+
+  aisle = doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
+
+  doc.css("div.price-container").each do |item|
+    process_item(item, aisle)
+  end
+end
+
 # data required extracted from page
 # find existing product on database
 # if product does not exist
