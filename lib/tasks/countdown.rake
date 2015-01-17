@@ -76,6 +76,14 @@ def grab_browse_aisle(aisle)
   end
 end
 
+def error?(doc)
+  doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
+end
+
+def aisle_name(doc)
+  doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
+end
+
 # data required extracted from page
 # find existing product on database
 # if product does not exist
