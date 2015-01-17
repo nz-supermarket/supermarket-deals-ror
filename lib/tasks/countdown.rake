@@ -53,14 +53,11 @@ task :fetch_prices => :environment do
 end
 
 def grab_deals_aisle(aisleNo)
-  url = "http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s
-  doc = Nokogiri::HTML(open(url))
+  doc = nokogiri_open_url("http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
 
-  if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
-    return
-  end
+  return if error?(doc)
 
-  aisle = doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
+  aisle = aisle_name(doc)
 
   doc.css("div.price-container").each do |item|
     process_item(item, aisle)
@@ -68,14 +65,11 @@ def grab_deals_aisle(aisleNo)
 end
 
 def grab_browse_aisle(aisle)
-  url = HOME_URL + FILTERS + aisle
-  doc = Nokogiri::HTML(open(url))
+  doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
 
-  if doc.title.strip.eql? "Shop Error - Countdown NZ Ltd"
-    return
-  end
+  return if error?(doc)
 
-  aisle = doc.at_css("div#breadcrumb-panel").elements[2].text + ', ' + doc.at_css("div#breadcrumb-panel").children[6].text.delete("/").gsub(/\A\p{Space}*/, '').strip
+  aisle = aisle_name(doc)
 
   doc.css("div.price-container").each do |item|
     process_item(item, aisle)
