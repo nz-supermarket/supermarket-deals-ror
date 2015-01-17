@@ -5,6 +5,9 @@ task :fetch_offer_prices => :environment do
   require "open-uri"
 
   @string_builder = ""
+  # could do the same as fetch_prices
+  # go thru every aisle in the array and
+  # replace "Browse" with "Deals"
 
   (0..50).each do |i|
     grab_deals_aisle(i)
