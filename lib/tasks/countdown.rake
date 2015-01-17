@@ -172,15 +172,43 @@ def logger string
   end
 end
 
-def generate_aisle doc
+def nokogiri_open_url(url)
+  Nokogiri::HTML(open(url))
+end
+
+HOME_URL = "http://shop.countdown.co.nz"
+FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
+
+def home_doc_fetch
+  nokogiri_open_url(HOME_URL + "/Shop/BrowseAisle/")
+end
+
+def sub_cat_fetch(val)
+  sleep rand(1.0..20.0)
+  nokogiri_open_url(HOME_URL + val)
+end
+
+def links_fetch(doc)
+  doc.at_css("div.navigation-node.navigation-root").css("a.navigation-link")
+end
+
+def generate_aisle(doc)
   aisle_array = []
 
-  links = doc.at_css("div.navigation-node.navigation-root").css("a.navigation-link")
+  links = links_fetch(doc)
 
   links.each do |link|
+    # category
     value = link.attributes["href"].value
-    if value.split("/").count >= 5
-      aisle_array << value
+
+    sub_links = links_fetch(sub_cat_fetch(value))
+
+    sub_links.each do |sub|
+      value = sub.attributes["href"].value
+
+      if value.split("/").count >= 5
+        aisle_array << value
+      end
     end
   end
 
