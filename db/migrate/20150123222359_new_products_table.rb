@@ -4,6 +4,6 @@ class NewProductsTable < ActiveRecord::Migration
     remove_column :products, :normal
     remove_column :products, :diff
     remove_column :products, :discount
-    add_column :products, :link_to_cd, :string, null: false
+    add_column :products, :link_to_cd, :string
   end
 end
