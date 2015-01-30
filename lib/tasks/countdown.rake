@@ -102,8 +102,6 @@ def process_item(item, aisle)
     if item.at_css("span.special-price").nil?
       return
     end
-    product.special = extract_price item,"special-price"
-    product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
     if product.save
