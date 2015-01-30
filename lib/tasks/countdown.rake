@@ -1,8 +1,7 @@
 desc 'Fetch deals product prices'
 task :fetch_offer_prices => :environment do
 
-  require "nokogiri"
-  require "open-uri"
+  setup
 
   @string_builder = ""
   # could do the same as fetch_prices
@@ -39,8 +38,7 @@ end
 desc 'Fetch normal product prices'
 task :fetch_prices => :environment do
 
-  require "nokogiri"
-  require "open-uri"
+  setup
 
   @string_builder = ""
 
