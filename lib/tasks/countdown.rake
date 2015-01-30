@@ -189,3 +189,9 @@ def generate_aisle(doc)
 
   aisle_array
 end
+
+def setup
+  require "nokogiri"
+  require "open-uri"
+  require "date_helper"
+end
