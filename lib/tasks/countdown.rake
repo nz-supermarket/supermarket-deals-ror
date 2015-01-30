@@ -56,18 +56,16 @@ end
 def grab_deals_aisle(aisleNo)
   doc = nokogiri_open_url(HOME_URL + FILTERS + "%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
 
-  return if error?(doc)
-
-  aisle = aisle_name(doc)
-
-  doc.css("div.price-container").each do |item|
-    process_item(item, aisle)
-  end
+  process_doc doc
 end
 
 def grab_browse_aisle(aisle)
   doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
 
+  process_doc doc
+end
+
+def process_doc(doc)
   return if error?(doc)
 
   aisle = aisle_name(doc)
