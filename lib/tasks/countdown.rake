@@ -115,6 +115,11 @@ def process_item(item, aisle)
     else
       logger("Something is wrong with creating "  + product.to_yaml)
     end
+  else
+    normal = (extract_price item,"was-price").presence || (extract_price item,"price").presence
+    NormalPrices.create({price: normal, product_id: product.id})
+
+    SpecialPrices.create({price: (extract_price item,"special-price"), product_id: product.id})
   end
 end
 
