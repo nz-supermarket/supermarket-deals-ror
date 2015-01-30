@@ -54,7 +54,7 @@ task :fetch_prices => :environment do
 end
 
 def grab_deals_aisle(aisleNo)
-  doc = nokogiri_open_url("http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
+  doc = nokogiri_open_url(HOME_URL + FILTERS + "%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
 
   return if error?(doc)
 
