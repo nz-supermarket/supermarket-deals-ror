@@ -107,36 +107,13 @@ def process_item(item, aisle)
 
     if product.save
       logger "Created product with sku: " + product.sku.to_s + ". "
+
+      normal = (extract_price item,"was-price").presence || (extract_price item,"price").presence
+      NormalPrices.create({price: normal, product_id: product.id})
+
+      SpecialPrices.create({price: (extract_price item,"special-price"), product_id: product.id})
     else
       logger("Something is wrong with creating "  + product.to_yaml)
-    end
-  else
-    logger "Product exist with sku: " + product.sku.to_s + ". "
-
-    begin
-      current_special = extract_price(item,"special-price").to_d
-      if product.special > current_special and current_special != 0.0
-        string = "Updated special price from " + product.special.to_d.to_s + " to "
-        product.special = extract_price item,"special-price"
-        logger (string + product.special.to_d.to_s + ". ")
-      end
-
-      product.save
-    rescue => e
-      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
-    end
-
-    begin
-      current_normal = extract_price(item,"was-price").to_d
-      if product.normal > current_normal and current_normal != 0.0
-        string = "Updated normal price from " + product.normal.to_d.to_s + " to "
-        product.normal = extract_price item,"was-price"
-        logger (string + product.normal.to_d.to_s + ". ")
-      end
-
-      product.save
-    rescue => e
-      logger("Something is wrong with to normal price for "  + product.sku.to_s + ", will ignore: #{e}")
     end
   end
 end
