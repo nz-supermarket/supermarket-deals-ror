@@ -103,6 +103,7 @@ def process_item(item, aisle)
       return
     end
     product.aisle = aisle + ', ' + product.name
+    product.link_to_cd = HOME_URL + link
 
     if product.save
       logger "Created product with sku: " + product.sku.to_s + ". "
