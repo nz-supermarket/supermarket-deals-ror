@@ -17,25 +17,14 @@ gem 'coffee-rails', '~> 4.0.0'
 # gem 'therubyracer',  platforms: :ruby
 gem 'rails_12factor', group: :production
 
+# dependencies
+gem 'foreman'
+
 # used for rake countdown task
 gem 'nokogiri', '~> 1.6.3.1'
 
-# scheduled background task
-gem 'clockwork'
-gem 'sidekiq'
-
-# IronWorker
-gem 'iron_worker_ng'
-
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass', '3.2.0.2'
-
-# Analytics with New Relic
-gem 'newrelic_rpm'
-
-# Pagination / Infinite Scrolling
-gem 'will_paginate', '~> 3.0.7'
-gem 'will_paginate-bootstrap', '~> 1.0.1'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -49,18 +38,13 @@ gem 'jbuilder', '~> 2.0'
 # datatable
 gem 'jquery-datatables-rails', '~> 3.1.0'
 gem 'jquery-ui-rails'
+gem 'will_paginate'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
 gem 'unicorn'
-
-# Use whenever for automated cron jobs
-gem 'whenever'
-
-# Remote Logging with PaperTrail
-gem 'remote_syslog_logger'
 
 group :development, :test do
   # debugger
