@@ -26,8 +26,6 @@ gem 'nokogiri'
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass'
 
-<<<<<<< Updated upstream
-=======
 # Analytics with New Relic
 gem 'newrelic_rpm'
 
@@ -35,7 +33,6 @@ gem 'newrelic_rpm'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
->>>>>>> Stashed changes
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
