@@ -44,11 +44,16 @@ task :fetch_prices => :environment do
 
   aisles = generate_aisle(home_doc_fetch)
 
+  if @cache.fetch('last').present?
+    aisles.drop(aisles.index(@cache.fetch('last')))
+  end
+
   aisles.each_with_index do |aisle, index|
     grab_browse_aisle(aisle)
-    sleep rand(1.0..30.0)
+    @cache.write('last', aisle)
+    sleep rand(1.0..10.0)
     if (index % 10) == 0
-      sleep rand(30.0..200.0)
+      sleep rand(20.0..50.0)
     end
   end
 end
@@ -130,7 +135,7 @@ end
 
 def process_prices item, product
   normal = (extract_price item,"was-price").presence
-  if normal
+  if normal.present?
     have_special = true
   else
     normal = (extract_price item,"price").presence
@@ -142,23 +147,22 @@ def process_prices item, product
   return unless have_special
 
   special = extract_price item,"special-price"
-  return if special.blank?
   special = SpecialPrice.new({price: special, product_id: product.id})
   logger "Created special price for product " + product.id.to_s + ". " if special.save
 end
 
 def extract_price item,fetch_param
+  item = item.at_css('div.grid-stamp-price-container')
   begin
     price = ""
     if fetch_param.include? "was"
-      price = item.at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
+      price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
     elsif fetch_param.include? "special-price"
-      binding.pry if item.at_css("span.special-price").present?
-      price = item.at_css("span.special-price").child.text.strip.delete("$")
+      price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
     else
-      price = item.at_css("span.#{fetch_param}").child.text.strip.delete("$")
+      price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
     end
-    price
+    return price
   rescue => e
     logger "Unable to extract price, will ignore: #{e}"
   end
@@ -199,24 +203,27 @@ def logger string
 end
 
 def nokogiri_open_url(url)
-  begin
-    Nokogiri::HTML(open(url))
-  rescue OpenURI::HTTPError => e
-    return nil
-  end
+  return Nokogiri::HTML(open_url_with_proxy(url))
 end
-
-HOME_URL = "http://shop.countdown.co.nz"
-FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
-LOG_LEVEL = "info"
 
 def home_doc_fetch
   nokogiri_open_url(HOME_URL + "/Shop/BrowseAisle/")
 end
 
 def sub_cat_fetch(val)
-  sleep rand(1.0..5.0)
-  nokogiri_open_url(HOME_URL + val)
+
+  if @cache.fetch(val).present?
+    return @cache.fetch(val) if @cache.fetch(val) =~ /\s/
+  end
+
+  @cache.delete(val)
+
+  sleep rand(1.0..10.0)
+
+  seconds_to_midnight = Time.new(Time.now.year, Time.now.month, Time.now.day, 23, 58, 00) - Time.now
+  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: seconds_to_midnight.seconds)
+
+  @cache.fetch(val)
 end
 
 def cat_links_fetch(doc)
@@ -226,7 +233,11 @@ end
 
 def sub_links_fetch(doc)
   print "."
-  doc.at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
+  if doc.class == String
+    Nokogiri::HTML(doc).at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
+  else
+    doc.at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
+  end
 end
 
 def generate_aisle(doc)
@@ -268,8 +279,61 @@ def generate_aisle(doc)
   aisle_array
 end
 
+def open_url_with_proxy(url)
+  proxies = PROXY_LIST
+  result = nil
+
+  while result.blank?
+    begin
+      proxy = proxies.sample
+
+      proxies.delete(proxy)
+
+      result = open(url, :proxy => proxy, :read_timeout => 10)
+    rescue RuntimeError => e
+      result = nil
+    rescue Errno::ETIMEDOUT => e
+      result = nil
+    rescue Errno::ENETUNREACH => e
+      result = nil
+    rescue OpenURI::HTTPError => e
+      result = nil
+    end
+  end
+  return result
+end
+
+###################################################
+## GENERAL SETTINGS
+###################################################
+
+HOME_URL = "http://shop.countdown.co.nz"
+FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
+LOG_LEVEL = "info"
+PROXY_LIST = [nil,
+              'http://202.27.212.58:8080', ##
+              'http://202.27.212.136:8080',
+              'http://203.86.202.222:80', ##
+              'http://202.49.183.14:8080',
+              'http://60.234.51.62:8118',
+              'https://114.134.6.21:443',
+              'http://203.86.202.167:9001',
+              'https://203.184.12.247:443',
+              'http://125.236.198.134:8080',
+              'https://121.99.222.224:443',
+              'http://156.62.100.35:80',
+              'https://60.234.119.141:443',
+              'http://103.247.194.152:80',
+              'http://103.247.194.95:80',
+              'http://121.73.85.80:2132',
+              '',
+              ''
+              ]
+
 def setup
   require 'nokogiri'
   require 'open-uri'
   require 'thread_safe'
+
+  @cache = ActiveSupport::Cache::FileStore.new("/tmp")
 end
