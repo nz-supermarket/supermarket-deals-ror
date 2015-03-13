@@ -129,9 +129,17 @@ def process_item(item, aisle)
 end
 
 def process_prices item, product
-  normal = (extract_price item,"price").presence || (extract_price item,"was-price").presence
+  normal = (extract_price item,"was-price").presence
+  if normal
+    have_special = true
+  else
+    normal = (extract_price item,"price").presence
+  end
+
   normal = NormalPrice.new({price: normal, product_id: product.id})
   logger "Created normal price for product " + product.id.to_s + ". " if normal.save
+
+  return unless have_special
 
   special = extract_price item,"special-price"
   return if special.blank?
