@@ -44,9 +44,11 @@ task :fetch_prices => :environment do
 
   aisles = generate_aisle(home_doc_fetch)
 
-  if @cache.fetch('last').present?
+  if @cache.fetch('last').present? and aisles.index(@cache.fetch('last')) != (aisles.count - 1)
     aisles.drop(aisles.index(@cache.fetch('last')))
   end
+
+  @aisle_processing = true
 
   aisles.each_with_index do |aisle, index|
     grab_browse_aisle(aisle)
@@ -65,9 +67,9 @@ def grab_deals_aisle(aisleNo)
 end
 
 def grab_browse_aisle(aisle)
-  doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
+  doc = cache_retrieve_url(FILTERS + aisle)
 
-  process_doc doc
+  process_doc Nokogiri::HTML(doc)
 end
 
 def process_doc(doc)
@@ -84,6 +86,7 @@ end
 
 def error?(doc)
   return true if doc.blank?
+  binding.pry if doc.title.blank?
   doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
 end
 
@@ -155,9 +158,10 @@ def extract_price item,fetch_param
   item = item.at_css('div.grid-stamp-price-container')
   begin
     price = ""
-    if fetch_param.include? "was"
+    if fetch_param.include? "was-price"
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
     elsif fetch_param.include? "special-price"
+      binding.pry
       price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
     else
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
@@ -207,10 +211,10 @@ def nokogiri_open_url(url)
 end
 
 def home_doc_fetch
-  nokogiri_open_url(HOME_URL + "/Shop/BrowseAisle/")
+  nokogiri_open_url(HOME_URL)
 end
 
-def sub_cat_fetch(val)
+def cache_retrieve_url(val)
 
   if @cache.fetch(val).present?
     return @cache.fetch(val) if @cache.fetch(val) =~ /\s/
@@ -233,11 +237,10 @@ end
 
 def sub_links_fetch(doc)
   print "."
-  if doc.class == String
-    Nokogiri::HTML(doc).at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
-  else
-    doc.at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
-  end
+
+  return nil if error?(Nokogiri::HTML(doc))
+
+  Nokogiri::HTML(doc).at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
 end
 
 def generate_aisle(doc)
@@ -249,20 +252,24 @@ def generate_aisle(doc)
     # category
     value = link.attributes["href"].value
 
-    resp = sub_cat_fetch(value)
+    resp = cache_retrieve_url(value)
 
     next if resp.blank?
 
     sub_links = sub_links_fetch(resp)
 
+    next if sub_links.nil?
+
     sub_links.each do |sub|
       value = sub.attributes["href"].value
 
-      sub_resp = sub_cat_fetch(value)
+      sub_resp = cache_retrieve_url(value)
 
       next if sub_resp.blank?
 
       sub_sub_links = sub_links_fetch(sub_resp)
+
+      next if sub_sub_links.nil?
 
       sub_sub_links.each do |sub_sub|
         value = sub_sub.attributes["href"].value
@@ -276,12 +283,14 @@ def generate_aisle(doc)
 
   puts ""
 
-  aisle_array
+  aisle_array.compact
 end
 
 def open_url_with_proxy(url)
   proxies = PROXY_LIST
+  proxies = PROXY_LIST[0..3] if @aisle_processing
   result = nil
+  number_of_retries = 0
 
   while result.blank?
     begin
@@ -289,18 +298,44 @@ def open_url_with_proxy(url)
 
       proxies.delete(proxy)
 
-      result = open(url, :proxy => proxy, :read_timeout => 10)
+      result = open(url, :proxy => proxy, :read_timeout => 30)
+
+      number_of_retries += 1 if proxies.count <= 1
+      return nil if number_of_retries >= 20
     rescue RuntimeError => e
+      log_proxy_error(url, proxy, e)
+      result = nil
+    rescue SocketError => e
+      log_proxy_error(url, proxy, e)
       result = nil
     rescue Errno::ETIMEDOUT => e
+      log_proxy_error(url, proxy, e)
       result = nil
     rescue Errno::ENETUNREACH => e
+      log_proxy_error(url, proxy, e)
+      result = nil
+    rescue Errno::EHOSTUNREACH => e
+      log_proxy_error(url, proxy, e)
+      result = nil
+    rescue Errno::ECONNRESET => e
+      log_proxy_error(url, proxy, e)
+      result = nil
+    rescue Errno::ECONNREFUSED => e
+      log_proxy_error(url, proxy, e)
       result = nil
     rescue OpenURI::HTTPError => e
+      log_proxy_error(url, proxy, e)
+      result = nil
+    rescue OpenURI::HTTPError => e
+      log_proxy_error(url, proxy, e)
       result = nil
     end
   end
   return result
+end
+
+def log_proxy_error(url, proxy, error)
+  puts "Unable to connect with #{proxy} and #{url}, will ignore: #{error}"
 end
 
 ###################################################
@@ -316,15 +351,14 @@ PROXY_LIST = [nil,
               'http://203.86.202.222:80', ##
               'http://202.49.183.14:8080',
               'http://60.234.51.62:8118',
-              'https://114.134.6.21:443',
+              'http://114.134.6.21:443',
               'http://203.86.202.167:9001',
-              'https://203.184.12.247:443',
+              'http://203.184.12.247:443',
               'http://125.236.198.134:8080',
-              'https://121.99.222.224:443',
+              'http://121.99.222.224:443',
               'http://156.62.100.35:80',
-              'https://60.234.119.141:443',
+              'http://60.234.119.141:443',
               'http://103.247.194.152:80',
-              'http://103.247.194.95:80',
               'http://121.73.85.80:2132',
               '',
               ''
@@ -336,4 +370,5 @@ def setup
   require 'thread_safe'
 
   @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+  @aisle_processing = false
 end
