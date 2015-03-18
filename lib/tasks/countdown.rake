@@ -44,7 +44,7 @@ task :fetch_prices => :environment do
 
   aisles = generate_aisle(home_doc_fetch)
 
-  if @cache.fetch('last').present? and aisles.index(@cache.fetch('last')) != (aisles.count - 1)
+  if @cache.fetch('last').present? and aisles.index(@cache.fetch('last')).present? and aisles.index(@cache.fetch('last')) != (aisles.count - 1)
     aisles.drop(aisles.index(@cache.fetch('last')))
   end
 
@@ -85,8 +85,7 @@ def process_doc(doc)
 end
 
 def error?(doc)
-  return true if doc.blank?
-  binding.pry if doc.title.blank?
+  return true if doc.blank? or doc.title.blank?
   doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
 end
 
@@ -298,10 +297,10 @@ def open_url_with_proxy(url)
 
       proxies.delete(proxy)
 
-      result = open(url, :proxy => proxy, :read_timeout => 30)
-
       number_of_retries += 1 if proxies.count <= 1
-      return nil if number_of_retries >= 20
+      break if number_of_retries >= 20
+
+      result = open(url, :proxy => proxy, :read_timeout => 30)
     rescue RuntimeError => e
       log_proxy_error(url, proxy, e)
       result = nil
