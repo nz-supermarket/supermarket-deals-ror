@@ -53,9 +53,9 @@ task :fetch_prices => :environment do
   aisles.each_with_index do |aisle, index|
     grab_browse_aisle(aisle)
     @cache.write('last', aisle)
-    sleep rand(1.0..10.0)
+    sleep rand(1.0..5.0)
     if (index % 10) == 0
-      sleep rand(20.0..50.0)
+      sleep rand(5.0..10.0)
     end
   end
 end
