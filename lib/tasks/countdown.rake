@@ -136,9 +136,10 @@ def process_item(item, aisle)
 end
 
 def process_prices item, product
-  normal = (extract_price item,"was-price").presence
-  if normal.present?
+
+  if has_special_price?(item)
     have_special = true
+    normal = (extract_price item,"was-price").presence
   else
     normal = (extract_price item,"price").presence
   end
@@ -160,7 +161,6 @@ def extract_price item,fetch_param
     if fetch_param.include? "was-price"
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
     elsif fetch_param.include? "special-price"
-      binding.pry
       price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
     else
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
@@ -169,6 +169,10 @@ def extract_price item,fetch_param
   rescue => e
     logger "Unable to extract price, will ignore: #{e}"
   end
+end
+
+def has_special_price?(item)
+  item.at_css('span.price').attributes['class'].value.include? 'special-price'
 end
 
 def logger string
