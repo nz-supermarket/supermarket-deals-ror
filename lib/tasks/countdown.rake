@@ -40,6 +40,8 @@ task :fetch_prices => :environment do
 
   setup
 
+  time = Time.now
+
   @string_builder = ""
 
   aisles = generate_aisle(home_doc_fetch)
@@ -58,6 +60,8 @@ task :fetch_prices => :environment do
       sleep rand(5.0..10.0)
     end
   end
+
+  puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
 
 def grab_deals_aisle(aisleNo)
@@ -79,7 +83,7 @@ def process_doc(doc)
 
   puts doc.css('div.details-container.row-fluid.mrow-fluid').count
 
-  doc.css('div.details-container.row-fluid.mrow-fluid').each do |item|
+  doc.css('div.product-stamp.product-stamp-grid').each do |item|
     process_item(item, aisle)
   end
 end
@@ -304,11 +308,8 @@ def open_url_with_proxy(url)
       number_of_retries += 1 if proxies.count <= 1
       break if number_of_retries >= 20
 
-      result = open(url, :proxy => proxy, :read_timeout => 30)
-    rescue RuntimeError => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue SocketError => e
+      result = open(url, :read_timeout => 30)
+    rescue RuntimeError, SocketError => e
       log_proxy_error(url, proxy, e)
       result = nil
     rescue Errno::ETIMEDOUT => e
@@ -324,9 +325,6 @@ def open_url_with_proxy(url)
       log_proxy_error(url, proxy, e)
       result = nil
     rescue Errno::ECONNREFUSED => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue OpenURI::HTTPError => e
       log_proxy_error(url, proxy, e)
       result = nil
     rescue OpenURI::HTTPError => e
