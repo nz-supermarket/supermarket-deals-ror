@@ -127,13 +127,9 @@ def process_item(item, aisle)
     product.aisle = aisle + ', ' + product.name
     product.link_to_cd = HOME_URL + link
 
-    if product.save
-      logger "Created product with sku: " + product.sku.to_s + ". "
+    logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
       process_prices item, product
-    else
-      logger("Something is wrong with creating "  + product.to_yaml)
-    end
   else
     process_prices item, product
   end
