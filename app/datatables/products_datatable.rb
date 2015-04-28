@@ -1,6 +1,6 @@
 class ProductsDatatable
-  delegate :params, :h, :link_to, :number_to_currency, :number_to_percentage, to: :@view
-  
+  delegate :params, :h, :link_to, :number_to_currency, :number_to_percentage, :content_tag, to: :@view
+
   def initialize(view)
     @view = view
   end
@@ -26,7 +26,7 @@ class ProductsDatatable
         number_to_currency(product.normal, unit: "NZ$", delimiter: ","), 
         number_to_currency(product.diff, unit: "NZ$", delimiter: ","),
         product.aisle, 
-        number_to_percentage(product.discount, precision: 2)
+        discount_handler(number_to_percentage(product.discount, precision: 2))
       ]
     end
   end
@@ -63,5 +63,16 @@ class ProductsDatatable
 
   def sort_direction
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  end
+
+  private
+  def discount_handler value
+    if value.to_d > 50
+      content_tag(:div, value, class: "yellow")
+    elsif value.to_d > 30
+      content_tag(:div, value, class: "green")
+    else
+      value
+    end
   end
 end
