@@ -11,3 +11,12 @@ jQuery ->
     bProcessing: true
     bServerSide: true
     sAjaxSource: $('#products').data('source')
+
+  $("#products").on "draw.dt", ->
+    setTimeout (->
+      $("div.green").parent().addClass "highlight-green"
+      $("div.yellow").parent().addClass "highlight-yellow"
+      return
+    ), 500
+    return
+  return

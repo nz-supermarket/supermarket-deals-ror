@@ -1,6 +1,0 @@
-runtime "ruby"
-stack "ruby-2.1"
-exec "lib/tasks/fetch_price.rb"
-remote
-gemfile "Gemfile"
-dir 'app/models/'
