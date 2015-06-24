@@ -49,7 +49,7 @@ task :fetch_prices => :environment do
   if @cache.fetch('last').present? and aisles.index(@cache.fetch('last')).present? and aisles.index(@cache.fetch('last')) != (aisles.count - 1)
     aisles.drop(aisles.index(@cache.fetch('last')))
   end
-
+    
   @aisle_processing = true
 
   aisles.each_with_index do |aisle, index|
@@ -66,6 +66,20 @@ end
 
 def grab_deals_aisle(aisleNo)
   doc = nokogiri_open_url(HOME_URL + FILTERS + "%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
+
+  process_doc doc
+end
+
+def grab_browse_aisle(aisle)
+  doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
+
+  process_doc doc
+end
+
+def process_doc(doc)
+  return if error?(doc)
+
+  aisle = aisle_name(doc)
 
   process_doc doc
 end
@@ -129,14 +143,13 @@ def process_item(item, aisle)
 
     logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
-      process_prices item, product
+    process_prices item, product
   else
     process_prices item, product
   end
 end
 
 def process_prices item, product
-
   if has_special_price?(item)
     have_special = true
     normal = (extract_price item,"was-price").presence
@@ -279,7 +292,6 @@ def generate_aisle(doc)
 
         if value.split("/").count >= 5
           aisle_array << value
-        end
       end
     end
   end
