@@ -133,7 +133,7 @@ def extract_price item,fetch_param
     end
     price
   rescue => e
-    logger "Unable to extract price, will ignore: #{e}" 
+    logger "Unable to extract price, will ignore: #{e}"
   end
 end
 
