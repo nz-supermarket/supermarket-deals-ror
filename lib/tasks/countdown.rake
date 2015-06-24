@@ -67,11 +67,7 @@ def process_item(item, aisle)
     product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
 
-    if product.save
-      logger "Created product with sku: " + product.sku.to_s + ". "
-    else
-      logger("Something is wrong with creating "  + product.to_yaml)
-    end
+    logger "Created product with sku: " + product.sku.to_s + ". " if product.save
   else
     logger "Product exist with sku: " + product.sku.to_s + ". "
 
