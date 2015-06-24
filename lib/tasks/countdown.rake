@@ -1,8 +1,7 @@
 desc 'Fetch deals product prices'
 task :fetch_offer_prices => :environment do
 
-  require "nokogiri"
-  require "open-uri"
+  setup
 
   @string_builder = ""
   # could do the same as fetch_prices
@@ -39,8 +38,7 @@ end
 desc 'Fetch normal product prices'
 task :fetch_prices => :environment do
 
-  require "nokogiri"
-  require "open-uri"
+  setup
 
   @string_builder = ""
 
@@ -56,20 +54,18 @@ task :fetch_prices => :environment do
 end
 
 def grab_deals_aisle(aisleNo)
-  doc = nokogiri_open_url("http://shop.countdown.co.nz/Shop/UpdatePageSize?pageSize=400&snapback=%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
+  doc = nokogiri_open_url(HOME_URL + FILTERS + "%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
 
-  return if error?(doc)
-
-  aisle = aisle_name(doc)
-
-  doc.css("div.price-container").each do |item|
-    process_item(item, aisle)
-  end
+  process_doc doc
 end
 
 def grab_browse_aisle(aisle)
   doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
 
+  process_doc doc
+end
+
+def process_doc(doc)
   return if error?(doc)
 
   aisle = aisle_name(doc)
@@ -106,39 +102,24 @@ def process_item(item, aisle)
     if item.at_css("span.special-price").nil?
       return
     end
-    product.special = extract_price item,"special-price"
-    product.normal = extract_price item,"was-price"
     product.aisle = aisle + ', ' + product.name
+    product.link_to_cd = HOME_URL + link
 
-    logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+    if product.save
+      logger "Created product with sku: " + product.sku.to_s + ". "
+
+      normal = (extract_price item,"was-price").presence || (extract_price item,"price").presence
+      NormalPrices.create({price: normal, product_id: product.id})
+
+      SpecialPrices.create({price: (extract_price item,"special-price"), product_id: product.id})
+    else
+      logger("Something is wrong with creating "  + product.to_yaml)
+    end
   else
-    logger "Product exist with sku: " + product.sku.to_s + ". "
+    normal = (extract_price item,"was-price").presence || (extract_price item,"price").presence
+    NormalPrices.create({price: normal, product_id: product.id})
 
-    begin
-      current_special = extract_price(item,"special-price").to_d
-      if product.special > current_special and current_special != 0.0
-        string = "Updated special price from " + product.special.to_d.to_s + " to "
-        product.special = extract_price item,"special-price"
-        logger (string + product.special.to_d.to_s + ". ")
-      end
-
-      product.save
-    rescue => e
-      logger("Something is wrong with to special price for "  + product.sku.to_s + ", will ignore: #{e}") 
-    end
-
-    begin
-      current_normal = extract_price(item,"was-price").to_d
-      if product.normal > current_normal and current_normal != 0.0
-        string = "Updated normal price from " + product.normal.to_d.to_s + " to "
-        product.normal = extract_price item,"was-price"
-        logger (string + product.normal.to_d.to_s + ". ")
-      end
-
-      product.save
-    rescue => e
-      logger("Something is wrong with to normal price for "  + product.sku.to_s + ", will ignore: #{e}")
-    end
+    SpecialPrices.create({price: (extract_price item,"special-price"), product_id: product.id})
   end
 end
 
@@ -152,7 +133,7 @@ def extract_price item,fetch_param
     end
     price
   rescue => e
-    logger "Unable to extract price, will ignore: #{e}" 
+    logger "Unable to extract price, will ignore: #{e}"
   end
 end
 
@@ -212,4 +193,9 @@ def generate_aisle(doc)
   end
 
   aisle_array
+end
+
+def setup
+  require "nokogiri"
+  require "open-uri"
 end
