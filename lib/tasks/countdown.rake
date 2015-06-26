@@ -292,6 +292,7 @@ def generate_aisle(doc)
 
         if value.split("/").count >= 5
           aisle_array << value
+        end
       end
     end
   end
