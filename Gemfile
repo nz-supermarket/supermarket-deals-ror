@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
-ruby "2.1.3"
+ruby "2.2.0"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.6'
+gem 'rails'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
 # Use postgres database for Active Record
-gem 'pg', '0.17.1'
+gem 'pg'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 gem 'rails_12factor', group: :production
@@ -21,37 +21,33 @@ gem 'rails_12factor', group: :production
 gem 'foreman'
 
 # used for rake countdown task
-gem 'nokogiri', '~> 1.6.3.1'
-
-# scheduled background task
-gem 'clockwork'
-gem 'sidekiq'
-
-# IronWorker
-gem 'iron_worker_ng'
+gem 'nokogiri'
 
 # Use bootstrap for style and formatting
-gem 'bootstrap-sass', '3.2.0.2'
+gem 'bootstrap-sass'
 
 # Analytics with New Relic
 gem 'newrelic_rpm'
 
 # Pagination / Infinite Scrolling
-gem 'will_paginate', '~> 3.0.7'
-gem 'will_paginate-bootstrap', '~> 1.0.1'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # datatable
-gem 'jquery-datatables-rails', '~> 3.1.0'
+gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
+
+# ruby-concurrency
+gem 'thread_safe'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -59,15 +55,10 @@ gem 'jquery-ui-rails'
 # Use unicorn as the app server
 gem 'unicorn'
 
-# Use whenever for automated cron jobs
-gem 'whenever'
-
-# Remote Logging with PaperTrail
-gem 'remote_syslog_logger'
-
 group :development, :test do
   # debugger
   gem 'pry-byebug', '2.0.0'
+  gem 'rubocop', require: false
 
   # Use Capistrano for deployment
   gem 'capistrano', '3.2.1'
@@ -86,8 +77,4 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'factory_girl_rspec'
   gem 'database_cleaner'
-
-  # Automated testing with guard
-  gem 'guard-cucumber', '1.4.1'
-  gem 'guard-rspec', '4.3.1'
 end

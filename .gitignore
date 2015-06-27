@@ -1,3 +1,4 @@
+automate.*
 *.rbc
 capybara-*.html
 .rspec
@@ -5,6 +6,7 @@ capybara-*.html
 /tmp
 /db/*.sqlite3
 /public/system
+/public/assets
 /coverage/
 /spec/tmp
 /db/schema.rb
@@ -14,6 +16,8 @@ pickle-email-*.html
 
 # TODO Comment out these rules if you are OK with secrets being uploaded to the repo
 config/initializers/secret_token.rb
+config/secrets.yml
+config/newrelic.yml
 
 ## Environment normalisation:
 /.bundle
