@@ -33,7 +33,7 @@ class ProductsDatatable
   end
 
   def fetch_products
-    products = Product.order("#{sort_column} #{sort_direction}")
+    products = LowestPrice.order("#{sort_column} #{sort_direction}")
     products = products.page(page).per_page(per_page)
     if params[:sSearch].present?
       params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
