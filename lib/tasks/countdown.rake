@@ -379,6 +379,12 @@ def setup
   require 'open-uri'
   require 'thread_safe'
 
-  @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+  case Rails.env
+  when 'production'
+    @cache = ActiveSupport::Cache::MemCacheStore.new("#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}")
+  else
+    @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+  end
+
   @aisle_processing = false
 end
