@@ -9,7 +9,7 @@ class ProductsDatatable
     {
       bDestroy: true,
       sEcho: params[:sEcho].to_i,
-      iTotalRecords: Product.count,
+      iTotalRecords: LowestPrice.count,
       iTotalDisplayRecords: products.total_entries,
       aaData: data
     }
