@@ -9,7 +9,7 @@ class ProductsDatatable
     {
       bDestroy: true,
       sEcho: params[:sEcho].to_i,
-      iTotalRecords: Product.count,
+      iTotalRecords: LowestPrice.count,
       iTotalDisplayRecords: products.total_entries,
       aaData: data
     }
@@ -33,7 +33,7 @@ class ProductsDatatable
   end
 
   def fetch_products
-    products = Product.order("#{sort_column} #{sort_direction}")
+    products = LowestPrice.order("#{sort_column} #{sort_direction}")
     products = products.page(page).per_page(per_page)
     if params[:sSearch].present?
       params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
@@ -64,6 +64,7 @@ class ProductsDatatable
 
   private
   def discount_handler value
+    return value if value.nil?
     if value.to_d > 50
       content_tag(:div, value, class: "yellow")
     elsif value.to_d > 30
