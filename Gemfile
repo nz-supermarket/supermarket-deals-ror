@@ -20,6 +20,8 @@ gem 'rails_12factor', group: :production
 # dependencies
 gem 'foreman'
 
+gem 'dalli', '~> 2.7'
+
 # used for rake countdown task
 gem 'nokogiri'
 
