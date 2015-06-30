@@ -198,9 +198,9 @@ def logger string
         @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
       end
     else
-      puts @string_builder
+      Rails.logger.info @string_builder
       @string_builder = ""
-      puts string
+      Rails.logger.info string
     end
   elsif LOG_LEVEL == "info"
     unless string.include? "Unable"
@@ -212,9 +212,9 @@ def logger string
           @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
         end
       else
-        puts @string_builder
+        Rails.logger.info @string_builder
         @string_builder = ""
-        puts string
+        Rails.logger.info string
       end
     end
   elsif LOG_LEVEL == "simple"
@@ -345,7 +345,7 @@ def open_url_with_proxy(url)
 end
 
 def log_proxy_error(url, proxy, error)
-  puts "Unable to connect with #{proxy} and #{url}, will ignore: #{error}"
+  Rails.logger.error "Unable to connect with #{proxy} and #{url}, will ignore: #{error}"
 end
 
 ###################################################
@@ -379,6 +379,12 @@ def setup
   require 'open-uri'
   require 'thread_safe'
 
-  @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+  case Rails.env
+  when 'production'
+    @cache = ActiveSupport::Cache::MemCacheStore.new("#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}")
+  else
+    @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+  end
+
   @aisle_processing = false
 end
