@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @counter = ((Time.now - Time.at(1419159600)).to_i / 604800).round
+    @counter = ((Time.now - Time.new(2015,7,1,10)).to_i / 604800).round
     @table_size = Product.all.count
     respond_to do |format|
       format.html
