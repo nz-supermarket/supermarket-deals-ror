@@ -128,7 +128,7 @@ def process_item(item, aisle)
   return if item.elements.first.at_css("a").at_css("img").blank?
   img = item.elements.first.at_css("a").at_css("img").attributes["src"].value
 
-  return unless link.include?("Stockcode=")
+  return unless link.include?("Stockcode=") and link.index("&name=")
 
   sku = link[(link.index("Stockcode=") + 10)..(link.index("&name=") - 1)]
   product = Product.where(sku: sku).first_or_initialize
