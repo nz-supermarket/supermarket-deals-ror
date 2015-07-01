@@ -381,7 +381,7 @@ def setup
 
   case Rails.env
   when 'production'
-    @cache = ActiveSupport::Cache::MemCacheStore.new("#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}")
+    @cache = ActiveSupport::Cache::DalliStore.new("#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}")
   else
     @cache = ActiveSupport::Cache::FileStore.new("/tmp")
   end
