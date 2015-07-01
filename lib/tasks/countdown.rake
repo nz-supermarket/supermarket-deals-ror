@@ -240,8 +240,7 @@ def cache_retrieve_url(val)
 
   sleep rand(1.0..10.0)
 
-  seconds_to_midnight = Time.new(Time.now.year, Time.now.month, Time.now.day, 23, 58, 00) - Time.now
-  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: seconds_to_midnight.seconds)
+  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: Midnight.seconds_to_midnight.seconds)
 
   @cache.fetch(val)
 end
