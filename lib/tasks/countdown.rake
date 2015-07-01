@@ -233,7 +233,7 @@ end
 def cache_retrieve_url(val)
 
   if @cache.fetch(val).present?
-    return @cache.fetch(val) if @cache.fetch(val) =~ /\s/
+    return @cache.fetch(val) if (@cache.fetch(val) =~ /\s/).present?
   end
 
   @cache.delete(val)
