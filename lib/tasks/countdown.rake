@@ -378,10 +378,11 @@ def setup
   require 'nokogiri'
   require 'open-uri'
   require 'thread_safe'
+  require 'dalli'
 
   case Rails.env
   when 'production'
-    @cache = ActiveSupport::Cache::DalliStore.new("#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}")
+    @cache = Rails.cache
   else
     @cache = ActiveSupport::Cache::FileStore.new("/tmp")
   end
