@@ -2,7 +2,7 @@
 <div class="row">
   <div class="col-xs-12">
     <h1>Bringing You The Lowest Price For Any Supermarket Product<br/></h1>
-    <h2>Since <%=  Time.new(2015, 7, 1, 10) %></h2>
+    <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
     <h3>With a total of <%= @table_size %> products. </h3>
 
     <div class="row spacer"></div>
