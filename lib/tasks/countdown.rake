@@ -377,8 +377,10 @@ PROXY_LIST = [nil,
 def setup
   require 'nokogiri'
   require 'open-uri'
-  require 'thread_safe'
   require 'dalli'
+  require "#{Rails.root}/lib/modules/midnight"
+
+  include Midnight
 
   case Rails.env
   when 'production'
