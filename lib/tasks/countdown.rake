@@ -209,7 +209,7 @@ def logger string
 end
 
 def nokogiri_open_url(url)
-  return Nokogiri::HTML(open_url_with_proxy(url, @aisle_processing))
+  return Nokogiri::HTML(RProxy.open_url_with_proxy(url, @aisle_processing))
 end
 
 def home_doc_fetch
@@ -299,8 +299,10 @@ def setup
   require 'nokogiri'
   require 'dalli'
   require "#{Rails.root}/lib/modules/midnight"
+  require "#{Rails.root}/lib/modules/r_proxy"
 
   include Midnight
+  include RProxy
 
   case Rails.env
   when 'production'
