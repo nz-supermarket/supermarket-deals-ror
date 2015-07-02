@@ -128,7 +128,7 @@ def process_item(item, aisle)
   return if item.elements.first.at_css("a").at_css("img").blank?
   img = item.elements.first.at_css("a").at_css("img").attributes["src"].value
 
-  return unless link.include?("Stockcode=")
+  return unless link.include?("Stockcode=") and link.index("&name=")
 
   sku = link[(link.index("Stockcode=") + 10)..(link.index("&name=") - 1)]
   product = Product.where(sku: sku).first_or_initialize
@@ -233,15 +233,14 @@ end
 def cache_retrieve_url(val)
 
   if @cache.fetch(val).present?
-    return @cache.fetch(val) if @cache.fetch(val) =~ /\s/
+    return @cache.fetch(val) if (@cache.fetch(val) =~ /\s/).present?
   end
 
   @cache.delete(val)
 
   sleep rand(1.0..10.0)
 
-  seconds_to_midnight = Time.new(Time.now.year, Time.now.month, Time.now.day, 23, 58, 00) - Time.now
-  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: seconds_to_midnight.seconds)
+  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: Midnight.seconds_to_midnight.seconds)
 
   @cache.fetch(val)
 end
@@ -377,8 +376,10 @@ PROXY_LIST = [nil,
 def setup
   require 'nokogiri'
   require 'open-uri'
-  require 'thread_safe'
   require 'dalli'
+  require "#{Rails.root}/lib/modules/midnight"
+
+  include Midnight
 
   case Rails.env
   when 'production'
