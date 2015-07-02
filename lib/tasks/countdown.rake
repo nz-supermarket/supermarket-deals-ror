@@ -70,12 +70,6 @@ def grab_deals_aisle(aisleNo)
   process_doc doc
 end
 
-def grab_browse_aisle(aisle)
-  doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
-
-  process_doc doc
-end
-
 def process_doc(doc)
   return if error?(doc)
 
