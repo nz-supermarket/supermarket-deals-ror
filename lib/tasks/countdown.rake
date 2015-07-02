@@ -209,7 +209,7 @@ def logger string
 end
 
 def nokogiri_open_url(url)
-  return Nokogiri::HTML(open_url_with_proxy(url))
+  return Nokogiri::HTML(open_url_with_proxy(url, @aisle_processing))
 end
 
 def home_doc_fetch
@@ -287,9 +287,9 @@ def generate_aisle(doc)
   aisle_array.compact
 end
 
-def open_url_with_proxy(url)
+def open_url_with_proxy(url, processing_aisle = false)
   proxies = PROXY_LIST
-  proxies = PROXY_LIST[0..3] if @aisle_processing
+  proxies = PROXY_LIST[0..3] if processing_aisle
   result = nil
   number_of_retries = 0
 
