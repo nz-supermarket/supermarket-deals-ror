@@ -9,6 +9,6 @@ class SpecialPrice < ActiveRecord::Base
   validates_uniqueness_of :product_id, :scope => :date
 
   def date_fix
-    self.date = Date.today
+    self.date = Time.zone.now.to_date
   end
 end
