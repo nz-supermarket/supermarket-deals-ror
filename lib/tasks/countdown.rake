@@ -46,10 +46,13 @@ task :fetch_prices => :environment do
 
   aisles = generate_aisle(home_doc_fetch)
 
-  if @cache.fetch('last').present? and aisles.index(@cache.fetch('last')).present? and aisles.index(@cache.fetch('last')) != (aisles.count - 1)
-    aisles.drop(aisles.index(@cache.fetch('last')))
+  if @cache.exist?('last')
+    last_aisle = @cache.fetch('last')
+    if aisles.index(last_aisle).present? and aisles.index(last_aisle) != (aisles.count - 1)
+      aisles.drop(aisles.index(last_aisle))
+    end
   end
-    
+
   @aisle_processing = true
 
   aisles.each_with_index do |aisle, index|
