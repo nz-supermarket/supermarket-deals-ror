@@ -59,15 +59,11 @@ gem 'unicorn'
 
 group :development, :test do
   # debugger
-  gem 'pry-byebug', '2.0.0'
+  gem 'pry-byebug'
   gem 'rubocop', require: false
 
-  # Use Capistrano for deployment
-  gem 'capistrano', '3.2.1'
-  gem 'capistrano-rails', '1.1.2'
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring', '1.1.3'
+  gem 'spring'
 
   # Test uses
   gem 'cucumber'

@@ -71,20 +71,6 @@ def grab_deals_aisle(aisleNo)
 end
 
 def grab_browse_aisle(aisle)
-  doc = nokogiri_open_url(HOME_URL + FILTERS + aisle)
-
-  process_doc doc
-end
-
-def process_doc(doc)
-  return if error?(doc)
-
-  aisle = aisle_name(doc)
-
-  process_doc doc
-end
-
-def grab_browse_aisle(aisle)
   doc = cache_retrieve_url(FILTERS + aisle)
 
   process_doc Nokogiri::HTML(doc)
@@ -223,7 +209,7 @@ def logger string
 end
 
 def nokogiri_open_url(url)
-  return Nokogiri::HTML(open_url_with_proxy(url))
+  return Nokogiri::HTML(RProxy.open_url_with_proxy(url, @aisle_processing))
 end
 
 def home_doc_fetch
@@ -233,7 +219,7 @@ end
 def cache_retrieve_url(val)
 
   if @cache.fetch(val).present?
-    return @cache.fetch(val) if (@cache.fetch(val) =~ /\s/).present?
+    return @cache.fetch(val) if @cache.fetch(val).match(/(\s500\s)/) # match " 500 " for 500 error
   end
 
   @cache.delete(val)
@@ -301,52 +287,6 @@ def generate_aisle(doc)
   aisle_array.compact
 end
 
-def open_url_with_proxy(url)
-  proxies = PROXY_LIST
-  proxies = PROXY_LIST[0..3] if @aisle_processing
-  result = nil
-  number_of_retries = 0
-
-  while result.blank?
-    begin
-      proxy = proxies.sample
-
-      proxies.delete(proxy)
-
-      number_of_retries += 1 if proxies.count <= 1
-      break if number_of_retries >= 20
-
-      result = open(url, :read_timeout => 30)
-    rescue RuntimeError, SocketError => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue Errno::ETIMEDOUT => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue Errno::ENETUNREACH => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue Errno::EHOSTUNREACH => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue Errno::ECONNRESET => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue Errno::ECONNREFUSED => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    rescue OpenURI::HTTPError => e
-      log_proxy_error(url, proxy, e)
-      result = nil
-    end
-  end
-  return result
-end
-
-def log_proxy_error(url, proxy, error)
-  Rails.logger.error "Unable to connect with #{proxy} and #{url}, will ignore: #{error}"
-end
-
 ###################################################
 ## GENERAL SETTINGS
 ###################################################
@@ -354,32 +294,15 @@ end
 HOME_URL = "http://shop.countdown.co.nz"
 FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 LOG_LEVEL = "info"
-PROXY_LIST = [nil,
-              'http://202.27.212.58:8080', ##
-              'http://202.27.212.136:8080',
-              'http://203.86.202.222:80', ##
-              'http://202.49.183.14:8080',
-              'http://60.234.51.62:8118',
-              'http://114.134.6.21:443',
-              'http://203.86.202.167:9001',
-              'http://203.184.12.247:443',
-              'http://125.236.198.134:8080',
-              'http://121.99.222.224:443',
-              'http://156.62.100.35:80',
-              'http://60.234.119.141:443',
-              'http://103.247.194.152:80',
-              'http://121.73.85.80:2132',
-              '',
-              ''
-              ]
 
 def setup
   require 'nokogiri'
-  require 'open-uri'
   require 'dalli'
   require "#{Rails.root}/lib/modules/midnight"
+  require "#{Rails.root}/lib/modules/r_proxy"
 
   include Midnight
+  include RProxy
 
   case Rails.env
   when 'production'
