@@ -23,7 +23,7 @@ class ProductsDatatable
         product.sku,
         price_handler(product.special, product.normal, product.diff),
         product.aisle,
-        discount_handler(number_to_percentage(product.discount, precision: 2))
+        discount_handler(number_to_percentage(product.discount || 0, precision: 2))
       ]
     end
   end
