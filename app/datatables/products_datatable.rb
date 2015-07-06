@@ -64,7 +64,7 @@ class ProductsDatatable
 
   private
   def discount_handler value
-    return value if value.nil?
+    return 0 if value.nil?
     if value.to_d > 50
       content_tag(:div, value, class: "yellow")
     elsif value.to_d > 30
