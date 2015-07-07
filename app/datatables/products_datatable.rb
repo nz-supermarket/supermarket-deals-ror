@@ -18,7 +18,7 @@ class ProductsDatatable
   def data
     products.map do |product|
       [
-        product.name,
+        link_to(product.name, "/products/#{product.id}"),
         product.volume,
         product.sku,
         price_handler(product.special, product.normal, product.diff),
