@@ -54,6 +54,7 @@ class ProductsDatatable
   end
 
   def sort_column
+    # database views/tables column names
     columns = %w[name volume sku diff_price aisle discount]
     columns[params[:iSortCol_0].to_i]
   end
