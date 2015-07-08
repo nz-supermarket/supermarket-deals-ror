@@ -30,6 +30,8 @@ class ProductsController < ApplicationController
     end
 
     def generate_chart
+      prices = combined_price_history
+
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
         f.title(:text => "Price History for #{@product.name}")
         f.xAxis(:categories => ["United States", "Japan", "China", "Germany", "France"])
@@ -47,22 +49,12 @@ class ProductsController < ApplicationController
 
     def combined_price_history
       prices = NormalPrice.product_price_history(@product.id) + SpecialPrice.product_price_history(@product.id)
-      prices.group_by{}
-    end
+      prices = prices.group_by{ |i| i.date }
 
-    def get_product_normal_price_history_prices
-      NormalPrice.product_price_history(@product.id).map{ |i| i.price }
-    end
+      prices = prices.each do |key, value|
+        puts "#{key} is #{value}"
+      end
 
-    def get_product_normal_price_history_dates
-      NormalPrice.product_price_history(@product.id).map{ |i| i.date }
-    end
-
-    def get_product_special_price_history_prices
-      SpecialPrice.product_price_history(@product.id).map{ |i| i.price }
-    end
-
-    def get_product_special_price_history_dates
-      SpecialPrice.product_price_history(@product.id).map{ |i| i.date }
+      prices
     end
 end
