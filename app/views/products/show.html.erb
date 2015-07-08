@@ -40,8 +40,6 @@
   <%= @product.discount %>
 </p>
 
-<div>
-  <%= high_chart("highchart", @chart) %>
-</div>
+<%= render partial: 'basic_chart' %>
 
 <%= link_to 'Back', products_path %>
