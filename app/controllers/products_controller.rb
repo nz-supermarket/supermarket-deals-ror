@@ -51,10 +51,18 @@ class ProductsController < ApplicationController
       prices = NormalPrice.product_price_history(@product.id) + SpecialPrice.product_price_history(@product.id)
       prices = prices.group_by{ |i| i.date }
 
-      prices = prices.each do |key, value|
-        puts "#{key} is #{value}"
-      end
+      prices.each do |key, values|
+        new_value = Hash.new(nil)
 
-      prices
+        values.each do |value|
+          if value.class == NormalPrice
+            new_value[:normal] = value.price
+          elsif value.class == SpecialPrice
+            new_value[:special] = value.price
+          end
+        end
+
+        prices[key] = new_value
+      end
     end
 end
