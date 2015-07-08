@@ -38,9 +38,9 @@ class ProductsController < ApplicationController
 
         values.each do |value|
           if value.class == NormalPrice
-            new_value[:normal] = value.price
+            new_value[:normal] = value.price.try(:to_f)
           elsif value.class == SpecialPrice
-            new_value[:special] = value.price
+            new_value[:special] = value.price.try(:to_f)
           end
         end
 
