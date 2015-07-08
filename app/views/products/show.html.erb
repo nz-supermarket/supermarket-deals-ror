@@ -40,4 +40,8 @@
   <%= @product.discount %>
 </p>
 
+<div>
+  <%= high_chart("highchart", @chart) %>
+</div>
+
 <%= link_to 'Back', products_path %>
