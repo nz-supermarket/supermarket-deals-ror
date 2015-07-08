@@ -45,6 +45,11 @@ class ProductsController < ApplicationController
       end
     end
 
+    def combined_price_history
+      prices = NormalPrice.product_price_history(@product.id) + SpecialPrice.product_price_history(@product.id)
+      prices.group_by{}
+    end
+
     def get_product_normal_price_history_prices
       NormalPrice.product_price_history(@product.id).map{ |i| i.price }
     end
