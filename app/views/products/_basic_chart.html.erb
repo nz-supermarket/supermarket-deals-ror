@@ -1,0 +1,83 @@
+<script type="text/javascript">
+
+$(function () {
+
+  $('#basic-chart').highcharts({
+    chart: {
+      type: 'line',
+      zoomType: 'x'
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      enabled: true,
+    },
+    title: {
+      text: "Price History of " + <%= raw @product.name.to_json %>,
+    },
+    subtitle: {
+      text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
+    },
+    xAxis: {
+      categories: <%= raw @prices.keys.to_json %>,
+      crosshair: true,
+    },
+    yAxis: [
+      { // Primary yAxis
+        labels: {
+            format: '${value}',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        title: {
+            text: 'Normal Price History',
+            style: {
+                color: Highcharts.getOptions().colors[1]
+            }
+        },
+        min: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.min - 1 %>,
+        max: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.max + 1 %>
+      }, { // Secondary yAxis
+        title: {
+            text: 'Special Price History',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        labels: {
+            format: '${value}',
+            style: {
+                color: Highcharts.getOptions().colors[0]
+            }
+        },
+        opposite: true,
+        min: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.min - 1 %>,
+        max: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.max + 1 %>
+      }
+    ],
+    tooltip: {
+      shared: true
+    },
+    series: [
+    {
+      name: 'Normal Prices',
+      data: <%= raw @prices.values.map{ |i| i[:normal] }.to_json %>,
+      tooltip: {
+        valuePrefix: '$ '
+      }
+    },
+    {
+      name: 'Special Prices',
+      yAxis: 1,
+      data: <%= raw @prices.values.map{ |i| i[:special] }.to_json %>,
+      tooltip: {
+        valuePrefix: '$ '
+      }
+    }]
+  });
+});
+</script>
+<div id='basic-chart' class="col-md-12"></div>
