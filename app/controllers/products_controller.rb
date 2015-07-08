@@ -29,15 +29,22 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:name, :volume, :sku, :special, :normal, :diff, :aisle, :discount)
     end
 
-    def get_product_normal_price_history
-      NormalPrice.where(product_id: @product.id).map do |i|
-        { i.date.to_time.to_i => i.price }
       end
     end
 
-    def get_product_special_price_history
-      SpecialPrice.where(product_id: @product.id).map do |i|
-        { i.date.to_time.to_i => i.price }
-      end
+    def get_product_normal_price_history_prices
+      NormalPrice.where(product_id: @product.id).order(:date).map{ |i| i.price }
+    end
+
+    def get_product_normal_price_history_dates
+      NormalPrice.where(product_id: @product.id).order(:date).map{ |i| i.date }
+    end
+
+    def get_product_special_price_history_prices
+      SpecialPrice.where(product_id: @product.id).order(:date).map{ |i| i.price }
+    end
+
+    def get_product_special_price_history_dates
+      SpecialPrice.where(product_id: @product.id).order(:date).map{ |i| i.date }
     end
 end
