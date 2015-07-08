@@ -15,7 +15,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    generate_chart
+    @prices = combined_price_history
   end
 
   private
@@ -27,25 +27,6 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:name, :volume, :sku, :special, :normal, :diff, :aisle, :discount)
-    end
-
-    def generate_chart
-      prices = combined_price_history
-
-      @chart = LazyHighCharts::HighChart.new('graph') do |f|
-        f.title(:text => "Price History for #{@product.name}")
-        f.xAxis(:categories => prices.keys)
-
-        f.series(:name => 'Normal Prices', :yAxis => 0, :data => prices.values.map{ |i| i[:normal] })
-        f.series(:name => 'Special Prices', :yAxis => 1, :data => prices.values.map{ |i| i[:special] })
-
-        f.yAxis [
-          {:title => {:text => 'Normal Price History', :margin => 70} },
-          {:title => {:text => 'Special Price History'}, :opposite => true},
-        ]
-
-        f.chart({:defaultSeriesType=>"line"})
-      end
     end
 
     def combined_price_history
