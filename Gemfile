@@ -51,6 +51,10 @@ gem 'jquery-ui-rails'
 # ruby-concurrency
 gem 'thread_safe'
 
+# highcharts
+gem 'highcharts-rails'
+gem 'lazy_high_charts'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
