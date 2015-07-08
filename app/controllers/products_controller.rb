@@ -34,13 +34,14 @@ class ProductsController < ApplicationController
 
       @chart = LazyHighCharts::HighChart.new('graph') do |f|
         f.title(:text => "Price History for #{@product.name}")
-        f.xAxis(:categories => ["United States", "Japan", "China", "Germany", "France"])
-        f.series(:name => 'Normal Prices', :yAxis => 0, :data => get_product_normal_price_history_prices)
-        f.series(:name => 'Special Prices', :yAxis => 1, :data => get_product_special_price_history_prices)
+        f.xAxis(:categories => prices.keys)
+
+        f.series(:name => 'Normal Prices', :yAxis => 0, :data => prices.values.map{ |i| i[:normal] })
+        f.series(:name => 'Special Prices', :yAxis => 1, :data => prices.values.map{ |i| i[:special] })
 
         f.yAxis [
-          {:title => {:text => "GDP in Billions", :margin => 70} },
-          {:title => {:text => "Population in Millions"}, :opposite => true},
+          {:title => {:text => 'Normal Price History', :margin => 70} },
+          {:title => {:text => 'Special Price History'}, :opposite => true},
         ]
 
         f.chart({:defaultSeriesType=>"line"})
