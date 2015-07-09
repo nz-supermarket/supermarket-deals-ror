@@ -1,5 +1,20 @@
 # Normal Prices Records
-class NormalPrice < Price
+class NormalPrice < Active
+  belongs_to :product
+  before_validation :date_fix
+
+  validates_uniqueness_of :product_id, :scope => :date
+
   alias_attribute :normal, :price
   alias_attribute :normal_date, :date
+
+  def self.product_price_history(id)
+    self.where(product_id: id).order(:date)
+  end
+
+  private
+
+  def date_fix
+    self.date = Time.zone.now.to_date
+  end
 end
