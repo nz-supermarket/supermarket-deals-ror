@@ -9,7 +9,7 @@ class SpecialPrice < ActiveRecord::Base
   alias_attribute :special_date, :date
 
   def self.product_price_history(id)
-    self.where(product_id: id).order(:date)
+    where(product_id: id).order(:date)
   end
 
   private
