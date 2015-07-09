@@ -1,5 +1,5 @@
 # Normal Prices Records
-class NormalPrice < Active
+class NormalPrice < ActiveRecord::Base
   belongs_to :product
   before_validation :date_fix
 

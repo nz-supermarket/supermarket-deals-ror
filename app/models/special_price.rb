@@ -1,5 +1,5 @@
 # Special Prices Records
-class SpecialPrice < Price
+class SpecialPrice < ActiveRecord::Base
   belongs_to :product
   before_validation :date_fix
 
