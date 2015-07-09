@@ -1,24 +1,28 @@
 <div class="row"></div>
 <div class="row">
+  <% cache("index_header", :expires_in => Time.new(Time.zone.now.year, Time.zone.now.month, Time.zone.now.day, 23, 58, 00) - Time.zone.now) do %>
+    <div class="col-xs-12">
+      <h1>Bringing You The Lowest Price For Any Supermarket Product<br/></h1>
+      <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
+      <h3>With a total of <%= @table_size %> products. </h3>
+
+      <div class="row spacer"></div>
+
+      <h5>
+      <p>With this list, you should be able to gauge an item that you are purchasing at it's lowest price. <br/>
+      You can now sort the list by any column in ascending or descending order. <br/>
+      Filter is added for columns name, sku and aisle. You can input in the search field to display what you are searching for. <br/>
+      In the discount column, if the price difference is more than 30% of it's original price,
+      it will be highlighted in green, more than 50% with yellow. <br/>
+      More improvements will be added in time.</p>
+
+      <p>If you like this compilation, please donate to<br/>
+      bitcoin address: 1JuNraU9vZyFxVqmUbTMJFFFFvzj1SHC48<br/>
+      paypal address: daniel.ltw@gmail.com</p></h5>
+      <div class="row spacer"></div>
+    </div>
+  <% end %>
   <div class="col-xs-12">
-    <h1>Bringing You The Lowest Price For Any Supermarket Product<br/></h1>
-    <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
-    <h3>With a total of <%= @table_size %> products. </h3>
-
-    <div class="row spacer"></div>
-
-    <h5>
-    <p>With this list, you should be able to gauge an item that you are purchasing at it's lowest price. <br/>
-    You can now sort the list by any column in ascending or descending order. <br/>
-    Filter is added for columns name, sku and aisle. You can input in the search field to display what you are searching for. <br/>
-    In the discount column, if the price difference is more than 30% of it's original price,
-    it will be highlighted in green, more than 50% with yellow. <br/>
-    More improvements will be added in time.</p>
-
-    <p>If you like this compilation, please donate to<br/>
-    bitcoin address: 1JuNraU9vZyFxVqmUbTMJFFFFvzj1SHC48<br/>
-    paypal address: daniel.ltw@gmail.com</p></h5>
-    <div class="row spacer"></div>
     <table id="products" class="display table-responsive" data-source="<%= products_url(format: "json") %>">
       <thead>
         <tr>
