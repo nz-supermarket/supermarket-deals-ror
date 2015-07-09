@@ -6,7 +6,7 @@ class NormalPrice < ActiveRecord::Base
   alias_attribute :normal, :price
   alias_attribute :normal_date, :date
 
-  validates_uniqueness_of :product_id, :scope => :date
+  validates_uniqueness_of :product_id, scope: :date
 
   def self.product_price_history(id)
     where(product_id: id).order(:date)
