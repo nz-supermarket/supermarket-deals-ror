@@ -18,7 +18,7 @@ class ProductsDatatable
   def data
     products.map do |product|
       [
-        product.name,
+        link_to(product.name, "/products/#{product.id}"),
         product.volume,
         product.sku,
         price_handler(product.special, product.normal, product.diff),
@@ -54,7 +54,8 @@ class ProductsDatatable
   end
 
   def sort_column
-    columns = %w[name volume sku diff aisle discount]
+    # database views/tables column names
+    columns = %w[name volume sku diff_price aisle discount]
     columns[params[:iSortCol_0].to_i]
   end
 

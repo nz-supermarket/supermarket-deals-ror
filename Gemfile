@@ -51,6 +51,9 @@ gem 'jquery-ui-rails'
 # ruby-concurrency
 gem 'thread_safe'
 
+# highcharts
+gem 'highcharts-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -61,6 +64,9 @@ group :development, :test do
   # debugger
   gem 'pry-byebug'
   gem 'rubocop', require: false
+
+  # mini-profiler to analyze time taken for fetching of data visually on the page
+  gem 'rack-mini-profiler', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
