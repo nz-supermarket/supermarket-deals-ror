@@ -3,7 +3,8 @@ require "#{Rails.root}/lib/modules/cacher"
 require "#{Rails.root}/lib/modules/rake_logger"
 require "#{Rails.root}/lib/modules/web_scrape"
 
-module CountdownAisleProcess
+class CountdownAisleProcess < Object
+  include Celluloid
   include Cacher
   include RakeLogger
   include WebScrape
@@ -11,7 +12,7 @@ module CountdownAisleProcess
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
-  def home_doc_fetch
+  def self.home_doc_fetch
     WebScrape.nokogiri_open_url(HOME_URL)
   end
 
