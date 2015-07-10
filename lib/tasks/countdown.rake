@@ -93,8 +93,10 @@ def process_item(item, aisle)
 
     RakeLogger.logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
+    RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
     process_prices item, product
   else
+    RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
     process_prices item, product
   end
 end
@@ -122,10 +124,13 @@ def extract_price item,fetch_param
   begin
     price = ""
     if fetch_param.include? "was-price"
+      RakeLogger.logger "Was price found for product " + product.id.to_s + ". "
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
     elsif fetch_param.include? "special-price"
+      RakeLogger.logger "Special price found for product " + product.id.to_s + ". "
       price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
     else
+      RakeLogger.logger "Normal price found for product " + product.id.to_s + ". "
       price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
     end
     return price
