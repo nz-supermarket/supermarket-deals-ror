@@ -1,6 +1,6 @@
 module RakeLogger
   def logger(string, level = 'info')
-    if LOG_LEVEL == "debug"
+    if level == "debug"
       if string.include? "exist"
         unless @string_builder.include? "exist"
           @string_builder = string
@@ -13,7 +13,7 @@ module RakeLogger
         @string_builder = ""
         Rails.logger.info string
       end
-    elsif LOG_LEVEL == "info"
+    elsif level == "info"
       unless string.include? "Unable"
         if string.include? "exist"
           unless @string_builder.include? "exist"
@@ -28,7 +28,7 @@ module RakeLogger
           Rails.logger.info string
         end
       end
-    elsif LOG_LEVEL == "simple"
+    elsif level == "simple"
       print('.')
     end
   end
