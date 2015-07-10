@@ -243,11 +243,9 @@ LOG_LEVEL = "info"
 def setup
   require 'nokogiri'
   require 'dalli'
-  require "#{Rails.root}/lib/modules/midnight"
   require "#{Rails.root}/lib/modules/r_proxy"
   require "#{Rails.root}/lib/modules/cacher"
 
-  include Midnight
   include RProxy
   include Cacher
 

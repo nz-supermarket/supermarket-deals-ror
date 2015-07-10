@@ -1,4 +1,12 @@
+require 'nokogiri'
+require 'dalli'
+require "#{Rails.root}/lib/modules/midnight"
+require "#{Rails.root}/lib/modules/r_proxy"
+
 module Cacher
+  include Midnight
+  include RProxy
+
   def cache_retrieve_url(val)
 
     if @cache.fetch(val).present?
