@@ -30,6 +30,10 @@ task :fetch_prices => :environment do
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
 
+def home_doc_fetch
+  nokogiri_open_url(HOME_URL)
+end
+
 def grab_browse_aisle(aisle)
   doc = Cacher.cache_retrieve_url(FILTERS + aisle)
 
@@ -170,10 +174,6 @@ end
 
 def nokogiri_open_url(url)
   return Nokogiri::HTML(RProxy.open_url_with_proxy(url, @aisle_processing))
-end
-
-def home_doc_fetch
-  nokogiri_open_url(HOME_URL)
 end
 
 def cat_links_fetch(doc)
