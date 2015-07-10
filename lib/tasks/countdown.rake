@@ -245,9 +245,11 @@ def setup
   require 'dalli'
   require "#{Rails.root}/lib/modules/midnight"
   require "#{Rails.root}/lib/modules/r_proxy"
+  require "#{Rails.root}/lib/modules/cacher"
 
   include Midnight
   include RProxy
+  include Cacher
 
   case Rails.env
   when 'production'
