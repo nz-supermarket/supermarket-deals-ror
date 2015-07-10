@@ -1,40 +1,3 @@
-desc 'Fetch deals product prices'
-task :fetch_offer_prices => :environment do
-
-  setup
-
-  @string_builder = ""
-  # could do the same as fetch_prices
-  # go thru every aisle in the array and
-  # replace "Browse" with "Deals"
-
-  (0..50).each do |i|
-    grab_deals_aisle(i)
-    sleep rand(1..20)
-  end
-
-  sleep rand(50.0..70.0)
-
-  (51..100).each do |i|
-    grab_deals_aisle(i)
-    sleep rand(1..20)
-  end
-
-  sleep rand(200.0..300.0)
-
-  (101..200).each do |i|
-    grab_deals_aisle(i)
-    sleep rand(1..20)
-  end
-
-  sleep rand(50..70)
-
-  (201..300).each do |i|
-    grab_deals_aisle(i)
-    sleep rand(1..20)
-  end
-end
-
 desc 'Fetch normal product prices'
 task :fetch_prices => :environment do
 
@@ -65,12 +28,6 @@ task :fetch_prices => :environment do
   end
 
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
-end
-
-def grab_deals_aisle(aisleNo)
-  doc = nokogiri_open_url(HOME_URL + FILTERS + "%2FShop%2FDealsAisle%2F" + aisleNo.to_s)
-
-  process_doc doc
 end
 
 def grab_browse_aisle(aisle)
