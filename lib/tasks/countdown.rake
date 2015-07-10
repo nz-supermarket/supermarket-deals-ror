@@ -143,10 +143,6 @@ def has_special_price?(item)
   item.at_css('span.price').attributes['class'].value.include? 'special-price'
 end
 
-def nokogiri_open_url(url)
-  return Nokogiri::HTML(RProxy.open_url_with_proxy(url, @aisle_processing))
-end
-
 def cat_links_fetch(doc)
   print "."
   doc.at_css("div.toolbar-links-children").at_css("div.row-fluid.mrow-fluid").css("a.toolbar-slidebox-link")
@@ -213,11 +209,9 @@ FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 def setup
   require 'nokogiri'
   require 'dalli'
-  require "#{Rails.root}/lib/modules/r_proxy"
   require "#{Rails.root}/lib/modules/cacher"
   require "#{Rails.root}/lib/modules/rake_logger"
 
-  include RProxy
   include Cacher
   include RakeLogger
 
