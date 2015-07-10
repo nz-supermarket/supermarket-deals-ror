@@ -1,5 +1,5 @@
 module RakeLogger
-  def logger(string, level = 'simple')
+  def logger(string, level = 'info')
     if LOG_LEVEL == "debug"
       if string.include? "exist"
         unless @string_builder.include? "exist"
