@@ -91,7 +91,7 @@ def process_item(item, aisle)
     product.aisle = aisle + ', ' + product.name
     product.link_to_cd = HOME_URL + link
 
-    logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+    RakeLogger.logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
     process_prices item, product
   else
@@ -108,13 +108,13 @@ def process_prices item, product
   end
 
   normal = NormalPrice.new({price: normal, product_id: product.id})
-  logger "Created normal price for product " + product.id.to_s + ". " if normal.save
+  RakeLogger.logger "Created normal price for product " + product.id.to_s + ". " if normal.save
 
   return unless have_special
 
   special = extract_price item,"special-price"
   special = SpecialPrice.new({price: special, product_id: product.id})
-  logger "Created special price for product " + product.id.to_s + ". " if special.save
+  RakeLogger.logger "Created special price for product " + product.id.to_s + ". " if special.save
 end
 
 def extract_price item,fetch_param
@@ -130,7 +130,7 @@ def extract_price item,fetch_param
     end
     return price
   rescue => e
-    logger "Unable to extract price, will ignore: #{e}"
+    RakeLogger.logger "Unable to extract price, will ignore: #{e}"
   end
 end
 
