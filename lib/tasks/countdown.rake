@@ -176,21 +176,6 @@ def home_doc_fetch
   nokogiri_open_url(HOME_URL)
 end
 
-def cache_retrieve_url(val)
-
-  if @cache.fetch(val).present?
-    return @cache.fetch(val) if @cache.fetch(val).match(/(\s500\s)/) # match " 500 " for 500 error
-  end
-
-  @cache.delete(val)
-
-  sleep rand(1.0..10.0)
-
-  @cache.write(val, nokogiri_open_url(HOME_URL + val).to_html, expires_in: Midnight.seconds_to_midnight.seconds)
-
-  @cache.fetch(val)
-end
-
 def cat_links_fetch(doc)
   print "."
   doc.at_css("div.toolbar-links-children").at_css("div.row-fluid.mrow-fluid").css("a.toolbar-slidebox-link")
