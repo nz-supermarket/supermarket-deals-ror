@@ -211,9 +211,11 @@ def setup
   require 'dalli'
   require "#{Rails.root}/lib/modules/r_proxy"
   require "#{Rails.root}/lib/modules/cacher"
+  require "#{Rails.root}/lib/modules/rake_logger"
 
   include RProxy
   include Cacher
+  include RakeLogger
 
   case Rails.env
   when 'production'
