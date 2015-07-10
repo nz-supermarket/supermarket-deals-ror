@@ -49,7 +49,7 @@ gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 
 # ruby-concurrency
-gem 'thread_safe'
+gem 'celluloid'
 
 # highcharts
 gem 'highcharts-rails'
