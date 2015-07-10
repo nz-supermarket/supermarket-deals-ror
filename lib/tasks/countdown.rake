@@ -31,7 +31,7 @@ task :fetch_prices => :environment do
 end
 
 def home_doc_fetch
-  nokogiri_open_url(HOME_URL)
+  WebScrape.nokogiri_open_url(HOME_URL)
 end
 
 def grab_browse_aisle(aisle)
