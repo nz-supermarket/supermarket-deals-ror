@@ -35,7 +35,7 @@ def home_doc_fetch
 end
 
 def grab_browse_aisle(aisle)
-  doc = Cacher.cache_retrieve_url(FILTERS + aisle)
+  doc = Cacher.cache_retrieve_url(@cache, FILTERS + aisle)
 
   process_doc Nokogiri::HTML(doc)
 end
@@ -198,7 +198,7 @@ def generate_aisle(doc)
     # category
     value = link.attributes["href"].value
 
-    resp = Cacher.cache_retrieve_url(value)
+    resp = Cacher.cache_retrieve_url(@cache, value)
 
     next if resp.blank?
 
@@ -209,7 +209,7 @@ def generate_aisle(doc)
     sub_links.each do |sub|
       value = sub.attributes["href"].value
 
-      sub_resp = Cacher.cache_retrieve_url(value)
+      sub_resp = Cacher.cache_retrieve_url(@cache, value)
 
       next if sub_resp.blank?
 
