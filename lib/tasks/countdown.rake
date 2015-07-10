@@ -204,7 +204,6 @@ end
 
 HOME_URL = "http://shop.countdown.co.nz"
 FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
-LOG_LEVEL = "info"
 
 def setup
   require 'nokogiri'
