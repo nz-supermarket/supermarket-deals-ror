@@ -1,5 +1,5 @@
 module RakeLogger
-  def logger(string, level = 'info')
+  def logger(string, level = 'debug')
     if level == "debug"
       log_string string
     elsif level == "info"
