@@ -18,7 +18,7 @@ task :fetch_prices => :environment do
 
   @aisle_processing = true
 
-  pool = CountdownAisleProcess.pool(size: 3)
+  pool = CountdownAisleProcess.pool(size: (Celluloid.cores / 2.0).ceil)
 
   aisles.each_with_index do |aisle, index|
     pool.async.grab_browse_aisle(aisle, @cache)
