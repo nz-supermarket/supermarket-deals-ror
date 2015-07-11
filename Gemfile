@@ -21,6 +21,7 @@ gem 'rails_12factor', group: :production
 gem 'foreman'
 
 gem 'dalli', '~> 2.7'
+gem 'connection_pool'
 
 # used for rake countdown task
 gem 'nokogiri'
