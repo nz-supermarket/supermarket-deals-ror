@@ -7,17 +7,17 @@ class CountdownAisleProcess < Object
   include Celluloid
   include Cacher
   include RakeLogger
-  include WebScrape
+  extend WebScrape
 
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
   def self.home_doc_fetch
-    WebScrape.nokogiri_open_url(HOME_URL)
+    nokogiri_open_url(HOME_URL)
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = Cacher.cache_retrieve_url(cache, FILTERS + aisle)
+    doc = cache_retrieve_url(cache, FILTERS + aisle)
 
     process_doc Nokogiri::HTML(doc)
   end
@@ -73,12 +73,12 @@ class CountdownAisleProcess < Object
       product.aisle = aisle + ', ' + product.name
       product.link_to_cd = HOME_URL + link
 
-      RakeLogger.logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+      logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
-      RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
+      logger "Process prices for product " + product.id.to_s + " now. "
       process_prices item, product
     else
-      RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
+      logger "Process prices for product " + product.id.to_s + " now. "
       process_prices item, product
     end
   end
@@ -92,13 +92,13 @@ class CountdownAisleProcess < Object
     end
 
     normal = NormalPrice.new({price: normal, product_id: product.id})
-    RakeLogger.logger "Created normal price for product " + product.id.to_s + ". " if normal.save
+    logger "Created normal price for product " + product.id.to_s + ". " if normal.save
 
     return unless have_special
 
     special = extract_price item,"special-price"
     special = SpecialPrice.new({price: special, product_id: product.id})
-    RakeLogger.logger "Created special price for product " + product.id.to_s + ". " if special.save
+    logger "Created special price for product " + product.id.to_s + ". " if special.save
   end
 
   def extract_price item,fetch_param
@@ -106,18 +106,18 @@ class CountdownAisleProcess < Object
     begin
       price = ""
       if fetch_param.include? "was-price"
-        RakeLogger.logger "Was price found for product " + product.id.to_s + ". "
+        logger "Was price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
       elsif fetch_param.include? "special-price"
-        RakeLogger.logger "Special price found for product " + product.id.to_s + ". "
+        logger "Special price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
       else
-        RakeLogger.logger "Normal price found for product " + product.id.to_s + ". "
+        logger "Normal price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
       end
       return price
     rescue => e
-      RakeLogger.logger "Unable to extract price, will ignore: #{e}"
+      logger "Unable to extract price, will ignore: #{e}"
     end
   end
 
