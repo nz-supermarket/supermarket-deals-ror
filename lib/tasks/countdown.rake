@@ -5,8 +5,6 @@ task :fetch_prices => :environment do
 
   time = Time.now
 
-  @string_builder = ""
-
   aisles = generate_aisle(CountdownAisleProcess.home_doc_fetch)
 
   if @cache.exist?('last')

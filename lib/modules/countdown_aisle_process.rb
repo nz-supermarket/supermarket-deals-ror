@@ -17,9 +17,13 @@ class CountdownAisleProcess < Object
   end
 
   def grab_browse_aisle(aisle, cache)
+    @log_string_builder = ""
+
     doc = cache_retrieve_url(cache, FILTERS + aisle)
 
     process_doc Nokogiri::HTML(doc)
+
+    @log_string_builder
   end
 
   def process_doc(doc)
