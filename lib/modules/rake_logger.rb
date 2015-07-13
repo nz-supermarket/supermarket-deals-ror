@@ -24,6 +24,7 @@ module RakeLogger
     else
       @log_string_builder.append('\n')
       @log_string_builder.append(string)
+      info string
     end
   end
 end
