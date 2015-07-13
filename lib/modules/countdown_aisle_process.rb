@@ -13,8 +13,6 @@ class CountdownAisleProcess < Object
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
-  Celluloid.logger = Rails.logger
-
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
   end
