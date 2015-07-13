@@ -15,15 +15,16 @@ module RakeLogger
 
   def log_string(string)
     if string.include? "exist"
-      unless @log_string_builder.include? "exist"
-        @log_string_builder = string
+      unless @string_builder.include? "exist"
+        @string_builder = string
       else
-        @log_string_builder = @log_string_builder.gsub('. ', '')
-        @log_string_builder = @log_string_builder + string.gsub("Product exist with sku: ", ", ")
+        @string_builder = @string_builder.gsub('. ', '')
+        @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
       end
     else
-      @log_string_builder.append('\n')
-      @log_string_builder.append(string)
+      info @string_builder
+      @string_builder = ""
+      info string
     end
   end
 end

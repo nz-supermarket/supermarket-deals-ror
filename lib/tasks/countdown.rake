@@ -27,6 +27,8 @@ task :fetch_prices => :environment do
     end
   end
 
+  sleep(500) while pool.running?
+
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
 
