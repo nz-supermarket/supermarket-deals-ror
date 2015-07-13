@@ -81,19 +81,19 @@ class CountdownAisleProcess < Object
       logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
       logger "Process prices for product " + product.id.to_s + " now. "
-      process_prices item, product
+      process_prices(item, product)
     else
       logger "Process prices for product " + product.id.to_s + " now. "
-      process_prices item, product
+      process_prices(item, product)
     end
   end
 
   def process_prices(item, product)
     if has_special_price?(item)
       have_special = true
-      normal = (extract_price item, "was-price").presence
+      normal = (extract_price(item, "was-price")).presence
     else
-      normal = (extract_price item, "price").presence
+      normal = (extract_price(item, "price")).presence
     end
 
     normal = NormalPrice.new({ price: normal, product_id: product.id })
@@ -101,7 +101,7 @@ class CountdownAisleProcess < Object
 
     return unless have_special
 
-    special = extract_price item,"special-price"
+    special = extract_price(item,"special-price")
     special = SpecialPrice.new({ price: special, product_id: product.id })
     logger "Created special price for product " + product.id.to_s + ". " if special.save
   end
