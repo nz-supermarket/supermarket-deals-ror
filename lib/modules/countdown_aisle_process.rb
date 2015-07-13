@@ -5,12 +5,15 @@ require "#{Rails.root}/lib/modules/web_scrape"
 
 class CountdownAisleProcess < Object
   include Celluloid
+  include Celluloid::Logger
   include Cacher
   include RakeLogger
   extend WebScrape
 
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
+
+  Celluloid.logger = Rails.logger
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
