@@ -22,9 +22,9 @@ module RakeLogger
         @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
       end
     else
-      Rails.logger.info @string_builder
+      info @string_builder
       @string_builder = ""
-      Rails.logger.info string
+      info string
     end
   end
 end
