@@ -17,7 +17,7 @@ module Cacher
 
     sleep rand(1.0..10.0)
 
-    cache.write(val, Nokogiri::HTML(RProxy.open_url_with_proxy(home_url + val)).to_html, expires_in: Midnight.seconds_to_midnight.seconds)
+    cache.write(val, Nokogiri::HTML(RProxy.open_url_with_proxy(home_url + val)).to_html, expires_in: 239.minutes)
 
     cache.fetch(val)
   end
