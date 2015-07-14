@@ -27,7 +27,7 @@ task :fetch_prices => :environment do
     end
   end
 
-  sleep(10) while pool.running?
+  sleep(10) while CountdownAisleProcess.running?
 
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
