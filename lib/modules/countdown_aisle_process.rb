@@ -91,9 +91,9 @@ class CountdownAisleProcess < Object
   def process_prices(item, product)
     if has_special_price?(item)
       have_special = true
-      normal = (extract_price(item, "was-price")).presence
+      normal = (extract_price(item, "was-price", product)).presence
     else
-      normal = (extract_price(item, "price")).presence
+      normal = (extract_price(item, "price", product)).presence
     end
 
     normal = NormalPrice.new({ price: normal, product_id: product.id })
@@ -101,12 +101,12 @@ class CountdownAisleProcess < Object
 
     return unless have_special
 
-    special = extract_price(item,"special-price")
+    special = extract_price(item,"special-price", product)
     special = SpecialPrice.new({ price: special, product_id: product.id })
     logger "Created special price for product " + product.id.to_s + ". " if special.save
   end
 
-  def extract_price(item, fetch_param)
+  def extract_price(item, fetch_param, product)
     item = item.at_css('div.grid-stamp-price-container')
     begin
       price = ""
