@@ -16,7 +16,10 @@ task :fetch_prices => :environment do
 
   @aisle_processing = true
 
-  pool = CountdownAisleProcess.pool(size: (Celluloid.cores / 2.0).ceil)
+  pool_size = (Celluloid.cores / 2.0).ceil
+  puts "pool size: #{pool_size}"
+
+  pool = CountdownAisleProcess.pool(size: pool_size)
 
   aisles.each_with_index do |aisle, index|
     pool.async.grab_browse_aisle(aisle, @cache)
@@ -27,7 +30,7 @@ task :fetch_prices => :environment do
     end
   end
 
-  sleep(10) while pool.current_actor.running?
+  sleep(1) while pool.idle_size < pool_size
 
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
