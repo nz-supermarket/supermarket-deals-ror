@@ -1,5 +1,5 @@
 module RakeLogger
-  def logger(string, level = 'info')
+  def logger(string, level = 'debug')
     if level == "debug"
       log_string string
     elsif level == "info"
@@ -15,16 +15,16 @@ module RakeLogger
 
   def log_string(string)
     if string.include? "exist"
-      unless @string_builder.include? "exist"
-        @string_builder = string
+      unless @log_string_builder.include? "exist"
+        @log_string_builder = string
       else
-        @string_builder = @string_builder.gsub('. ', '')
-        @string_builder = @string_builder + string.gsub("Product exist with sku: ", ", ")
+        @log_string_builder = @log_string_builder.gsub('. ', '')
+        @log_string_builder = @log_string_builder + string.gsub("Product exist with sku: ", ", ")
       end
     else
-      Rails.logger.info @string_builder
-      @string_builder = ""
-      Rails.logger.info string
+      @log_string_builder = @log_string_builder + '\n'
+      @log_string_builder = @log_string_builder + string
+      info string
     end
   end
 end

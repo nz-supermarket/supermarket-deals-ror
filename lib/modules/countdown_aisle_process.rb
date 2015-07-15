@@ -3,22 +3,28 @@ require "#{Rails.root}/lib/modules/cacher"
 require "#{Rails.root}/lib/modules/rake_logger"
 require "#{Rails.root}/lib/modules/web_scrape"
 
-module CountdownAisleProcess
+class CountdownAisleProcess < Object
+  include Celluloid
+  include Celluloid::Logger
   include Cacher
   include RakeLogger
-  include WebScrape
+  extend WebScrape
 
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
-  def home_doc_fetch
-    WebScrape.nokogiri_open_url(HOME_URL)
+  def self.home_doc_fetch
+    nokogiri_open_url(HOME_URL)
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = Cacher.cache_retrieve_url(cache, FILTERS + aisle)
+    @log_string_builder = ""
+
+    doc = cache_retrieve_url(cache, FILTERS + aisle)
 
     process_doc Nokogiri::HTML(doc)
+
+    @log_string_builder
   end
 
   def process_doc(doc)
@@ -72,51 +78,51 @@ module CountdownAisleProcess
       product.aisle = aisle + ', ' + product.name
       product.link_to_cd = HOME_URL + link
 
-      RakeLogger.logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+      logger "Created product with sku: " + product.sku.to_s + ". " if product.save
 
-      RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
-      process_prices item, product
+      logger "Process prices for product " + product.id.to_s + " now. "
+      process_prices(item, product)
     else
-      RakeLogger.logger "Process prices for product " + product.id.to_s + " now. "
-      process_prices item, product
+      logger "Process prices for product " + product.id.to_s + " now. "
+      process_prices(item, product)
     end
   end
 
-  def process_prices item, product
+  def process_prices(item, product)
     if has_special_price?(item)
       have_special = true
-      normal = (extract_price item,"was-price").presence
+      normal = (extract_price(item, "was-price", product)).presence
     else
-      normal = (extract_price item,"price").presence
+      normal = (extract_price(item, "price", product)).presence
     end
 
-    normal = NormalPrice.new({price: normal, product_id: product.id})
-    RakeLogger.logger "Created normal price for product " + product.id.to_s + ". " if normal.save
+    normal = NormalPrice.new({ price: normal, product_id: product.id })
+    logger "Created normal price for product " + product.id.to_s + ". " if normal.save
 
     return unless have_special
 
-    special = extract_price item,"special-price"
-    special = SpecialPrice.new({price: special, product_id: product.id})
-    RakeLogger.logger "Created special price for product " + product.id.to_s + ". " if special.save
+    special = extract_price(item,"special-price", product)
+    special = SpecialPrice.new({ price: special, product_id: product.id })
+    logger "Created special price for product " + product.id.to_s + ". " if special.save
   end
 
-  def extract_price item,fetch_param
+  def extract_price(item, fetch_param, product)
     item = item.at_css('div.grid-stamp-price-container')
     begin
       price = ""
       if fetch_param.include? "was-price"
-        RakeLogger.logger "Was price found for product " + product.id.to_s + ". "
+        logger "Was price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
       elsif fetch_param.include? "special-price"
-        RakeLogger.logger "Special price found for product " + product.id.to_s + ". "
+        logger "Special price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
       else
-        RakeLogger.logger "Normal price found for product " + product.id.to_s + ". "
+        logger "Normal price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
       end
       return price
     rescue => e
-      RakeLogger.logger "Unable to extract price, will ignore: #{e}"
+      logger "Unable to extract price, will ignore: #{e}"
     end
   end
 

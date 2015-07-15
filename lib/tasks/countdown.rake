@@ -5,8 +5,6 @@ task :fetch_prices => :environment do
 
   time = Time.now
 
-  @string_builder = ""
-
   aisles = generate_aisle(CountdownAisleProcess.home_doc_fetch)
 
   if @cache.exist?('last')
@@ -18,14 +16,21 @@ task :fetch_prices => :environment do
 
   @aisle_processing = true
 
+  pool_size = (Celluloid.cores / 2.0).ceil
+  puts "pool size: #{pool_size}"
+
+  pool = CountdownAisleProcess.pool(size: pool_size)
+
   aisles.each_with_index do |aisle, index|
-    CountdownAisleProcess.grab_browse_aisle(aisle, @cache)
+    pool.async.grab_browse_aisle(aisle, @cache)
     @cache.write('last', aisle)
     sleep rand(1.0..5.0)
     if (index % 10) == 0
       sleep rand(5.0..10.0)
     end
   end
+
+  sleep(1) while pool.idle_size < pool_size
 
   puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
@@ -41,6 +46,11 @@ def sub_links_fetch(doc)
   return nil if error?(Nokogiri::HTML(doc))
 
   Nokogiri::HTML(doc).at_css("div.single-level-navigation.filter-container").css("a.browse-navigation-link")
+end
+
+def error?(doc)
+  return true if doc.blank? or doc.title.blank?
+  doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
 end
 
 def generate_aisle(doc)
@@ -93,11 +103,11 @@ end
 def setup
   require 'nokogiri'
   require 'dalli'
+  require 'Celluloid'
   require "#{Rails.root}/lib/modules/cacher"
   require "#{Rails.root}/lib/modules/countdown_aisle_process"
 
   include Cacher
-  include CountdownAisleProcess
 
   case Rails.env
   when 'production'
