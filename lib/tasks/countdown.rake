@@ -103,7 +103,7 @@ end
 def setup
   require 'nokogiri'
   require 'dalli'
-  require 'Celluloid'
+  require 'celluloid'
   require "#{Rails.root}/lib/modules/cacher"
   require "#{Rails.root}/lib/modules/countdown_aisle_process"
 
