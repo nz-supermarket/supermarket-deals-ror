@@ -17,6 +17,7 @@ task :fetch_prices => :environment do
   @aisle_processing = true
 
   pool_size = (Celluloid.cores / 2.0).ceil
+  pool_size = 3 if pool_size < 2
   puts "pool size: #{pool_size}"
 
   pool = CountdownAisleProcess.pool(size: pool_size)
