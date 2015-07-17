@@ -108,6 +108,8 @@ class CountdownAisleProcess < Object
 
   def extract_price(item, fetch_param, product)
     item = item.at_css('div.grid-stamp-price-container')
+    # do not process club price
+    return nil if item.at_css('div.club-price-container').present?
     begin
       price = ""
       if fetch_param.include? "was-price"
