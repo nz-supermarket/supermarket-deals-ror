@@ -1,6 +1,5 @@
 desc 'Fetch normal product prices'
 task fetch_prices: :environment do
-
   setup
 
   time = Time.now
