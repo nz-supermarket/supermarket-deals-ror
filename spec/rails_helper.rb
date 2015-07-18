@@ -28,9 +28,11 @@ require 'vcr'
 require 'webmock/rspec'
 
 VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
+  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7.days, :allow_playback_repeats => true }
 end
 
 RSpec.configure do |config|
@@ -56,9 +58,4 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
-
-
-  # so we can use :vcr rather than :vcr => true;
-  # in RSpec 3 this will no longer be necessary.
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 end
