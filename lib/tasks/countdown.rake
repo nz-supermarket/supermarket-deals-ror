@@ -5,7 +5,7 @@ task fetch_prices: :environment do
   time = Time.now
 
   aisles = CountdownLinksProcessor\
-           .generate_aisle(CountdownAisleProcess\
+           .generate_aisle(CountdownAisleProcessor\
               .home_doc_fetch, @cache)
 
   if @cache.exist?('last')
