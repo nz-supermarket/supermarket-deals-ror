@@ -78,6 +78,7 @@ group :development, :test do
   gem 'pickle'
   gem 'rspec-rails'
   gem 'capybara'
+  gem 'vcr'
   gem 'factory_girl', '~> 4.4.0'
   gem 'factory_girl_rails'
   gem 'factory_girl_rspec'

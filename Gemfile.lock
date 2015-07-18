@@ -244,6 +244,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    vcr (2.9.3)
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -287,5 +288,6 @@ DEPENDENCIES
   spring
   uglifier
   unicorn
+  vcr
   will_paginate
   will_paginate-bootstrap
