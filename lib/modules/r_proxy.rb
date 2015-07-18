@@ -63,6 +63,8 @@ PROXY_LIST = [nil,
     return result
   end
 
+  module_function :open_url_with_proxy
+
   def log_proxy_error(url, proxy, error)
     Rails.logger.error "Unable to connect with #{proxy} and #{url}, will ignore: #{error}"
   end
