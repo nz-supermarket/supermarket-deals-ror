@@ -86,6 +86,5 @@ RSpec.configure do |config|
 
 # Add this to load Capybara integration:
 require 'capybara/rspec'
-require 'capybara/rails'
 
 end
