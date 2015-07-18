@@ -9,7 +9,7 @@ task :fetch_prices => :environment do
 
   if @cache.exist?('last')
     last_aisle = @cache.fetch('last')
-    if aisles.index(last_aisle).present? and aisles.index(last_aisle) != (aisles.count - 1)
+    if aisles.index(last_aisle).present? && aisles.index(last_aisle) != (aisles.count - 1)
       aisles.drop(aisles.index(last_aisle))
     end
   end
@@ -26,9 +26,7 @@ task :fetch_prices => :environment do
     pool.async.grab_browse_aisle(aisle, @cache)
     @cache.write('last', aisle)
     sleep rand(1.0..5.0)
-    if (index % 10) == 0
-      sleep rand(5.0..10.0)
-    end
+    sleep rand(5.0..10.0) if (index % 10) == 0
   end
 
   sleep(1) while pool.idle_size < pool_size
@@ -51,7 +49,7 @@ def setup
   include Cacher
   include CountdownLinksProcessor
 
-  WebMock.allow_net_connect!
+  WebMock.allow_net_connect! if Rails.env != 'test'
 
   case Rails.env
   when 'production'
