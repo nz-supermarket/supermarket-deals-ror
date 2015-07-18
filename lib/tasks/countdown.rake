@@ -1,15 +1,18 @@
 desc 'Fetch normal product prices'
-task :fetch_prices => :environment do
+task fetch_prices: :environment do
 
   setup
 
   time = Time.now
 
-  aisles = CountdownLinksProcessor.generate_aisle(CountdownAisleProcess.home_doc_fetch, @cache)
+  aisles = CountdownLinksProcessor\
+           .generate_aisle(CountdownAisleProcess\
+              .home_doc_fetch, @cache)
 
   if @cache.exist?('last')
     last_aisle = @cache.fetch('last')
-    if aisles.index(last_aisle).present? && aisles.index(last_aisle) != (aisles.count - 1)
+    if aisles.index(last_aisle)\
+       .present? && aisles.index(last_aisle) != (aisles.count - 1)
       aisles.drop(aisles.index(last_aisle))
     end
   end
@@ -55,7 +58,7 @@ def setup
   when 'production'
     @cache = Rails.cache
   else
-    @cache = ActiveSupport::Cache::FileStore.new("/tmp")
+    @cache = ActiveSupport::Cache::FileStore.new('/tmp')
   end
 
   @aisle_processing = false
