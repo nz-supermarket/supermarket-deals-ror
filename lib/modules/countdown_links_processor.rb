@@ -32,7 +32,7 @@ module CountdownLinksProcessor
 
     links.each do |link|
       # category
-      value = link.attributes['href'].value
+      value = link.attr('href')
 
       resp = Cacher.cache_retrieve_url(cache, value)
 
@@ -43,7 +43,7 @@ module CountdownLinksProcessor
       next if sub_links.nil?
 
       sub_links.each do |sub|
-        value = sub.attributes['href'].value
+        value = sub.attr('href')
 
         sub_resp = Cacher.cache_retrieve_url(cache, value)
 
@@ -54,7 +54,7 @@ module CountdownLinksProcessor
         next if sub_sub_links.nil?
 
         sub_sub_links.each do |sub_sub|
-          value = sub_sub.attributes['href'].value
+          value = sub_sub.attr('href')
 
           if value.split('/').count >= 5
             aisle_array << value
