@@ -45,7 +45,7 @@ def setup
   require 'dalli'
   require 'celluloid'
   require "#{Rails.root}/lib/modules/cacher"
-  require "#{Rails.root}/lib/modules/countdown_aisle_process"
+  require "#{Rails.root}/lib/modules/countdown_aisle_processor"
   require "#{Rails.root}/lib/modules/countdown_links_processor"
 
   include Cacher
