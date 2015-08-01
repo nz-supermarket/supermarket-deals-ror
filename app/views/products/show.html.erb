@@ -17,17 +17,17 @@
 
 <p>
   <strong>Special:</strong>
-  <%= @product.special %>
+  <%= number_to_currency(@product.special, unit: "NZD$", format: "%u %n") %>
 </p>
 
 <p>
   <strong>Normal:</strong>
-  <%= @product.normal %>
+  <%= number_to_currency(@product.normal, unit: "NZD$", format: "%u %n") %>
 </p>
 
 <p>
-  <strong>Diff:</strong>
-  <%= @product.diff %>
+  <strong>Difference/Variance:</strong>
+  <%= number_to_currency(@product.diff, unit: "NZD$", format: "%u %n") %>
 </p>
 
 <p>
