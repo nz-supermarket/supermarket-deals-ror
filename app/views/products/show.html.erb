@@ -37,7 +37,7 @@
 
 <p>
   <strong>Discount:</strong>
-  <%= @product.discount %>
+  <%= number_to_percentage(@product.discount * 100, precision: 3) %>
 </p>
 
 <%= render partial: 'basic_chart' %>
