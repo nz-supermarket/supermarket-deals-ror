@@ -21,7 +21,9 @@ class ProductsDatatable
         link_to(product.name, "/products/#{product.id}"),
         product.volume,
         product.sku,
-        price_handler(product.special, product.normal, product.diff),
+        number_to_currency(product.special),
+        number_to_currency(product.normal),
+        number_to_currency(product.diff),
         product.aisle,
         discount_handler(number_to_percentage(product.discount * 100, precision: 2))
       ]
