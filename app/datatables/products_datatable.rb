@@ -76,18 +76,4 @@ class ProductsDatatable
       value
     end
   end
-
-  def price_handler special, normal, diff
-
-    prices = [special, normal, diff]
-    prices_names = ["Special: ", "Normal: ", "Variance: "]
-    content = ""
-
-    (0..2).each do |i|
-      each = content_tag(:td, prices_names[i]) + content_tag(:td, number_to_currency(prices[i]))
-      content << content_tag(:div, each, class: "row")
-    end
-
-    content
-  end
 end
