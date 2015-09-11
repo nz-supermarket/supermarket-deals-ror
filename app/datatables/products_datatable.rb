@@ -84,8 +84,13 @@ class ProductsDatatable
     content = ""
 
     (0..2).each do |i|
-      each = content_tag(:td, prices_names[i]) + content_tag(:td, number_to_currency(prices[i]))
-      content << content_tag(:div, each, class: "row")
+      each = content_tag(:td, prices_names[i])
+      if number_to_currency(prices[i])
+        each = each + content_tag(:td, number_to_currency(prices[i]))
+      else
+        each = each + content_tag(:br)
+      end
+      content << content_tag(:div, each, class: "price-row")
     end
 
     content
