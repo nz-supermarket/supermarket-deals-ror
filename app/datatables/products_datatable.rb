@@ -22,6 +22,9 @@ class ProductsDatatable
         product.volume,
         product.sku,
         price_handler(product.special, product.normal, product.diff),
+        number_to_currency(product.special),
+        number_to_currency(product.normal),
+        number_to_currency(product.diff),
         product.aisle,
         discount_handler(number_to_percentage(product.discount * 100, precision: 2))
       ]
@@ -55,7 +58,7 @@ class ProductsDatatable
 
   def sort_column
     # database views/tables column names
-    columns = %w[name volume sku diff_price aisle discount]
+    columns = %w[name volume sku diff_price special normal diff_price aisle discount]
     columns[params[:iSortCol_0].to_i]
   end
 
@@ -76,14 +79,18 @@ class ProductsDatatable
   end
 
   def price_handler special, normal, diff
-
     prices = [special, normal, diff]
     prices_names = ["Special: ", "Normal: ", "Variance: "]
     content = ""
 
     (0..2).each do |i|
-      each = content_tag(:td, prices_names[i]) + content_tag(:td, number_to_currency(prices[i]))
-      content << content_tag(:div, each, class: "row")
+      each = content_tag(:td, prices_names[i])
+      if number_to_currency(prices[i])
+        each = each + content_tag(:td, number_to_currency(prices[i]))
+      else
+        each = each + content_tag(:br)
+      end
+      content << content_tag(:div, each, class: "price-row")
     end
 
     content
