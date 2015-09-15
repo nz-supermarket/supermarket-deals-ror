@@ -21,7 +21,7 @@ class ProductsDatatable
         link_to(product.name, "/products/#{product.id}"),
         product.volume,
         product.sku,
-        number_to_currency(product.special),
+        number_to_currency(product.special) || '',
         number_to_currency(product.normal),
         number_to_currency(product.diff),
         product.aisle,
