@@ -3,6 +3,17 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'vcr'
+require 'webmock/rspec'
+require 'database_cleaner'
+
+VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+  c.cassette_library_dir = 'spec/cassettes'
+  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7.days, :allow_playback_repeats => true }
+end
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -24,17 +35,6 @@ require 'rspec/rails'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-require 'vcr'
-require 'webmock/rspec'
-
-VCR.configure do |c|
-  c.allow_http_connections_when_no_cassette = true
-  c.cassette_library_dir = 'spec/cassettes'
-  c.hook_into :webmock
-  c.configure_rspec_metadata!
-  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 7.days, :allow_playback_repeats => true }
-end
-
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -43,6 +43,15 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.start
+  end
+
+  config.after(:suite) do
+    DatabaseCleaner.clean
+  end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
