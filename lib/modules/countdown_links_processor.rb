@@ -67,4 +67,6 @@ module CountdownLinksProcessor
 
     aisle_array.compact
   end
+
+  module_function :generate_aisle, :sub_links_fetch, :cat_links_fetch, :error?
 end
