@@ -23,15 +23,17 @@
     </div>
   <% end %>
   <div class="col-xs-12">
-    <table id="products" class="display table-responsive" data-source="<%= products_url(format: "json") %>">
+    <table id="products" class="display responsive" data-source="<%= products_url(format: "json") %>" width='100%'>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Volume</th>
-          <th>SKU</th>
-          <th>Prices (NZ$)</th>
-          <th>Aisle</th>
-          <th>Discount</th>
+          <th class='all'>Name</th>
+          <th class='not-mobile'>Volume</th>
+          <th class='min-tablet-l'>SKU</th>
+          <th class='not-mobile'>Special Prices (NZ$)</th>
+          <th class='not-mobile'>Normal Prices (NZ$)</th>
+          <th class='min-tablet-l'>Variance (NZ$)</th>
+          <th class='desktop'>Aisle</th>
+          <th class='all'>Discount</th>
         </tr>
       </thead>
       <tbody>

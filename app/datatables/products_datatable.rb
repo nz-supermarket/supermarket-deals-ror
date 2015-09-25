@@ -21,9 +21,11 @@ class ProductsDatatable
         link_to(product.name, "/products/#{product.id}"),
         product.volume,
         product.sku,
-        price_handler(product.special, product.normal, product.diff),
+        number_to_currency(product.special) || '',
+        number_to_currency(product.normal),
+        number_to_currency(product.diff),
         product.aisle,
-        discount_handler(number_to_percentage(product.discount, precision: 2))
+        discount_handler(number_to_percentage(product.discount * 100, precision: 2))
       ]
     end
   end
@@ -55,7 +57,7 @@ class ProductsDatatable
 
   def sort_column
     # database views/tables column names
-    columns = %w[name volume sku diff_price aisle discount]
+    columns = %w[name volume sku special normal diff_price aisle discount]
     columns[params[:iSortCol_0].to_i]
   end
 
@@ -73,19 +75,5 @@ class ProductsDatatable
     else
       value
     end
-  end
-
-  def price_handler special, normal, diff
-
-    prices = [special, normal, diff]
-    prices_names = ["Special: ", "Normal: ", "Variance: "]
-    content = ""
-
-    (0..2).each do |i|
-      each = content_tag(:td, prices_names[i]) + content_tag(:td, number_to_currency(prices[i]))
-      content << content_tag(:div, each, class: "row")
-    end
-
-    content
   end
 end
