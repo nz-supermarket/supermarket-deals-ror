@@ -57,10 +57,14 @@ class CountdownAisleProcessor < Object
   # if product does not exist
   # create new
   def process_item(item, aisle, logger = @logger)
-    return if item.elements.first.at_css("a").blank?
-    link = item.elements.first.at_css("a").attributes["href"].value
-    return if item.elements.first.at_css("a").at_css("img").blank?
-    img = item.elements.first.at_css("a").at_css("img").attributes["src"].value
+    return if item.css('div.grid-stamp-pull-top').first.blank?
+    link = item\
+            .css('div.grid-stamp-pull-top')\
+            .first.at_css('a').attributes['href'].value
+    img = item\
+            .css('div.grid-stamp-pull-top')\
+            .first.at_css("a").at_css("img")\
+            .attributes["src"].value
 
     return unless link.include?("Stockcode=") and link.index("&name=")
 
