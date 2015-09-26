@@ -126,10 +126,10 @@ class CountdownAisleProcessor < Object
   end
 
   def special_price?(item)
-    (item\
+    item\
       .at_css('span.price')\
       .attributes['class']\
-      .value.include? 'special-price')
+      .value.include? 'special-price'
   end
 
   def multi_buy?(item)
