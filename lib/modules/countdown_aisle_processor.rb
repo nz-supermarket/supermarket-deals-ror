@@ -87,7 +87,6 @@ class CountdownAisleProcessor < Object
 
   def process_prices(item, product, logger = @logger)
     if special_price?(item)
-      have_special = true
       normal = (extract_price(item, "was-price", product, logger)).presence
     else
       normal = (extract_price(item, "price", product, logger)).presence
@@ -96,7 +95,7 @@ class CountdownAisleProcessor < Object
     normal = NormalPrice.new({ price: normal, product_id: product.id })
     logger.log "Created normal price for product " + product.id.to_s + ". " if normal.save
 
-    return unless have_special
+    return unless special_price?(item) || multi_buy?(item)
 
     special = extract_price(item,"special-price", product, logger)
     special = SpecialPrice.new({ price: special, product_id: product.id })
