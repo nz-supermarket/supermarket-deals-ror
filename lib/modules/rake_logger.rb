@@ -1,6 +1,10 @@
 # processing log string based on log level
-module RakeLogger
-  def logger(string, level = 'debug')
+class RakeLogger
+  def initialize(builder = '')
+    @log_string_builder = builder
+  end
+
+  def log(string, level = 'debug')
     if level == 'debug'
       log_string string
     elsif level == 'info'
@@ -15,6 +19,10 @@ module RakeLogger
   def log_string(string)
     @log_string_builder += '\n'
     @log_string_builder += string
-    info string
+    if Rails.env == 'test'
+      Rails.logger.info string
+    else
+      info string
+    end
   end
 end
