@@ -135,7 +135,6 @@ class CountdownAisleProcessor < Object
   end
 
   def extract_multi(item, product, logger = @logger)
-    div = item.at_css('div.multi-buy-container')
     value = item.at_css('span.multi-buy-award-value').text
     quantity = item.at_css('span.multi-buy-award-quantity').text.gsub(' for', '')
 
