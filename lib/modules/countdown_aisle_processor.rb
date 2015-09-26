@@ -101,7 +101,11 @@ class CountdownAisleProcessor < Object
 
     return unless special_price?(item) || multi_buy?(item)
 
-    special = extract_price(item,"special-price", product, logger)
+    special = if multi_buy?(item)
+      extract_multi(item, product, logger)
+    else
+      extract_price(item,"special-price", product, logger)
+    end
     special = SpecialPrice.new({ price: special, product_id: product.id })
     logger.log "Created special price for product " + product.id.to_s + ". " if special.save
   end
