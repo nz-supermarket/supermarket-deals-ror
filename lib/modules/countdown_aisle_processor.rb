@@ -136,6 +136,6 @@ class CountdownAisleProcessor < Object
   end
 
   def multi_buy?(item)
-    item.css('div.product-tag-desktop').present?
+    item.css('div.multi-buy-container').present?
   end
 end
