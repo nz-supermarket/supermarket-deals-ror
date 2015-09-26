@@ -115,16 +115,18 @@ class CountdownAisleProcessor < Object
     # do not process club price
     return nil if item.at_css('div.club-price-container').present?
     begin
-      price = ""
-      if fetch_param.include? "was-price"
-        logger.log "Was price found for product " + product.id.to_s + ". "
-        price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
-      elsif fetch_param.include? "special-price"
-        logger.log "Special price found for product " + product.id.to_s + ". "
-        price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
+      price = ''
+      container = item.at_css('div.price-container')\
+                  .at_css("span.#{fetch_param}")
+      if fetch_param.include? 'was-price'
+        logger.log 'Was price found for product ' + product.id.to_s + '. '
+        price = container.child.text.gsub('was', '').strip.delete('$')
+      elsif fetch_param.include? 'special-price'
+        logger.log 'Special price found for product ' + product.id.to_s + '. '
+        price = container.child.text.strip.delete('$')
       else
-        logger.log "Normal price found for product " + product.id.to_s + ". "
-        price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
+        logger.log 'Normal price found for product ' + product.id.to_s + '. '
+        price = container.child.text.strip.delete('$')
       end
       return price
     rescue => e
