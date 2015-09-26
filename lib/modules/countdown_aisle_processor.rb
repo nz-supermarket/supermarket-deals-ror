@@ -82,7 +82,7 @@ class CountdownAisleProcessor < Object
       logger.log "Created product with sku: " + product.sku.to_s + ". " if product.save
 
       logger.log "Process prices for product " + product.id.to_s + " now. "
-      process_prices(item, product)
+      process_prices(item, product, logger)
     else
       logger.log "Process prices for product " + product.id.to_s + " now. "
       process_prices(item, product, logger)
