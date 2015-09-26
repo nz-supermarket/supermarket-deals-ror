@@ -7,7 +7,6 @@ class CountdownAisleProcessor < Object
   include Celluloid
   include Celluloid::Logger
   include Cacher
-  include RakeLogger
   extend WebScrape
 
   HOME_URL = "http://shop.countdown.co.nz"
@@ -18,13 +17,11 @@ class CountdownAisleProcessor < Object
   end
 
   def grab_browse_aisle(aisle, cache)
-    @log_string_builder = ""
+    @logger = RakeLogger.new
 
-    doc = cache_retrieve_url(cache, FILTERS + aisle)
+    doc = cache_retrieve_url(cache, aisle)
 
     process_doc Nokogiri::HTML(doc)
-
-    @log_string_builder
   end
 
   def process_doc(doc)
@@ -32,7 +29,7 @@ class CountdownAisleProcessor < Object
 
     aisle = aisle_name(doc)
 
-    puts doc.css('div.details-container.row-fluid.mrow-fluid').count
+    puts doc.css('div.product-stamp.product-stamp-grid').count
 
     doc.css('div.product-stamp.product-stamp-grid').each do |item|
       process_item(item, aisle)
@@ -59,7 +56,7 @@ class CountdownAisleProcessor < Object
   # find existing product on database
   # if product does not exist
   # create new
-  def process_item(item, aisle)
+  def process_item(item, aisle, logger = @logger)
     return if item.elements.first.at_css("a").blank?
     link = item.elements.first.at_css("a").attributes["href"].value
     return if item.elements.first.at_css("a").at_css("img").blank?
@@ -78,53 +75,53 @@ class CountdownAisleProcessor < Object
       product.aisle = aisle + ', ' + product.name
       product.link_to_cd = HOME_URL + link
 
-      logger "Created product with sku: " + product.sku.to_s + ". " if product.save
+      logger.log "Created product with sku: " + product.sku.to_s + ". " if product.save
 
-      logger "Process prices for product " + product.id.to_s + " now. "
+      logger.log "Process prices for product " + product.id.to_s + " now. "
       process_prices(item, product)
     else
-      logger "Process prices for product " + product.id.to_s + " now. "
-      process_prices(item, product)
+      logger.log "Process prices for product " + product.id.to_s + " now. "
+      process_prices(item, product, logger)
     end
   end
 
-  def process_prices(item, product)
+  def process_prices(item, product, logger = @logger)
     if has_special_price?(item)
       have_special = true
-      normal = (extract_price(item, "was-price", product)).presence
+      normal = (extract_price(item, "was-price", product, logger)).presence
     else
-      normal = (extract_price(item, "price", product)).presence
+      normal = (extract_price(item, "price", product, logger)).presence
     end
 
     normal = NormalPrice.new({ price: normal, product_id: product.id })
-    logger "Created normal price for product " + product.id.to_s + ". " if normal.save
+    logger.log "Created normal price for product " + product.id.to_s + ". " if normal.save
 
     return unless have_special
 
-    special = extract_price(item,"special-price", product)
+    special = extract_price(item,"special-price", product, logger)
     special = SpecialPrice.new({ price: special, product_id: product.id })
-    logger "Created special price for product " + product.id.to_s + ". " if special.save
+    logger.log "Created special price for product " + product.id.to_s + ". " if special.save
   end
 
-  def extract_price(item, fetch_param, product)
+  def extract_price(item, fetch_param, product, logger = @logger)
     item = item.at_css('div.grid-stamp-price-container')
     # do not process club price
     return nil if item.at_css('div.club-price-container').present?
     begin
       price = ""
       if fetch_param.include? "was-price"
-        logger "Was price found for product " + product.id.to_s + ". "
+        logger.log "Was price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.gsub("was",'').strip.delete("$")
       elsif fetch_param.include? "special-price"
-        logger "Special price found for product " + product.id.to_s + ". "
+        logger.log "Special price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.special-price").child.text.strip.delete("$")
       else
-        logger "Normal price found for product " + product.id.to_s + ". "
+        logger.log "Normal price found for product " + product.id.to_s + ". "
         price = item.at_css('div.price-container').at_css("span.#{fetch_param}").child.text.strip.delete("$")
       end
       return price
     rescue => e
-      logger "Unable to extract price, will ignore: #{e}"
+      logger.log "Unable to extract price, will ignore: #{e}"
     end
   end
 
