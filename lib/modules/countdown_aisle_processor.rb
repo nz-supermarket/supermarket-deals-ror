@@ -126,6 +126,10 @@ class CountdownAisleProcessor < Object
   end
 
   def has_special_price?(item)
-    item.at_css('span.price').attributes['class'].value.include? 'special-price'
+    (item\
+      .at_css('span.price')\
+      .attributes['class']\
+      .value.include? 'special-price') ||
+      item.css('div.product-tag-desktop').present?
   end
 end
