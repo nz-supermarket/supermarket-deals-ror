@@ -139,7 +139,6 @@ class CountdownAisleProcessor < Object
     quantity = item.at_css('span.multi-buy-award-quantity')\
                .text.gsub(' for', '')
 
-
     logger.log 'Multi buy price found for product ' + product.id.to_s + '. '
     value.to_d / quantity.to_d
   end
