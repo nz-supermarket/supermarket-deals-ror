@@ -86,7 +86,7 @@ class CountdownAisleProcessor < Object
   end
 
   def process_prices(item, product, logger = @logger)
-    if has_special_price?(item)
+    if special_price?(item)
       have_special = true
       normal = (extract_price(item, "was-price", product, logger)).presence
     else
@@ -125,7 +125,7 @@ class CountdownAisleProcessor < Object
     end
   end
 
-  def has_special_price?(item)
+  def special_price?(item)
     (item\
       .at_css('span.price')\
       .attributes['class']\
