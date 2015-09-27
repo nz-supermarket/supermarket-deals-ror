@@ -19,7 +19,7 @@ class RakeLogger
   def log_string(string)
     @log_string_builder += '\n'
     @log_string_builder += string
-    if Rails.env == 'test'
+    if Rails.env == 'test' || Rails.env == 'development'
       Rails.logger.info string
     else
       info string
