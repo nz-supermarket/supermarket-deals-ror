@@ -22,7 +22,7 @@ task fetch_prices: :environment do
   pool_size = 3 if pool_size < 2
   puts "pool size: #{pool_size}"
 
-  pool = CountdownAisleProcess.pool(size: pool_size)
+  pool = CountdownAisleProcessor.pool(size: pool_size)
 
   aisles.each_with_index do |aisle, index|
     pool.async.grab_browse_aisle(aisle, @cache)
@@ -51,7 +51,8 @@ def setup
   include Cacher
   include CountdownLinksProcessor
 
-  WebMock.allow_net_connect! if Rails.env != 'test'
+  WebMock.disable! if Rails.env != 'test'
+  Celluloid.task_class = Celluloid::TaskThread
 
   case Rails.env
   when 'production'
