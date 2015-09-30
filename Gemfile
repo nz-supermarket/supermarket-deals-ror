@@ -77,9 +77,14 @@ group :development, :test do
   gem 'cucumber-rails', :require => false
   gem 'pickle'
   gem 'rspec-rails'
+  gem 'fuubar'
   gem 'capybara'
   gem 'factory_girl', '~> 4.4.0'
   gem 'factory_girl_rails'
   gem 'factory_girl_rspec'
   gem 'database_cleaner'
+
+  # web mock up
+  gem 'vcr'
+  gem 'webmock'
 end
