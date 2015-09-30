@@ -21,4 +21,6 @@ module Cacher
 
     cache.fetch(val)
   end
+
+  module_function :cache_retrieve_url
 end

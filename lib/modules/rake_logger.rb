@@ -1,12 +1,15 @@
-module RakeLogger
-  def logger(string, level = 'debug')
-    if level == "debug"
+# processing log string based on log level
+class RakeLogger
+  def initialize(builder = '')
+    @log_string_builder = builder
+  end
+
+  def log(string, level = 'debug')
+    if level == 'debug'
       log_string string
-    elsif level == "info"
-      unless string.include? "Unable"
-        log_string string
-      end
-    elsif level == "simple"
+    elsif level == 'info'
+      log_string string unless string.include? 'Unable'
+    elsif level == 'simple'
       print('.')
     end
   end
@@ -14,16 +17,11 @@ module RakeLogger
   private
 
   def log_string(string)
-    if string.include? "exist"
-      unless @log_string_builder.include? "exist"
-        @log_string_builder = string
-      else
-        @log_string_builder = @log_string_builder.gsub('. ', '')
-        @log_string_builder = @log_string_builder + string.gsub("Product exist with sku: ", ", ")
-      end
+    @log_string_builder += '\n'
+    @log_string_builder += string
+    if Rails.env == 'test' || Rails.env == 'development'
+      Rails.logger.info string
     else
-      @log_string_builder = @log_string_builder + '\n'
-      @log_string_builder = @log_string_builder + string
       info string
     end
   end
