@@ -51,7 +51,6 @@ def setup
   include Cacher
   include CountdownLinksProcessor
 
-  WebMock.disable! if Rails.env != 'test'
   Celluloid.task_class = Celluloid::TaskThread
 
   case Rails.env
