@@ -27,6 +27,8 @@ class CountdownAisleProcessor < Object
   def process_doc(doc)
     return if error?(doc)
 
+    ActiveRecord::Base.establish_connection
+
     aisle = aisle_name(doc)
 
     puts doc.css('div.product-stamp.product-stamp-grid').count

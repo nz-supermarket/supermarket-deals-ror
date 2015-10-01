@@ -24,12 +24,12 @@ test: &test
 production:
   adapter: postgresql
   encoding: unicode
-  pool: 5
+  pool: 15
   timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
 
 dokku:
   adapter: postgresql
-  pool: 5
+  pool: 15
   timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
