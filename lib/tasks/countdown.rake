@@ -33,7 +33,7 @@ task fetch_prices: :environment do
 
   sleep(1) while pool.idle_size < pool_size
 
-  puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
+  Rails.logger.info "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
 
 ###################################################
