@@ -20,7 +20,7 @@ task fetch_prices: :environment do
 
   pool_size = (Celluloid.cores / 2.0).ceil
   pool_size = 3 if pool_size < 2
-  puts "pool size: #{pool_size}"
+  Rails.logger.info "pool size: #{pool_size}"
 
   pool = CountdownAisleProcessor.pool(size: pool_size)
 
@@ -33,7 +33,7 @@ task fetch_prices: :environment do
 
   sleep(1) while pool.idle_size < pool_size
 
-  puts "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
+  Rails.logger.info "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
 end
 
 ###################################################
