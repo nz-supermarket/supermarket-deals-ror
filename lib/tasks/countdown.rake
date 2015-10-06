@@ -19,6 +19,7 @@ task fetch_prices: :environment do
   @aisle_processing = true
 
   pool_size = ((Celluloid.cores * 2) - 1)
+  pool_size = 3 if pool_size < 2
   Rails.logger.info "pool size: #{pool_size}"
 
   pool = CountdownAisleProcessor.pool(size: pool_size)
