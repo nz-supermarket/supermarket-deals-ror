@@ -18,7 +18,7 @@ task fetch_prices: :environment do
 
   @aisle_processing = true
 
-  pool_size = (Celluloid.cores / 2.0).ceil
+  pool_size = ((Celluloid.cores * 2) - 1)
   pool_size = 3 if pool_size < 2
   Rails.logger.info "pool size: #{pool_size}"
 
@@ -50,8 +50,6 @@ def setup
 
   include Cacher
   include CountdownLinksProcessor
-
-  Celluloid.task_class = Celluloid::TaskThread
 
   case Rails.env
   when 'production'
