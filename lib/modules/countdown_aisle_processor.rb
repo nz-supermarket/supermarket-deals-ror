@@ -9,6 +9,8 @@ class CountdownAisleProcessor < Object
   include Cacher
   extend WebScrape
 
+  finalizer :finish
+
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
