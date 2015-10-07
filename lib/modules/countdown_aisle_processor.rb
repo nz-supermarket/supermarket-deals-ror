@@ -17,9 +17,6 @@ class CountdownAisleProcessor < Object
   end
 
   def grab_browse_aisle(aisle, cache)
-    Celluloid.logger = Rails.logger
-    @logger = RakeLogger.new
-
     doc = cache_retrieve_url(cache, aisle)
 
     process_doc Nokogiri::HTML(doc)
