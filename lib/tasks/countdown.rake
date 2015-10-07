@@ -51,6 +51,8 @@ def setup
   include Cacher
   include CountdownLinksProcessor
 
+  Celluloid.task_class = Celluloid::TaskThread
+
   case Rails.env
   when 'production'
     @cache = Rails.cache
