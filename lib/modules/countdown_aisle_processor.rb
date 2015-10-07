@@ -39,7 +39,7 @@ class CountdownAisleProcessor < Object
 
     aisle = aisle_name(doc)
 
-    puts doc.css('div.product-stamp.product-stamp-grid').count
+    Rails.logger.info doc.css('div.product-stamp.product-stamp-grid').count
 
     doc.css('div.product-stamp.product-stamp-grid').each do |item|
       process_item(item, aisle)
