@@ -9,6 +9,8 @@ class CountdownAisleProcessor < Object
   include Cacher
   extend WebScrape
 
+  finalizer :finish
+
   HOME_URL = "http://shop.countdown.co.nz"
   FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
@@ -17,22 +19,27 @@ class CountdownAisleProcessor < Object
   end
 
   def grab_browse_aisle(aisle, cache)
-    Celluloid.logger = Rails.logger
-    @logger = RakeLogger.new
-
     doc = cache_retrieve_url(cache, aisle)
 
     process_doc Nokogiri::HTML(doc)
   end
 
+  def finish
+    ActiveRecord::Base.connection.disconnect!
+    terminate
+  end
+
   def process_doc(doc)
     return if error?(doc)
+
+    Celluloid.logger = Rails.logger
+    @logger = RakeLogger.new
 
     ActiveRecord::Base.establish_connection
 
     aisle = aisle_name(doc)
 
-    puts doc.css('div.product-stamp.product-stamp-grid').count
+    Rails.logger.info doc.css('div.product-stamp.product-stamp-grid').count
 
     doc.css('div.product-stamp.product-stamp-grid').each do |item|
       process_item(item, aisle)
