@@ -25,6 +25,9 @@ class CountdownAisleProcessor < Object
   def process_doc(doc)
     return if error?(doc)
 
+    Celluloid.logger = Rails.logger
+    @logger = RakeLogger.new
+
     ActiveRecord::Base.establish_connection
 
     aisle = aisle_name(doc)
