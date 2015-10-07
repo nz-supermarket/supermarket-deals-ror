@@ -24,6 +24,11 @@ class CountdownAisleProcessor < Object
     process_doc Nokogiri::HTML(doc)
   end
 
+  def finish
+    ActiveRecord::Base.connection.disconnect!
+    terminate
+  end
+
   def process_doc(doc)
     return if error?(doc)
 
