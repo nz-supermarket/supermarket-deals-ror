@@ -26,6 +26,7 @@ class CountdownAisleProcessor < Object
 
   def finish
     ActiveRecord::Base.connection.disconnect!
+    Rails.logger.info "terminating #{self}"
     terminate
   end
 
@@ -44,6 +45,8 @@ class CountdownAisleProcessor < Object
     doc.css('div.product-stamp.product-stamp-grid').each do |item|
       process_item(item, aisle)
     end
+
+    Rails.logger.info "finish processing #{aisle}"
   end
 
   def error?(doc)
