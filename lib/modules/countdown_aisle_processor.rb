@@ -26,6 +26,7 @@ class CountdownAisleProcessor < Object
 
   def finish
     ActiveRecord::Base.connection.disconnect!
+    Rails.logger.info "terminating #{self}"
     terminate
   end
 
