@@ -25,7 +25,6 @@ class CountdownAisleProcessor < Object
   end
 
   def finish
-    ActiveRecord::Base.connection.disconnect!
     Rails.logger.info "terminating #{self}"
     terminate
   end
@@ -36,7 +35,7 @@ class CountdownAisleProcessor < Object
     Celluloid.logger = Rails.logger
     @logger = RakeLogger.new
 
-    ActiveRecord::Base.establish_connection
+    ActiveRecord::Base.connection_pool.reap
 
     aisle = aisle_name(doc)
 
@@ -47,6 +46,7 @@ class CountdownAisleProcessor < Object
     end
 
     Rails.logger.info "finish processing #{aisle}"
+    ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
   end
 
   def error?(doc)
