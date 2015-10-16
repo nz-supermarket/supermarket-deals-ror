@@ -4,6 +4,8 @@ require "#{Rails.root}/lib/modules/cacher"
 module CountdownLinksProcessor
   extend Cacher
 
+  FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
+
   def cat_links_fetch(doc)
     print '.'
     doc.at_css('div.toolbar-links-children')\
@@ -45,7 +47,7 @@ module CountdownLinksProcessor
       sub_links.each do |sub|
         value = sub.attr('href')
 
-        sub_resp = Cacher.cache_retrieve_url(cache, value)
+        sub_resp = Cacher.cache_retrieve_url(cache, FILTERS + value)
 
         next if sub_resp.blank?
 
