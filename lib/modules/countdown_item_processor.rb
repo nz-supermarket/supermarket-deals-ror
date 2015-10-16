@@ -1,13 +1,9 @@
 require 'nokogiri'
-require "#{Rails.root}/lib/modules/cacher"
 require "#{Rails.root}/lib/modules/rake_logger"
-require "#{Rails.root}/lib/modules/web_scrape"
 
 class CountdownAisleProcessor < Object
   include Celluloid
   include Celluloid::Logger
-  include Cacher
-  extend WebScrape
 
   HOME_URL = "http://shop.countdown.co.nz"
 
