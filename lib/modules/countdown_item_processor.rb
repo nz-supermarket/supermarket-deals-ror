@@ -15,7 +15,7 @@ class CountdownAisleProcessor < Object
   # find existing product on database
   # if product does not exist
   # create new
-  def process_item(item, aisle, logger = @logger)
+  def process_item(item, aisle)
     return if item.css('div.grid-stamp-pull-top').first.blank?
     link = item\
             .css('div.grid-stamp-pull-top')\
@@ -25,7 +25,7 @@ class CountdownAisleProcessor < Object
             .first.at_css("a").at_css("img")\
             .attributes["src"].value
 
-    @logger = RakeLogger.new
+    logger = RakeLogger.new
 
     ActiveRecord::Base.connection_pool.reap
 
