@@ -2,6 +2,7 @@ require 'nokogiri'
 require "#{Rails.root}/lib/modules/cacher"
 require "#{Rails.root}/lib/modules/rake_logger"
 require "#{Rails.root}/lib/modules/web_scrape"
+require "#{Rails.root}/lib/modules/countdown_item_processor"
 
 class CountdownAisleProcessor < Object
   include Celluloid
@@ -35,8 +36,10 @@ class CountdownAisleProcessor < Object
 
     Rails.logger.info doc.css('div.product-stamp.product-stamp-grid').count
 
+    pool = CountdownItemProcessor.pool(size: 3)
+
     doc.css('div.product-stamp.product-stamp-grid').each do |item|
-      process_item(item, aisle)
+      pool.async.process_item(item, aisle)
     end
 
     Rails.logger.info "finish processing #{aisle}"

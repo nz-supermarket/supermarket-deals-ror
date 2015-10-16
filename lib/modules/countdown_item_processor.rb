@@ -1,7 +1,7 @@
 require 'nokogiri'
 require "#{Rails.root}/lib/modules/rake_logger"
 
-class CountdownAisleProcessor < Object
+class CountdownItemProcessor < Object
   include Celluloid
   include Celluloid::Logger
 
