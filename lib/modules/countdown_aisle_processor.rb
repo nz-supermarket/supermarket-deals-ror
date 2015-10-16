@@ -34,7 +34,7 @@ class CountdownAisleProcessor < Object
 
     aisle = aisle_name(doc)
 
-    Rails.logger.info doc.css('div.product-stamp.product-stamp-grid').count
+    Rails.logger.info "#{doc.css('div.product-stamp.product-stamp-grid').count} item for #{aisle}"
 
     pool = CountdownItemProcessor.pool(size: 3)
 
