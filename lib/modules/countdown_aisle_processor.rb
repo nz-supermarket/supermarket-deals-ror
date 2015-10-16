@@ -12,7 +12,6 @@ class CountdownAisleProcessor < Object
   finalizer :finish
 
   HOME_URL = "http://shop.countdown.co.nz"
-  FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
