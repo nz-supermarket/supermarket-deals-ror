@@ -25,6 +25,10 @@ class CountdownAisleProcessor < Object
             .first.at_css("a").at_css("img")\
             .attributes["src"].value
 
+    @logger = RakeLogger.new
+
+    ActiveRecord::Base.connection_pool.reap
+
     return unless link.include?("Stockcode=") and link.index("&name=")
 
     sku = link[(link.index("Stockcode=") + 10)..(link.index("&name=") - 1)]
@@ -46,6 +50,8 @@ class CountdownAisleProcessor < Object
       logger.log "Process prices for product " + product.id.to_s + " now. "
       process_prices(item, product, logger)
     end
+
+    ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
   end
 
   def process_prices(item, product, logger = @logger)

@@ -31,11 +31,6 @@ class CountdownAisleProcessor < Object
   def process_doc(doc)
     return if error?(doc)
 
-    Celluloid.logger = Rails.logger
-    @logger = RakeLogger.new
-
-    ActiveRecord::Base.connection_pool.reap
-
     aisle = aisle_name(doc)
 
     Rails.logger.info doc.css('div.product-stamp.product-stamp-grid').count
@@ -45,7 +40,6 @@ class CountdownAisleProcessor < Object
     end
 
     Rails.logger.info "finish processing #{aisle}"
-    ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
   end
 
   def error?(doc)
