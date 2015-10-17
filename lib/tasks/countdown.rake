@@ -11,7 +11,8 @@ task fetch_prices: :environment do
   if @cache.exist?('last')
     last_aisle = @cache.fetch('last')
     if aisles.index(last_aisle)\
-       .present? && aisles.index(last_aisle) != (aisles.count - 1)
+       .present? && aisles\
+                    .index(last_aisle) != (aisles.count - 1)
       aisles.drop(aisles.index(last_aisle))
     end
   end
