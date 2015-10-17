@@ -8,7 +8,7 @@ module CountdownAisleProcessor
   include Cacher
   extend WebScrape
 
-  HOME_URL = "http://shop.countdown.co.nz"
+  HOME_URL = 'http://shop.countdown.co.nz'
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
@@ -28,8 +28,8 @@ module CountdownAisleProcessor
     log "count - #{doc.css('div.product-stamp.product-stamp-grid').count}"
 
     work_q = Queue.new
-    processed = 0
-    doc.css('div.product-stamp.product-stamp-grid').each{|x| work_q.push x }
+    doc\
+      .css('div.product-stamp.product-stamp-grid').each { |x| work_q.push x }
     workers = (0...4).map do
       Thread.new do
         begin
@@ -46,17 +46,17 @@ module CountdownAisleProcessor
   end
 
   def error?(doc)
-    return true if doc.blank? or doc.title.blank?
+    return true if doc.blank? || doc.title.blank?
     doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
   end
 
   def aisle_name(doc)
-    text = ""
-    doc.at_css("div.breadcrumbs").elements.each do |e|
+    text = ''
+    doc.at_css('div.breadcrumbs').elements.each do |e|
       text = text + e.text + ',' if e.text.present?
     end
 
-    text[text.length - 1] = "" # remove last comma
+    text[text.length - 1] = '' # remove last comma
 
     text.gsub(/,\b/, ', ').downcase.gsub('groceries, ', '')
   end
