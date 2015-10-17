@@ -65,5 +65,5 @@ module CountdownAisleProcessor
     Rails.logger.info "#{aisle.split(', ').last} - " + string
   end
 
-  module_function :grab_browse_aisle, :process_doc, :error?, :aisle_name
+  module_function :grab_browse_aisle, :process_doc, :error?, :aisle_name, :log
 end
