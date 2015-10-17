@@ -4,7 +4,7 @@ require "#{Rails.root}/lib/modules/rake_logger"
 require "#{Rails.root}/lib/modules/web_scrape"
 require "#{Rails.root}/lib/modules/countdown_item_processor"
 
-class CountdownAisleProcessor < Object
+module CountdownAisleProcessor
   include Celluloid
   include Celluloid::Logger
   include Cacher
