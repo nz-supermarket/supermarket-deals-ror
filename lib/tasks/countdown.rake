@@ -22,7 +22,7 @@ task fetch_prices: :environment do
   require 'thread'
   work_q = Queue.new
   processed = 0
-  aisles.each{|x| work_q.push x }
+  aisles.each { |x| work_q.push x }
   workers = (0...4).map do
     Thread.new do
       begin
@@ -35,13 +35,17 @@ task fetch_prices: :environment do
       rescue ThreadError
       end
     end
-  end; "ok"
-  workers.map(&:join); "ok"
+  end
+  workers.map(&:join)
 
-  Rails.logger.info "New Product count: #{Product.where("created_at >= ?", Time.zone.now.beginning_of_day).count}"
-  Rails.logger.info "New Special count: #{SpecialPrice.where("created_at >= ?", Time.zone.now.beginning_of_day).count}"
-  Rails.logger.info "New Normal count: #{NormalPrice.where("created_at >= ?", Time.zone.now.beginning_of_day).count}"
+  Rails.logger.info "New Product count: #{today_count(Product)}"
+  Rails.logger.info "New Special count: #{today_count(SpecialPrice)}"
+  Rails.logger.info "New Normal count: #{today_count(NormalPrice)}"
   Rails.logger.info "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
+end
+
+def today_count(model)
+  model.where('created_at >= ?', Time.zone.now.beginning_of_day).count
 end
 
 ###################################################
