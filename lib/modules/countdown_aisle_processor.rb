@@ -25,17 +25,20 @@ module CountdownAisleProcessor
 
     aisle = aisle_name(doc)
 
-    Rails.logger.info "#{doc.css('div.product-stamp.product-stamp-grid').count} item for #{aisle}"
-
-    pool = CountdownItemProcessor.pool(size: 3)
-
-    doc.css('div.product-stamp.product-stamp-grid').each do |item|
-      pool.async.process_item(item, aisle)
+    work_q = Queue.new
+    processed = 0
+    doc.css('div.product-stamp.product-stamp-grid').each{|x| work_q.push x }
+    workers = (0...4).map do
+      Thread.new do
+        begin
+          while item = work_q.pop(true)
+            CountdownItemProcessor.process_item(item, aisle)
+          end
+        rescue ThreadError
+        end
+      end
     end
-
-    sleep(1) while pool.idle_size < 3
-
-    Rails.logger.info "finish processing #{aisle}"
+    workers.map(&:join)
   end
 
   def error?(doc)
