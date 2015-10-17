@@ -5,12 +5,8 @@ require "#{Rails.root}/lib/modules/web_scrape"
 require "#{Rails.root}/lib/modules/countdown_item_processor"
 
 module CountdownAisleProcessor
-  include Celluloid
-  include Celluloid::Logger
   include Cacher
   extend WebScrape
-
-  finalizer :finish
 
   HOME_URL = "http://shop.countdown.co.nz"
 
@@ -22,11 +18,6 @@ module CountdownAisleProcessor
     doc = cache_retrieve_url(cache, aisle)
 
     process_doc Nokogiri::HTML(doc)
-  end
-
-  def finish
-    Rails.logger.info "terminating #{self}"
-    terminate
   end
 
   def process_doc(doc)
