@@ -25,7 +25,7 @@ module CountdownAisleProcessor
 
     aisle = aisle_name(doc)
 
-    log "count - #{doc.css('div.product-stamp.product-stamp-grid').count}"
+    log "count - #{doc.css('div.product-stamp.product-stamp-grid').count} items"
 
     work_q = Queue.new
     doc\
@@ -42,7 +42,7 @@ module CountdownAisleProcessor
     end
     workers.map(&:join)
 
-    log 'finish processing'
+    log 'processed'
   end
 
   def error?(doc)
