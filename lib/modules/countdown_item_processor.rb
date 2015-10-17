@@ -1,9 +1,7 @@
 require 'nokogiri'
 require "#{Rails.root}/lib/modules/rake_logger"
 
-class CountdownItemProcessor < Object
-  include Celluloid
-  include Celluloid::Logger
+module CountdownItemProcessor
 
   HOME_URL = "http://shop.countdown.co.nz"
 
@@ -114,4 +112,6 @@ class CountdownItemProcessor < Object
   def multi_buy?(item)
     item.css('div.multi-buy-container').present?
   end
+
+  module_function :process_item, :process_prices, :extract_price, :extract_multi, :special_price?, :multi_buy?
 end
