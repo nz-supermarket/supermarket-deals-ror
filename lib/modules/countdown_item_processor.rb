@@ -3,7 +3,7 @@ require "#{Rails.root}/lib/modules/rake_logger"
 
 module CountdownItemProcessor
 
-  HOME_URL = "http://shop.countdown.co.nz"
+  HOME_URL = 'http://shop.countdown.co.nz'
 
   # data required extracted from page
   # find existing product on database
@@ -12,36 +12,39 @@ module CountdownItemProcessor
   def process_item(item, aisle)
     return if item.css('div.grid-stamp-pull-top').first.blank?
     link = item\
-            .css('div.grid-stamp-pull-top')\
-            .first.at_css('a').attributes['href'].value
+           .css('div.grid-stamp-pull-top')\
+           .first.at_css('a').attributes['href'].value
     img = item\
-            .css('div.grid-stamp-pull-top')\
-            .first.at_css("a").at_css("img")\
-            .attributes["src"].value
+          .css('div.grid-stamp-pull-top')\
+          .first.at_css('a').at_css('img')\
+          .attributes['src'].value
 
     logger = RakeLogger.new
 
     ActiveRecord::Base.connection_pool.reap
 
-    return unless link.include?("Stockcode=") and link.index("&name=")
+    return unless link.include?('Stockcode=') && link.index('&name=')
 
-    sku = link[(link.index("Stockcode=") + 10)..(link.index("&name=") - 1)]
+    sku = link[(link.index('Stockcode=') + 10)..(link.index('&name=') - 1)]
     product = Product.where(sku: sku).first_or_initialize
 
     if product.id.nil?
       # product does not exist
-      product.volume = item.elements.at_css("span.volume-size").text.strip
-      product.name = item.elements.at_css("span.description").text.strip.gsub(product.volume,'')
+      product.volume = item.elements.at_css('span.volume-size').text.strip
+      product.name = item.elements\
+        .at_css('span.description')\
+        .text.strip.gsub(product.volume, '')
 
       product.aisle = aisle + ', ' + product.name
       product.link_to_cd = HOME_URL + link
 
-      logger.log "Created product with sku: " + product.sku.to_s + ". " if product.save
+      logger.log 'Created product with sku: ' +
+        product.sku.to_s + '. ' if product.save
 
-      logger.log "Process prices for product " + product.id.to_s + " now. "
+      logger.log 'Process prices for product ' + product.id.to_s + ' now. '
       process_prices(item, product, logger)
     else
-      logger.log "Process prices for product " + product.id.to_s + " now. "
+      logger.log 'Process prices for product ' + product.id.to_s + ' now. '
       process_prices(item, product, logger)
     end
 
@@ -50,23 +53,28 @@ module CountdownItemProcessor
 
   def process_prices(item, product, logger = @logger)
     if special_price?(item)
-      normal = (extract_price(item, "was-price", product, logger)).presence
+      normal = (extract_price(item, 'was-price', product, logger)).presence
     else
-      normal = (extract_price(item, "price", product, logger)).presence
+      normal = (extract_price(item, 'price', product, logger)).presence
     end
 
-    normal = NormalPrice.new({ price: normal, product_id: product.id })
-    logger.log "Created normal price for product " + product.id.to_s + ". " if normal.save
+    normal = NormalPrice.new(price: normal, product_id: product.id)
+
+    logger.log 'Created normal price for product ' +
+      product.id.to_s + '. ' if normal.save
 
     return unless special_price?(item) || multi_buy?(item)
 
     special = if multi_buy?(item)
-      extract_multi(item, product, logger)
-    else
-      extract_price(item,"special-price", product, logger)
-    end
-    special = SpecialPrice.new({ price: special, product_id: product.id })
-    logger.log "Created special price for product " + product.id.to_s + ". " if special.save
+                extract_multi(item, product, logger)
+              else
+                extract_price(item, 'special-price', product, logger)
+              end
+
+    special = SpecialPrice.new(price: special, product_id: product.id)
+
+    logger.log 'Created special price for product ' +
+      product.id.to_s + '. ' if special.save
   end
 
   def extract_price(item, fetch_param, product, logger = @logger)
