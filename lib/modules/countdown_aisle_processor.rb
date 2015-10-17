@@ -25,6 +25,8 @@ module CountdownAisleProcessor
 
     aisle = aisle_name(doc)
 
+    log "count - #{doc.css('div.product-stamp.product-stamp-grid').count}"
+
     work_q = Queue.new
     processed = 0
     doc.css('div.product-stamp.product-stamp-grid').each{|x| work_q.push x }
@@ -39,6 +41,8 @@ module CountdownAisleProcessor
       end
     end
     workers.map(&:join)
+
+    log 'finish processing'
   end
 
   def error?(doc)
@@ -55,6 +59,10 @@ module CountdownAisleProcessor
     text[text.length - 1] = "" # remove last comma
 
     text.gsub(/,\b/, ', ').downcase.gsub('groceries, ', '')
+  end
+
+  def log(aisle, string)
+    Rails.logger.info "#{aisle.split(', ').last} - " + string
   end
 
   module_function :grab_browse_aisle, :process_doc, :error?, :aisle_name
