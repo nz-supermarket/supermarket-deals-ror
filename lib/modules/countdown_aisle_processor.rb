@@ -42,6 +42,8 @@ module CountdownAisleProcessor
       pool.async.process_item(item, aisle)
     end
 
+    sleep(1) while pool.idle_size < 3
+
     Rails.logger.info "finish processing #{aisle}"
   end
 
