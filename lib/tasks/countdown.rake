@@ -45,7 +45,11 @@ task fetch_prices: :environment do
 end
 
 def today_count(model)
-  model.where('created_at >= ?', Time.zone.now.beginning_of_day).count
+  if model == Product
+    model.where('created_at >= ?', Time.zone.now.beginning_of_day).count
+  else
+    model.where(date: Date.today).count
+  end
 end
 
 ###################################################
