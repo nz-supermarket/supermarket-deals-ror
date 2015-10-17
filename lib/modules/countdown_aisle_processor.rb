@@ -60,4 +60,6 @@ module CountdownAisleProcessor
 
     text.gsub(/,\b/, ', ').downcase.gsub('groceries, ', '')
   end
+
+  module_function :grab_browse_aisle, :process_doc, :error?, :aisle_name
 end
