@@ -19,20 +19,24 @@ task fetch_prices: :environment do
 
   @aisle_processing = true
 
-  pool_size = ((Celluloid.cores * 2) - 1)
-  pool_size = 3 if pool_size < 2
-  Rails.logger.info "pool size: #{pool_size}"
-
-  pool = CountdownAisleProcessor.pool(size: pool_size)
-
-  aisles.each_with_index do |aisle, index|
-    pool.async.grab_browse_aisle(aisle, @cache)
-    @cache.write('last', aisle)
-    sleep rand(1.0..5.0)
-    sleep rand(5.0..10.0) if (index % 10) == 0
-  end
-
-  sleep(1) while pool.idle_size < pool_size
+  require 'thread'
+  work_q = Queue.new
+  processed = 0
+  aisles.each{|x| work_q.push x }
+  workers = (0...4).map do
+    Thread.new do
+      begin
+        while aisle = work_q.pop(true)
+          CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
+          @cache.write('last', aisle)
+          sleep rand(1.0..5.0)
+          sleep rand(5.0..10.0) if (processed % 10) == 0
+        end
+      rescue ThreadError
+      end
+    end
+  end; "ok"
+  workers.map(&:join); "ok"
 
   Rails.logger.info "New Product count: #{Product.where("created_at >= ?", Time.zone.now.beginning_of_day).count}"
   Rails.logger.info "New Special count: #{SpecialPrice.where("created_at >= ?", Time.zone.now.beginning_of_day).count}"
