@@ -23,7 +23,7 @@ task fetch_prices: :environment do
   work_q = Queue.new
   processed = 0
   aisles.each { |x| work_q.push x }
-  workers = (0...4).map do
+  workers = (0...8).map do
     Thread.new do
       begin
         while aisle = work_q.pop(true)
