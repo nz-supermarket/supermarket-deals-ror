@@ -1,10 +1,11 @@
 require "#{Rails.root}/lib/modules/cacher"
+require 'thread'
 
 # Process links on Countdown Website
 module CountdownLinksProcessor
   extend Cacher
 
-  FILTERS = "/Shop/UpdatePageSize?pageSize=400&snapback="
+  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
 
   def cat_links_fetch(doc)
     print '.'
