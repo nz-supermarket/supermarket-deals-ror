@@ -10,13 +10,12 @@ module CountdownItemProcessor
   # if product does not exist
   # create new
   def process_item(item, aisle)
-    return if item.css('div.grid-stamp-pull-top').first.blank?
-    link = item\
-           .css('div.grid-stamp-pull-top')\
-           .first.at_css('a').attributes['href'].value
-    img = item\
-          .css('div.grid-stamp-pull-top')\
-          .first.at_css('a').at_css('img')\
+    container = fetch_product_container(item)
+    return if container.blank?
+    link = container\
+           .at_css('a').attributes['href'].value
+    img = container\
+          .at_css('a').at_css('img')\
           .attributes['src'].value
 
     logger = RakeLogger.new
@@ -49,6 +48,11 @@ module CountdownItemProcessor
     end
 
     ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
+  end
+
+  def fetch_product_container(item)
+    item.css('div.grid-stamp-pull-top').first ||
+      item.css('div.details-container').first
   end
 
   def process_prices(item, product, logger = @logger)
@@ -121,5 +125,11 @@ module CountdownItemProcessor
     item.css('div.multi-buy-container').present?
   end
 
-  module_function :process_item, :process_prices, :extract_price, :extract_multi, :special_price?, :multi_buy?
+  module_function :process_item,
+                  :process_prices,
+                  :extract_price,
+                  :extract_multi,
+                  :special_price?,
+                  :multi_buy?,
+                  :fetch_product_container
 end
