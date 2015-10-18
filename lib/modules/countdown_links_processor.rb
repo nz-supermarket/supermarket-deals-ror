@@ -45,25 +45,43 @@ module CountdownLinksProcessor
 
       next if sub_links.nil?
 
-      sub_links.each do |sub|
-        value = sub.attr('href')
+      sub_q = Queue.new
+      sub_links.each { |x| sub_q.push x }
+      workers = (0...4).map do
+        Thread.new do
+          begin
+            while sub = sub_q.pop(true)
+              value = sub.attr('href')
 
-        sub_resp = Cacher.cache_retrieve_url(cache, FILTERS + value)
+              sub_resp = Cacher.cache_retrieve_url(cache, FILTERS + value)
 
-        next if sub_resp.blank?
+              next if sub_resp.blank?
 
-        sub_sub_links = sub_links_fetch(sub_resp)
+              sub_sub_links = sub_links_fetch(sub_resp)
 
-        next if sub_sub_links.nil?
+              next if sub_sub_links.nil?
 
-        sub_sub_links.each do |sub_sub|
-          value = sub_sub.attr('href')
+              sub_sub_q = Queue.new
+              sub_sub_links.each { |x| sub_sub_q.push x }
+              workers = (0...4).map do
+                Thread.new do
+                  begin
+                    while sub_sub = sub_sub_q.pop(true)
+                      value = sub_sub.attr('href')
 
-          if value.split('/').count >= 5
-            aisle_array << value
+                      aisle_array << value if value.split('/').count >= 5
+                    end
+                  rescue ThreadError
+                  end
+                end
+              end
+              workers.map(&:join)
+            end
+          rescue ThreadError
           end
         end
       end
+      workers.map(&:join)
     end
 
     puts ''
