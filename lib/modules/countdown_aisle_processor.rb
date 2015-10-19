@@ -63,7 +63,9 @@ module CountdownAisleProcessor
   end
 
   def log(aisle, string)
-    Rails.logger.info "#{aisle.split(', ').last} - " + string
+    values = aisle.split(', ')
+    size = values.count
+    Rails.logger.info "#{values[size - 2]}, #{values[size - 1]} - " + string
   end
 
   module_function :grab_browse_aisle, :process_doc, :error?, :aisle_name, :log
