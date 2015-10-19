@@ -22,7 +22,7 @@ task fetch_prices: :environment do
   require 'thread'
   work_q = Queue.new
   processed = 0
-  aisles.each { |x| work_q.push x }
+  aisles.shuffle.each { |x| work_q.push x }
   workers = (0...8).map do
     Thread.new do
       begin
