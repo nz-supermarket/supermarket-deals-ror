@@ -25,7 +25,7 @@ module CountdownItemProcessor
     return unless link.include?('Stockcode=') && link.index('&name=')
 
     sku = link[(link.index('Stockcode=') + 10)..(link.index('&name=') - 1)]
-    product = Product.first_or_initialize(sku: sku)
+    product = Product.where(sku: sku).first_or_initialize
 
     if product.id.nil?
       # product does not exist
