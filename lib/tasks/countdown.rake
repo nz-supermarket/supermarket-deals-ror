@@ -30,7 +30,8 @@ task fetch_prices: :environment do
           CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
           @cache.write('last', aisle)
           sleep rand(1.0..5.0)
-          sleep rand(5.0..10.0) if (processed % 10) == 0
+          sleep rand(3.0..8.0) if (processed % 10) == 0
+          sleep rand(5.0..10.0) if (processed % 20) == 0
         end
       rescue ThreadError
       end
