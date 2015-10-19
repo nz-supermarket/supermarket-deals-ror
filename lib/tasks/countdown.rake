@@ -62,6 +62,9 @@ def setup
   require "#{Rails.root}/lib/modules/cacher"
   require "#{Rails.root}/lib/modules/countdown_aisle_processor"
   require "#{Rails.root}/lib/modules/countdown_links_processor"
+  require "#{Rails.root}/app/models/product"
+  require "#{Rails.root}/app/models/normal_price"
+  require "#{Rails.root}/app/models/special_price"
 
   include Cacher
   include CountdownLinksProcessor
