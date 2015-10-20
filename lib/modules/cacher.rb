@@ -7,8 +7,6 @@ module Cacher
   include Midnight
   include RProxy
 
-  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
-
   def cache_retrieve_url(cache, val, home_url = 'http://shop.countdown.co.nz')
 
     if cache.fetch(val).present?

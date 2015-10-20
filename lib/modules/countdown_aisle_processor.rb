@@ -9,6 +9,7 @@ module CountdownAisleProcessor
   extend WebScrape
 
   HOME_URL = 'http://shop.countdown.co.nz'
+  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
