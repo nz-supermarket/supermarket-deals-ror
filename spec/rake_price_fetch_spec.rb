@@ -25,6 +25,9 @@ end
 describe 'more than 24 products in an aisle' do
   before do
     require "#{Rails.root}/lib/modules/countdown_aisle_processor"
+    require "#{Rails.root}/app/models/product"
+    require "#{Rails.root}/app/models/special_price"
+    require "#{Rails.root}/app/models/normal_price"
   end
 
   it 'should be able to retrieve more than 25 products' do
