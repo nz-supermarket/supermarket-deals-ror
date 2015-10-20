@@ -5,20 +5,37 @@ require "#{Rails.root}/lib/modules/web_scrape"
 require "#{Rails.root}/lib/modules/countdown_item_processor"
 
 module CountdownAisleProcessor
-  include Cacher
+  extend Cacher
   extend WebScrape
 
   HOME_URL = 'http://shop.countdown.co.nz'
-  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = cache_retrieve_url(cache, FILTERS + aisle)
+    doc = cache_retrieve_url(cache, aisle)
 
-    process_doc Nokogiri::HTML(doc)
+    noko_doc = Nokogiri::HTML(doc)
+    process_doc noko_doc
+
+    aisle_total_count = noko_doc\
+                        .css('div.product-stamp.product-stamp-grid')\
+                        .count
+
+    while noko_doc.css('li.next')
+      url = noko_doc.css('li.next').at_css('a').attr('href')
+      return aisle_total_count if url.nil?
+      doc = cache_retrieve_url(cache, url)
+
+      noko_doc = Nokogiri::HTML(doc)
+      process_doc noko_doc
+
+      aisle_total_count += noko_doc\
+                           .css('div.product-stamp.product-stamp-grid')\
+                           .count
+    end
   end
 
   def process_doc(doc)
