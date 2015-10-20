@@ -49,9 +49,6 @@ gem 'jbuilder'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 
-# ruby-concurrency
-gem 'celluloid'
-
 # highcharts
 gem 'highcharts-rails'
 
