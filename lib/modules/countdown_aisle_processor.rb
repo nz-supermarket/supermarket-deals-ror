@@ -25,7 +25,7 @@ module CountdownAisleProcessor
                         .count
 
     while noko_doc.css('li.next')
-      url = noko_doc.css('li.next').at_css('a').attr('href')
+      url = noko_doc.css('li.next').at_css('a').try(:attr, 'href')
       return aisle_total_count if url.nil?
       doc = cache_retrieve_url(cache, url)
 
