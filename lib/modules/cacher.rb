@@ -9,8 +9,10 @@ module Cacher
 
   def cache_retrieve_url(cache, val, home_url = 'http://shop.countdown.co.nz')
 
-    if cache.fetch(val).present?
-      return cache.fetch(val) if cache.fetch(val).match(/(\s500\s)/).nil? # match " 500 " for 500 error
+    cached_value = cache.fetch(val)
+
+    if cached_value.present?
+      return cached_value if cached_value.match(/(\s500\s)/).nil? # match " 500 " for 500 error
     end
 
     cache.delete(val)
