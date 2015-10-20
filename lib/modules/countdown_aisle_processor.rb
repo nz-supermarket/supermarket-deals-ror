@@ -15,9 +15,27 @@ module CountdownAisleProcessor
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = cache_retrieve_url(cache, FILTERS + aisle)
+    doc = cache_retrieve_url(cache, aisle)
 
-    process_doc Nokogiri::HTML(doc)
+    noko_doc = Nokogiri::HTML(doc)
+    process_doc noko_doc
+
+    aisle_total_count = noko_doc\
+                        .css('div.product-stamp.product-stamp-grid')\
+                        .count
+
+    while noko_doc.css('li.next')
+      url = noko_doc.css('li.next').at_css('a').attr('href')
+      return aisle_total_count if url.nil?
+      doc = cache_retrieve_url(cache, url)
+
+      noko_doc = Nokogiri::HTML(doc)
+      process_doc noko_doc
+
+      aisle_total_count += noko_doc\
+                           .css('div.product-stamp.product-stamp-grid')\
+                           .count
+    end
   end
 
   def process_doc(doc)
