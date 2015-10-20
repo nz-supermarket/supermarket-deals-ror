@@ -51,7 +51,7 @@ module CountdownLinksProcessor
             while sub = sub_q.pop(true)
               value = sub.attr('href')
 
-              sub_resp = Cacher.cache_retrieve_url(cache, FILTERS + value)
+              sub_resp = Cacher.cache_retrieve_url(cache, value)
 
               next if sub_resp.blank?
 
