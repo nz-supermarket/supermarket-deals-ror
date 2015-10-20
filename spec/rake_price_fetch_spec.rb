@@ -22,6 +22,23 @@ describe 'rproxy, webscrape, countdown homepage' do
   end
 end
 
+describe 'more than 24 products in an aisle' do
+  before do
+    require "#{Rails.root}/lib/modules/countdown_aisle_processor"
+  end
+
+  it 'should be able to retrieve more than 25 products' do
+    cache = ActiveSupport::Cache::FileStore.new('/tmp')
+
+    VCR.use_cassette('more_than_25', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+      CountdownAisleProcessor\
+             .grab_browse_aisle('/Shop/Browse/personal-care/oral-care', cache)
+
+      expect(Product.count).to eq(183)
+    end
+  end
+end
+
 describe 'rproxy, webscrape, countdown links' do
   before do
     require "#{Rails.root}/lib/modules/countdown_links_processor"
