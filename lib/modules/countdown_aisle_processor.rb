@@ -5,7 +5,7 @@ require "#{Rails.root}/lib/modules/web_scrape"
 require "#{Rails.root}/lib/modules/countdown_item_processor"
 
 module CountdownAisleProcessor
-  include Cacher
+  extend Cacher
   extend WebScrape
 
   HOME_URL = 'http://shop.countdown.co.nz'
