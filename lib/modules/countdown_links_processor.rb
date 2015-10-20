@@ -5,8 +5,6 @@ require 'thread'
 module CountdownLinksProcessor
   extend Cacher
 
-  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
-
   def cat_links_fetch(doc)
     print '.'
     doc.at_css('div.toolbar-links-children')\

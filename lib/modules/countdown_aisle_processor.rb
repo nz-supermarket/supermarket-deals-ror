@@ -15,7 +15,7 @@ module CountdownAisleProcessor
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = cache_retrieve_url(cache, aisle)
+    doc = cache_retrieve_url(cache, FILTERS + aisle)
 
     process_doc Nokogiri::HTML(doc)
   end
