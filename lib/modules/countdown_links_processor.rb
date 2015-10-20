@@ -5,8 +5,6 @@ require 'thread'
 module CountdownLinksProcessor
   extend Cacher
 
-  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
-
   def cat_links_fetch(doc)
     print '.'
     doc.at_css('div.toolbar-links-children')\
@@ -53,7 +51,7 @@ module CountdownLinksProcessor
             while sub = sub_q.pop(true)
               value = sub.attr('href')
 
-              sub_resp = Cacher.cache_retrieve_url(cache, FILTERS + value)
+              sub_resp = Cacher.cache_retrieve_url(cache, value)
 
               next if sub_resp.blank?
 

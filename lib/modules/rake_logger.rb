@@ -4,9 +4,9 @@ class RakeLogger
     @log_string_builder = builder
   end
 
-  def log(string, level = 'debug')
+  def log(string, level = 'info')
     if level == 'debug'
-      log_string string
+      log_string string, level
     elsif level == 'info'
       log_string string unless string.include? 'Unable'
     elsif level == 'simple'
@@ -16,9 +16,13 @@ class RakeLogger
 
   private
 
-  def log_string(string)
+  def log_string(string, level = 'info')
     @log_string_builder += '\n'
     @log_string_builder += string
-    Rails.logger.info string
+    if level == 'debug'
+      Rails.logger.debug string
+    else
+      Rails.logger.info string
+    end
   end
 end

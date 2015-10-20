@@ -90,18 +90,18 @@ module CountdownItemProcessor
       container = item.at_css('div.price-container')\
                   .at_css("span.#{fetch_param}")
       if fetch_param.include? 'was-price'
-        logger.log 'Was price found for product ' + product.id.to_s + '. '
+        logger.log 'Was price found for product ' + product.id.to_s + '. ', 'debug'
         price = container.child.text.gsub('was', '').strip.delete('$')
       elsif fetch_param.include? 'special-price'
-        logger.log 'Special price found for product ' + product.id.to_s + '. '
+        logger.log 'Special price found for product ' + product.id.to_s + '. ', 'debug'
         price = container.child.text.strip.delete('$')
       else
-        logger.log 'Normal price found for product ' + product.id.to_s + '. '
+        logger.log 'Normal price found for product ' + product.id.to_s + '. ', 'debug'
         price = container.child.text.strip.delete('$')
       end
       return price
     rescue => e
-      logger.log "Unable to extract price, will ignore: #{e}"
+      logger.log "Unable to extract price, will ignore: #{e}", 'debug'
     end
   end
 
@@ -110,7 +110,7 @@ module CountdownItemProcessor
     quantity = item.at_css('span.multi-buy-award-quantity')\
                .text.gsub(' for', '')
 
-    logger.log 'Multi buy price found for product ' + product.id.to_s + '. '
+    logger.log 'Multi buy price found for product ' + product.id.to_s + '. ', 'debug'
     value.to_d / quantity.to_d
   end
 

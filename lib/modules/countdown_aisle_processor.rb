@@ -9,13 +9,14 @@ module CountdownAisleProcessor
   extend WebScrape
 
   HOME_URL = 'http://shop.countdown.co.nz'
+  FILTERS = '/Shop/UpdatePageSize?pageSize=240&snapback='
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
   end
 
   def grab_browse_aisle(aisle, cache)
-    doc = cache_retrieve_url(cache, aisle)
+    doc = cache_retrieve_url(cache, FILTERS + aisle)
 
     process_doc Nokogiri::HTML(doc)
   end
@@ -31,7 +32,7 @@ module CountdownAisleProcessor
     work_q = Queue.new
     doc\
       .css('div.product-stamp.product-stamp-grid').each { |x| work_q.push x }
-    workers = (0...4).map do
+    workers = (0...3).map do
       Thread.new do
         begin
           while item = work_q.pop(true)
