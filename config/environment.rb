@@ -5,4 +5,11 @@ require File.expand_path('../application', __FILE__)
 Rails.application.initialize!
 
 Rails.logger = Logger.new(STDOUT)
-Rails.logger.level = 0
+case Rails.env
+when 'development'
+  Rails.logger.level = 1
+when 'test'
+  Rails.logger.level = 1
+else
+  Rails.logger.level = 0
+end
