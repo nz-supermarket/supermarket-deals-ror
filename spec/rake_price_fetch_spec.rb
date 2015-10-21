@@ -37,7 +37,7 @@ describe 'more than 24 products in an aisle' do
   it 'should be able to retrieve more than 25 products' do
     cache = ActiveSupport::Cache::FileStore.new('/tmp')
 
-    VCR.use_cassette('more_than_25', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+    VCR.use_cassette('more_than_25', :match_requests_on => [:method, :uri, :query]) do
       CountdownAisleProcessor\
         .grab_browse_aisle('/Shop/Browse/personal-care/oral-care', cache)
 
@@ -54,9 +54,9 @@ describe 'rproxy, webscrape, countdown links' do
 
   it 'should be able to process various links' do
     cache = ActiveSupport::Cache::FileStore.new('/tmp')
-    VCR.use_cassette('fetch_homepage', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+    VCR.use_cassette('fetch_homepage', :match_requests_on => [:method, :uri, :query]) do
       doc = CountdownAisleProcessor.home_doc_fetch
-      VCR.use_cassette('aisles', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+      VCR.use_cassette('aisles', :match_requests_on => [:method, :uri, :query]) do
         aisles = CountdownLinksProcessor.generate_aisle(doc, cache)
         expect(aisles.size).to eq(3108)
         expect(aisles.first).to include('/Shop/Browse/bakery/')
@@ -75,7 +75,7 @@ describe 'rproxy, webscrape, countdown aisles' do
   end
 
   it 'should be able to process special price product' do
-    VCR.use_cassette('just_special', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+    VCR.use_cassette('just_special', :match_requests_on => [:method, :uri, :query]) do
       doc = Cacher.cache_retrieve_url(@cache, '/Shop/Browse/bakery/bread-rolls-bread-sticks-bagels/sliders')
       html = Nokogiri::HTML(doc)
       aisle = CountdownAisleProcessor.aisle_name(html)
@@ -95,7 +95,7 @@ describe 'rproxy, webscrape, countdown aisles' do
   end
 
   it 'should be able to process basic multi buy product' do
-    VCR.use_cassette('just_multibuy', :match_requests_on => [:method, :uri, :query], :re_record_interval => nil) do
+    VCR.use_cassette('just_multibuy', :match_requests_on => [:method, :uri, :query]) do
       doc = Cacher.cache_retrieve_url(@cache, '/Shop/Browse/bakery/bread-rolls-bread-sticks-bagels/dinner-rolls')
       html = Nokogiri::HTML(doc)
       aisle = CountdownAisleProcessor.aisle_name(html)
