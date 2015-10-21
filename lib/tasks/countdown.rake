@@ -74,6 +74,9 @@ def setup
   case Rails.env
   when 'production'
     @cache = Rails.cache
+  when 'development'
+    WebMock.disable!
+    @cache = ActiveSupport::Cache::FileStore.new('/tmp')
   else
     @cache = ActiveSupport::Cache::FileStore.new('/tmp')
   end
