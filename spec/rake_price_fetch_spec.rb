@@ -17,8 +17,7 @@ describe 'rproxy, webscrape, countdown homepage' do
 
       expect(doc.class).to eq(Nokogiri::HTML::Document)
       expect(doc.at_css('title').text.strip)\
-        .to eq('Online Supermarket: \
-          Online Grocery Shopping & Free Recipes at countdown.co.nz')
+        .to eq('Online Supermarket: Online Grocery Shopping & Free Recipes at countdown.co.nz')
       expect(doc.at_css('.copyright-wrapper')\
         .at_css('.visible-phone').text.strip)\
         .to eq("© Countdown #{Time.now.year}")
