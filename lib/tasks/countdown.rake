@@ -17,8 +17,6 @@ task fetch_prices: :environment do
     end
   end
 
-  @aisle_processing = true
-
   require 'thread'
   work_q = Queue.new
   processed = 0
@@ -80,6 +78,4 @@ def setup
   else
     @cache = ActiveSupport::Cache::FileStore.new('/tmp')
   end
-
-  @aisle_processing = false
 end
