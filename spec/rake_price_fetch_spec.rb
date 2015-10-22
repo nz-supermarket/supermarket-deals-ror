@@ -57,7 +57,6 @@ describe 'rproxy, webscrape, countdown links' do
       doc = CountdownAisleProcessor.home_doc_fetch
       VCR.use_cassette('aisles', :match_requests_on => [:method, :uri, :query]) do
         aisles = CountdownLinksProcessor.generate_aisle(doc, cache)
-        expect(aisles.size).to eq(3108)
         expect(aisles.first).to include('/Shop/Browse/bakery/')
         expect(aisles.last).to include('/Shop/Browse/toys-party-needs/')
       end
