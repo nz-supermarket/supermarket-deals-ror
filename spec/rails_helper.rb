@@ -12,7 +12,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.configure_rspec_metadata!
   c.cassette_library_dir = 'spec/cassettes'
-  c.default_cassette_options = { :record => :new_episodes, :re_record_interval => 3.months, :allow_playback_repeats => true }
+  c.default_cassette_options = { :record => :new_episodes, :allow_playback_repeats => true }
 end
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -44,12 +44,12 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = false
 
-  config.before(:suite) do
+  config.before(:each) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.start
   end
 
-  config.after(:suite) do
+  config.after(:each) do
     DatabaseCleaner.clean
   end
 
