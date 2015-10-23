@@ -1,6 +1,6 @@
 <div class="row"></div>
 <div class="row">
-  <% cache("index_header", :expires_in => Time.new(Time.zone.now.year, Time.zone.now.month, Time.zone.now.day, 23, 58, 00) - Time.zone.now) do %>
+  <% cache("index_header", :expires_in => 1.hour do %>
     <div class="col-xs-12">
       <h1>Bringing You The Lowest Price For Any Supermarket Product<br/></h1>
       <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
