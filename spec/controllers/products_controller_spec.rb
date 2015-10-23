@@ -52,13 +52,6 @@ RSpec.describe ProductsController, :type => :controller do
     end
   end
 
-  describe "GET new" do
-    it "assigns a new product as @product" do
-      get :new, {}, valid_session
-      expect(assigns(:product)).to be_a_new(Product)
-    end
-  end
-
   describe "GET edit" do
     it "assigns the requested product as @product" do
       product = Product.create! valid_attributes
