@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :special_price, :class => 'SpecialPrice' do
-    price "9.99"
-    date "2015-01-24 11:06:34"
+    price   '9.99'
+    date    { generate(:date) }
     product nil
   end
 end
