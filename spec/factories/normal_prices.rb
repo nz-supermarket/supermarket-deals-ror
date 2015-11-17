@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :normal_price, class: 'NormalPrice' do
     price       { generate(:decimals) }
     date        { generate(:date) }
-    association product
+    association :product
   end
 end
