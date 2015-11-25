@@ -9,7 +9,7 @@ case Rails.env
 when 'development'
   Rails.logger.level = 1
 when 'test'
-  Rails.logger.level = 1
+  Rails.logger.level = 3
 else
   Rails.logger.level = 0
 end

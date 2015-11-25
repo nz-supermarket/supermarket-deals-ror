@@ -1,6 +1,5 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'vcr'
@@ -10,9 +9,9 @@ require 'database_cleaner'
 VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
   c.hook_into :webmock
-  c.configure_rspec_metadata!
   c.cassette_library_dir = 'spec/cassettes'
   c.default_cassette_options = { :record => :new_episodes, :allow_playback_repeats => true }
+  c.configure_rspec_metadata!
 end
 # Add additional requires below this line. Rails is not loaded until this point!
 
