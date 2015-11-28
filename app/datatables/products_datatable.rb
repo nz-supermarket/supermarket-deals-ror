@@ -7,8 +7,6 @@ class ProductsDatatable
 
   def as_json(options = {})
     {
-      bDestroy: true,
-      bStateSave: true,
       sEcho: params[:sEcho].to_i,
       iTotalRecords: LowestPrice.count,
       iTotalDisplayRecords: products.total_entries,
