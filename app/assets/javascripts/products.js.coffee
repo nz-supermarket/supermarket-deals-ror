@@ -11,6 +11,7 @@ jQuery ->
     dom: "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
     processing: true
     serverSide: true
+    responsive: true
     sAjaxSource: $('#products').data('source')
 
   $("#products").on "draw.dt", ->
