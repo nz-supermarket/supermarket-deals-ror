@@ -7,7 +7,7 @@
 default: &default
   adapter: postgresql
   pool: 20
-  timeout: 5000
+  timeout: 10000
   host: localhost
 
 development:
@@ -24,10 +24,8 @@ test: &test
 production:
   adapter: postgresql
   encoding: unicode
-  timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
 
 dokku:
   adapter: postgresql
-  timeout: 5000
   url: <%= ENV['DATABASE_URL'] %>
