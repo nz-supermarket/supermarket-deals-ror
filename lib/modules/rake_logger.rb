@@ -4,11 +4,11 @@ class RakeLogger
     @log_string_builder = builder
   end
 
-  def log(string, level = 'info')
+  def log(thread, string, level = 'info')
     if level == 'debug'
-      log_string string, level
+      log_string thread, string, level
     elsif level == 'info'
-      log_string string unless string.include? 'Unable'
+      log_string thread, string unless string.include? 'Unable'
     elsif level == 'simple'
       print('.')
     end
@@ -16,13 +16,13 @@ class RakeLogger
 
   private
 
-  def log_string(string, level = 'info')
+  def log_string(thread, string, level = 'info')
     @log_string_builder += '\n'
     @log_string_builder += string
     if level == 'debug'
-      Rails.logger.debug string
+      Rails.logger.debug thread.inspect.split('/').first + ' - ' + string
     else
-      Rails.logger.info string
+      Rails.logger.info thread.inspect.split('/').first + ' - ' + string
     end
   end
 end
