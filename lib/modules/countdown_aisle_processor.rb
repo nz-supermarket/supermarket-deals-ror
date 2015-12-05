@@ -50,10 +50,10 @@ module CountdownAisleProcessor
     doc\
       .css('div.product-stamp.product-stamp-grid').each { |x| work_q.push x }
     workers = (0...3).map do
-      Thread.new do
+      thread = Thread.new do
         begin
           while item = work_q.pop(true)
-            CountdownItemProcessor.process_item(item, aisle)
+            CountdownItemProcessor.process_item(thread, item, aisle)
           end
         rescue ThreadError
         end
