@@ -9,7 +9,7 @@ module CountdownItemProcessor
   # find existing product on database
   # if product does not exist
   # create new
-  def process_item(item, aisle)
+  def process_item(thread, item, aisle)
     container = fetch_product_container(item)
     return if container.blank?
     link = container\
@@ -37,14 +37,16 @@ module CountdownItemProcessor
       product.aisle = aisle + ', ' + product.name
       product.link_to_cd = HOME_URL + link
 
-      logger.log 'Created product with sku: ' +
+      logger.log thread, 'Created product with sku: ' +
         product.sku.to_s + '. ' if product.save
 
-      logger.log 'Process prices for product ' + product.id.to_s + ' now. '
-      process_prices(item, product, logger)
+      logger.log thread,
+                 'Process prices for product ' + product.id.to_s + ' now. '
+      process_prices(thread, item, product, logger)
     else
-      logger.log 'Process prices for product ' + product.id.to_s + ' now. '
-      process_prices(item, product, logger)
+      logger.log thread,
+                 'Process prices for product ' + product.id.to_s + ' now. '
+      process_prices(thread, item, product, logger)
     end
 
     ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
@@ -55,33 +57,34 @@ module CountdownItemProcessor
       item.css('div.details-container').first
   end
 
-  def process_prices(item, product, logger = @logger)
+  def process_prices(thread, item, product, logger = @logger)
     if special_price?(item)
-      normal = (extract_price(item, 'was-price', product, logger)).presence
+      normal = (extract_price(thread,
+                              item, 'was-price', product, logger)).presence
     else
-      normal = (extract_price(item, 'price', product, logger)).presence
+      normal = (extract_price(thread, item, 'price', product, logger)).presence
     end
 
     normal = NormalPrice.new(price: normal, product_id: product.id)
 
-    logger.log 'Created normal price for product ' +
+    logger.log thread, 'Created normal price for product ' +
       product.id.to_s + '. ' if normal.save
 
     return unless special_price?(item) || multi_buy?(item)
 
     special = if multi_buy?(item)
-                extract_multi(item, product, logger)
+                extract_multi(thread, item, product, logger)
               else
-                extract_price(item, 'special-price', product, logger)
+                extract_price(thread, item, 'special-price', product, logger)
               end
 
     special = SpecialPrice.new(price: special, product_id: product.id)
 
-    logger.log 'Created special price for product ' +
+    logger.log thread, 'Created special price for product ' +
       product.id.to_s + '. ' if special.save
   end
 
-  def extract_price(item, fetch_param, product, logger = @logger)
+  def extract_price(thread, item, fetch_param, product, logger = @logger)
     item = item.at_css('div.grid-stamp-price-container')
     # do not process club price
     return nil if item.at_css('div.club-price-container').present?
@@ -90,27 +93,35 @@ module CountdownItemProcessor
       container = item.at_css('div.price-container')\
                   .at_css("span.#{fetch_param}")
       if fetch_param.include? 'was-price'
-        logger.log 'Was price found for product ' + product.id.to_s + '. ', 'debug'
+        logger.log thread,
+                   'Was price found for product ' + product.id.to_s + '. ',
+                   'debug'
         price = container.child.text.gsub('was', '').strip.delete('$')
       elsif fetch_param.include? 'special-price'
-        logger.log 'Special price found for product ' + product.id.to_s + '. ', 'debug'
+        logger.log thread,
+                   'Special price found for product ' + product.id.to_s + '. ',
+                   'debug'
         price = container.child.text.strip.delete('$')
       else
-        logger.log 'Normal price found for product ' + product.id.to_s + '. ', 'debug'
+        logger.log thread,
+                   'Normal price found for product ' + product.id.to_s + '. ',
+                   'debug'
         price = container.child.text.strip.delete('$')
       end
       return price
     rescue => e
-      logger.log "Unable to extract price, will ignore: #{e}", 'debug'
+      logger.log thread, "Unable to extract price, will ignore: #{e}", 'debug'
     end
   end
 
-  def extract_multi(item, product, logger = @logger)
+  def extract_multi(thread, item, product, logger = @logger)
     value = item.at_css('span.multi-buy-award-value').text
     quantity = item.at_css('span.multi-buy-award-quantity')\
                .text.gsub(' for', '')
 
-    logger.log 'Multi buy price found for product ' + product.id.to_s + '. ', 'debug'
+    logger.log thread,
+               'Multi buy price found for product ' + product.id.to_s + '. ',
+               'debug'
     value.to_d / quantity.to_d
   end
 
