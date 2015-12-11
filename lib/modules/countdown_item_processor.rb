@@ -3,7 +3,7 @@ require "#{Rails.root}/lib/modules/rake_logger"
 
 module CountdownItemProcessor
 
-  HOME_URL = 'http://shop.countdown.co.nz'
+  HOME_URL = 'https://shop.countdown.co.nz'
 
   # data required extracted from page
   # find existing product on database
