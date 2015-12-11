@@ -8,7 +8,7 @@ module CountdownAisleProcessor
   extend Cacher
   extend WebScrape
 
-  HOME_URL = 'http://shop.countdown.co.nz'
+  HOME_URL = 'https://shop.countdown.co.nz'
 
   def self.home_doc_fetch
     nokogiri_open_url(HOME_URL)
