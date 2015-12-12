@@ -34,16 +34,16 @@ class ProductsDatatable
   end
 
   def fetch_products
-    products = LowestPrice.order("#{sort_column} #{sort_direction}")
-    products = products.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
-      params[:sSearch] = params[:sSearch].split(' ').map{ |i| i = "%" + i + "%"}
-      params[:sSearch].each do |text|
-        products = products.where("lower(name) similar to :search or lower(aisle) similar to :search or sku::text ~ :search", search: "#{text}")
-      end
+    Rails.cache.fetch(cache_key_gen,
+                      expires_in: 12.hours,
+                      race_condition_ttl: 10) do
+      products = LowestPrice.order("#{sort_column} #{sort_direction}")
+      products = products.page(page).per_page(per_page)
+
+      products = product_filter_on_search(products) if params[:sSearch].present?
+
+      products
     end
-    products
   end
 
   def page
@@ -74,5 +74,22 @@ class ProductsDatatable
     else
       value
     end
+  end
+
+  def cache_key_gen
+    cache_key = 'products'
+    cache_key += "/#{params[:sSearch]}" if params[:sSearch].present?
+
+    cache_key
+  end
+
+  def product_filter_on_search(products)
+    params[:sSearch] = params[:sSearch].downcase() if !params[:sSearch].match(/\d+/)
+    params[:sSearch] = params[:sSearch].split(' ').map{ |i| i = "%" + i + "%"}
+    params[:sSearch].each do |text|
+      products = products.where("lower(name) similar to :search or lower(aisle) similar to :search or sku::text ~ :search", search: "#{text}")
+    end
+
+    products
   end
 end
