@@ -43,7 +43,13 @@ class ProductsDatatable
         products = products.where("lower(name) similar to :search or lower(aisle) similar to :search or sku::text ~ :search", search: "#{text}")
       end
     end
-    products
+    
+    cache_key = "products"
+    cache_key = (cache_key + "/#{params[:sSearch]}") if params[:sSearch].present?
+
+    Rails.cache.fetch(cache_key, expires_in: 12.hours, race_condition_ttl: 10) do
+      products
+    end
   end
 
   def page
