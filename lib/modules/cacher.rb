@@ -7,7 +7,7 @@ module Cacher
   include Midnight
   include RProxy
 
-  def cache_retrieve_url(cache, val, home_url = 'http://shop.countdown.co.nz')
+  def cache_retrieve_url(cache, val, home_url = 'https://shop.countdown.co.nz')
 
     cached_value = cache.fetch(val)
 
