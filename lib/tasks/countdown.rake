@@ -69,6 +69,8 @@ def setup
   include Cacher
   include CountdownLinksProcessor
 
+  ActiveRecord::Base.connection_pool.checkout_timeout = 10
+
   case Rails.env
   when 'production'
     @cache = Rails.cache
