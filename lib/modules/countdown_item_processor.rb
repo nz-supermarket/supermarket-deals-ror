@@ -20,36 +20,34 @@ module CountdownItemProcessor
 
     logger = RakeLogger.new
 
-    ActiveRecord::Base.connection_pool.reap
+    ActiveRecord::Base.connection_pool.with_connection do
+      return unless link.include?('Stockcode=') && link.index('&name=')
 
-    return unless link.include?('Stockcode=') && link.index('&name=')
+      sku = link[(link.index('Stockcode=') + 10)..(link.index('&name=') - 1)]
+      product = Product.where(sku: sku).first_or_initialize
 
-    sku = link[(link.index('Stockcode=') + 10)..(link.index('&name=') - 1)]
-    product = Product.where(sku: sku).first_or_initialize
+      if product.id.nil?
+        # product does not exist
+        product.volume = item.elements.at_css('span.volume-size').text.strip
+        product.name = item.elements\
+          .at_css('span.description')\
+          .text.strip.gsub(product.volume, '')
 
-    if product.id.nil?
-      # product does not exist
-      product.volume = item.elements.at_css('span.volume-size').text.strip
-      product.name = item.elements\
-        .at_css('span.description')\
-        .text.strip.gsub(product.volume, '')
+        product.aisle = aisle + ', ' + product.name
+        product.link_to_cd = HOME_URL + link
 
-      product.aisle = aisle + ', ' + product.name
-      product.link_to_cd = HOME_URL + link
+        logger.log thread, 'Created product with sku: ' +
+          product.sku.to_s + '. ' if product.save
 
-      logger.log thread, 'Created product with sku: ' +
-        product.sku.to_s + '. ' if product.save
-
-      logger.log thread,
-                 'Process prices for product ' + product.id.to_s + ' now. '
-      process_prices(thread, item, product, logger)
-    else
-      logger.log thread,
-                 'Process prices for product ' + product.id.to_s + ' now. '
-      process_prices(thread, item, product, logger)
+        logger.log thread,
+                   'Process prices for product ' + product.id.to_s + ' now. '
+        process_prices(thread, item, product, logger)
+      else
+        logger.log thread,
+                   'Process prices for product ' + product.id.to_s + ' now. '
+        process_prices(thread, item, product, logger)
+      end
     end
-
-    ActiveRecord::Base.connection.close if ActiveRecord::Base.connection
   end
 
   def fetch_product_container(item)
