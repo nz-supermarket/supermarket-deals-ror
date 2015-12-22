@@ -53,7 +53,7 @@ class ProductsDatatable
       rescue ThreadError => e
         Rails.logger.error e
       end
-    end
+    end.join
 
     products
   end
