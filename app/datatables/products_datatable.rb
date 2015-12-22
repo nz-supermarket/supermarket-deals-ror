@@ -34,16 +34,28 @@ class ProductsDatatable
   end
 
   def fetch_products
-    Rails.cache.fetch(cache_key_gen,
-                      expires_in: 12.hours,
-                      race_condition_ttl: 10) do
+    products = Rails.cache.read(cache_key_gen)
+
+    if products.nil?
       products = LowestPrice.order("#{sort_column} #{sort_direction}")
       products = products.page(page).per_page(per_page)
 
       products = product_filter_on_search(products) if params[:sSearch].present?
-
-      products
     end
+
+    Thread.new do
+      begin
+        Rails.cache.write(
+          cache_key_gen,
+          products,
+          expires_in: 12.hours,
+          race_condition_ttl: 10)
+      rescue ThreadError => e
+        Rails.logger.error e
+      end
+    end
+
+    products
   end
 
   def page
