@@ -90,7 +90,7 @@ class ProductsDatatable
 
   def cache_key_gen
     cache_key = 'products#'
-    cache_key += Digest::SHA2.hexdigest(params)
+    cache_key += Digest::SHA2.hexdigest(params.to_s)
 
     cache_key
   end
