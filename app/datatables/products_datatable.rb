@@ -77,8 +77,8 @@ class ProductsDatatable
   end
 
   def cache_key_gen
-    cache_key = 'products'
-    cache_key += "/#{params[:sSearch]}" if params[:sSearch].present?
+    cache_key = 'products#'
+    cache_key += Digest::SHA2.hexdigest(params)
 
     cache_key
   end
