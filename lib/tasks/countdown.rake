@@ -62,6 +62,7 @@ end
 def setup
   require 'nokogiri'
   require 'dalli'
+  require 'parallel'
   require "#{Rails.root}/lib/modules/cacher"
   require "#{Rails.root}/lib/modules/countdown_aisle_processor"
   require "#{Rails.root}/lib/modules/countdown_links_processor"
