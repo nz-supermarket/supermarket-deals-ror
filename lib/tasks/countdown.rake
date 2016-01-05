@@ -38,11 +38,11 @@ task fetch_prices: :environment do
   end
   workers.map(&:join)
 
-  ActiveRecord::Base.connection.execute('REFRESH MATERIALIZED VIEW lowest_prices')
   Rails.logger.info "New Product count: #{today_count(Product)}"
   Rails.logger.info "New Special count: #{today_count(SpecialPrice)}"
   Rails.logger.info "New Normal count: #{today_count(NormalPrice)}"
   Rails.logger.info "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
+  ActiveRecord::Base.connection.execute('REFRESH MATERIALIZED VIEW lowest_prices')
 end
 
 def today_count(model)
