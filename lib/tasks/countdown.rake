@@ -35,7 +35,9 @@ task fetch_prices: :environment do
   Rails.logger.info "New Special count: #{today_count(SpecialPrice)}"
   Rails.logger.info "New Normal count: #{today_count(NormalPrice)}"
   Rails.logger.info "Time Taken: #{((Time.now - time) / 60.0 / 60.0)} hours"
-  ActiveRecord::Base.connection.execute('REFRESH MATERIALIZED VIEW lowest_prices')
+
+  ActiveRecord::Base
+    .connection.execute('REFRESH MATERIALIZED VIEW lowest_prices')
 end
 
 def today_count(model)
