@@ -19,7 +19,8 @@ task fetch_prices: :environment do
 
   Parallel
     .each_with_index(aisles.shuffle,
-                     in_threads: 9) do |aisle, index|
+                     in_threads: 9,
+                     in_process: 4) do |aisle, index|
     CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
     @cache.write('last', aisle)
     Rails.logger.info "worker size left - #{aisles.size - index}"
