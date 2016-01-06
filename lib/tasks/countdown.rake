@@ -17,26 +17,19 @@ task fetch_prices: :environment do
     end
   end
 
-  require 'thread'
   work_q = Queue.new
-  processed = 0
   aisles.shuffle.each { |x| work_q.push x }
-  workers = (0...9).map do
-    Thread.new do
-      begin
-        while aisle = work_q.pop(true)
-          CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
-          @cache.write('last', aisle)
-          Rails.logger.info "worker size left - #{work_q.size}"
-          sleep rand(1.0..5.0)
-          sleep rand(3.0..8.0) if (processed % 10) == 0
-          sleep rand(5.0..10.0) if (processed % 20) == 0
-        end
-      rescue ThreadError
-      end
-    end
+  Parallel
+    .each_with_index(work_q,
+                     in_threads: 3,
+                     in_processes: 4) do |aisle, index|
+    CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
+    @cache.write('last', aisle)
+    Rails.logger.info "worker size left - #{aisles.size - index}"
+    sleep rand(1.0..5.0)
+    sleep rand(3.0..8.0) if (index % 10) == 0
+    sleep rand(5.0..10.0) if (index % 20) == 0
   end
-  workers.map(&:join)
 
   Rails.logger.info "New Product count: #{today_count(Product)}"
   Rails.logger.info "New Special count: #{today_count(SpecialPrice)}"
