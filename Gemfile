@@ -49,8 +49,8 @@ gem 'jbuilder'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 
-# highcharts
-gem 'highcharts-rails'
+# processes and thread
+gem 'parallel'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
