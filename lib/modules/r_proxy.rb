@@ -44,7 +44,7 @@ module RProxy
         number_of_retries += 1 if proxies.count <= 1
         break if number_of_retries >= 20
 
-        result = open(url, proxy: proxy, read_timeout: 30)
+        result = open(url, read_timeout: 30)
       rescue RuntimeError,
              SocketError,
              Errno::ETIMEDOUT,
