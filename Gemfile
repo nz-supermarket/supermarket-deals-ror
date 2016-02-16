@@ -61,6 +61,9 @@ gem 'highcharts-rails'
 # Use unicorn as the app server
 gem 'unicorn'
 
+# sitemap generator
+gem 'sitemap_generator'
+
 group :development, :test do
   # debugger
   gem 'pry-byebug'
