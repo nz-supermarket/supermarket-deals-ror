@@ -1,6 +1,7 @@
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "http://supermarket.lowestprice.club"
-SitemapGenerator::Sitemap.public_path = 'sitemap/'
+SitemapGenerator::Sitemap.default_host = 'http://supermarket.lowestprice.club'
+SitemapGenerator::Sitemap.public_path = 'public/sitemap/'
+SitemapGenerator::Sitemap.sitemaps_path = 'sitemap/'
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.
@@ -27,5 +28,5 @@ SitemapGenerator::Sitemap.create do
   #   end
   LowestPrice.all.each do |product|
     add product_path(product.id), :lastmod => product.normal_date
-  end 
+  end
 end
