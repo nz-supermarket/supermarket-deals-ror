@@ -1,5 +1,6 @@
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = "http://supermarket.lowestprice.club"
+SitemapGenerator::Sitemap.public_path = 'sitemap/'
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.
