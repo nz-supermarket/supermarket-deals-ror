@@ -1,3 +1,6 @@
+<% set_meta_tags title: 'Bringing You The Lowest Price For Any Supermarket Product' %>
+<% set_meta_tags description: "With this list, you should be able to gauge an item that you are purchasing at it's lowest price. " %>
+<% set_meta_tags keywords: %w[lowest price supermarket newzealand nz] %>
 <div class="row"></div>
 <div class="row">
   <% cache("index_header", :expires_in => 1.hour) do %>
@@ -42,3 +45,12 @@
   </div>
 </div>
 <br>
+<script>
+  var scrl = " Value and Prices, Supermarket Lowest Price ";
+  function scrlsts() {
+    scrl = scrl.substring(1, scrl.length) + scrl.substring(0, 1);
+    document.title = scrl;
+    setTimeout("scrlsts()", 300);
+  }
+  scrlsts()
+</script>

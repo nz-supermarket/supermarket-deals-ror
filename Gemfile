@@ -64,6 +64,9 @@ gem 'unicorn'
 # sitemap generator
 gem 'sitemap_generator'
 
+# meta tags generator
+gem 'meta-tags'
+
 group :development, :test do
   # debugger
   gem 'pry-byebug'
