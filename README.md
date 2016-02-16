@@ -3,7 +3,7 @@ supermarket-deals-ror
 
 Giving a go at creating a web application version of my [supermarket deals project](https://github.com/Daniel-ltw/countdown-nz-deals-parser#countdown-nz-deals-parser). 
 
-Current Ruby on Rails version of this implementation is @ [supermarket.technikality.info](http://supermarket.technikality.info). 
+Current Ruby on Rails version of this implementation is @ [supermarket.lowestprice.club](http://supermarket.lowestprice.club). 
 Raise an issue in this project, if you found bugs or have suggestions. 
 
 Currently will start this project from scratch. 
