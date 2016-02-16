@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Value and Prices (Brought to you by Technikality)</title>
+  <%= display_meta_tags site: 'Supermarket Lowest Price' %>
+  <title>Value and Prices, Supermarket Lowest Price</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -14,7 +15,7 @@
 </body>
 </html>
 <script>
-  var scrl = " Value and Prices (Brought to you by Technikality) ";
+  var scrl = " Value and Prices, Supermarket Lowest Price ";
   function scrlsts() {
     scrl = scrl.substring(1, scrl.length) + scrl.substring(0, 1);
     document.title = scrl;
