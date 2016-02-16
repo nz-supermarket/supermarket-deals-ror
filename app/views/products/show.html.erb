@@ -1,3 +1,11 @@
+<% set_meta_tags title: @product.name %>
+<% set_meta_tags description: @product.name + '. ' + @product.aisle %>
+<% set_meta_tags keywords: @product
+                           .aisle.split(',')
+                           .append('lowest')
+                           .append('price')
+                           .append('history chart')
+                           .append('nz') %>
 <p id="notice"><%= notice %></p>
 
 <p>
