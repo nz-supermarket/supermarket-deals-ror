@@ -90,6 +90,9 @@ group :development, :test do
   gem 'factory_girl_rspec'
   gem 'database_cleaner'
 
+  # Fake data generator
+  gem 'faker'
+
   # web mock up
   gem 'vcr'
   gem 'webmock'
