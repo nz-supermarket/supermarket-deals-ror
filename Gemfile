@@ -93,4 +93,7 @@ group :development, :test do
   # web mock up
   gem 'vcr'
   gem 'webmock'
+
+  # javascript headless testing
+  gem 'poltergeist'
 end
