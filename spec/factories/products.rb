@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :product do
-    name        "MyString"
-    volume      "MyString"
+    name        Faker::Commerce.product_name
+    volume      Faker::Lorem.word
     sku         {rand(10000..20000)}
-    aisle       "MyString"
-    link_to_cd  "http://local/product/1"
+    aisle       Faker::Lorem.words(4, true).join(', ')
+    link_to_cd  Faker::Internet.url('local/products')
   end
 end
