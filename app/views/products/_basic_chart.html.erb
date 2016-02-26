@@ -38,8 +38,8 @@ $(function () {
                 color: Highcharts.getOptions().colors[1]
             }
         },
-        min: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.min - 1 %>,
-        max: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.max + 1 %>
+        min: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :min) - 1 %>,
+        max: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :max) + 1 %>
       }, { // Secondary yAxis
         title: {
             text: 'Special Price History',
@@ -54,8 +54,8 @@ $(function () {
             }
         },
         opposite: true,
-        min: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.min - 1 %>,
-        max: <%= raw (@prices.values.map{ |i| i[:normal] } + @prices.values.map{ |i| i[:special] }).compact.max + 1 %>
+        min: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :min) - 1 %>,
+        max: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :max) + 1 %>
       }
     ],
     tooltip: {
