@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :special_price, class: 'SpecialPrice' do
     price       { generate(:decimals) }
-    date        { generate(:date) }
+    date        { Faker::Date.between(90.days.ago, Date.today) }
     association :product
   end
 end
