@@ -13,6 +13,6 @@ class Price < ActiveRecord::Base
   private
 
   def date_fix
-    self.date = Time.zone.now.to_date
+    self.date = Time.zone.parse(date.to_s)
   end
 end
