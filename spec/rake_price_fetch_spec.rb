@@ -79,7 +79,7 @@ describe 'rproxy, webscrape, countdown aisles' do
     expect(NormalPrice.all.size).to be_between(1, 5)
     expect(NormalPrice.where(product_id: 1).first.price).to eq(4.19)
     expect(SpecialPrice.all.size).to be_between(1, 5)
-    expect(SpecialPrice.where(product_id: 1).first.price).to eq(3.00)
+    expect(SpecialPrice.where(product_id: 1).first.price).to be_between(3.00, 3.50)
   end
 
   it 'should be able to process basic multi buy product' do
@@ -101,6 +101,6 @@ describe 'rproxy, webscrape, countdown aisles' do
     expect(NormalPrice.all.size).to be_between(1, 5)
     expect(NormalPrice.where(product_id: 1).first.price).to eq(4.19)
     expect(SpecialPrice.all.size).to be_between(1, 5)
-    expect(SpecialPrice.where(product_id: 1).first.price).to eq(3.00)
+    expect(SpecialPrice.where(product_id: 1).first.price).to be_between(3.00, 3.50)
   end
 end
