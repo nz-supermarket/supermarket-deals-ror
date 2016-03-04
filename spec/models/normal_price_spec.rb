@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe NormalPrice, :type => :model do
   before do
-    create_list(:normal_price, 50)
+    create_list(:normal_price, 20)
   end
 
   describe 'NormalPrice' do
     it 'should have 50 prices' do
-      expect(NormalPrice.all.size).to eq(50)
+      expect(NormalPrice.all.size).to eq(20)
     end
 
     it 'should return a result for product_price_history' do
