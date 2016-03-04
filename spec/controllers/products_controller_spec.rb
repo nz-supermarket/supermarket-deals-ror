@@ -39,26 +39,17 @@ RSpec.describe ProductsController, :type => :controller do
 
   describe "GET index" do
     it "assigns all products as @products" do
-      product = Product.create! valid_attributes
+      product = create(:product_with_prices)
       get :index, {}, valid_session
-      expect(assigns(:products)).to eq(nil)
+      expect(response).to render_template('index')
     end
   end
 
   describe "GET show" do
     it "assigns the requested product as @product" do
-      product = Product.create! valid_attributes
+      product = create(:product_with_prices)
       get :show, {:id => product.to_param}, valid_session
-      expect(assigns(:product)).to eq(LowestPrice.where(sku: product.sku).first)
+      expect(response).to render_template('show')
     end
   end
-
-  describe "GET edit" do
-    it "assigns the requested product as @product" do
-      product = Product.create! valid_attributes
-      get :edit, {:id => product.to_param}, valid_session
-      expect(assigns(:product)).to eq(nil)
-    end
-  end
-
 end
