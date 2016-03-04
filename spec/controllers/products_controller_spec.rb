@@ -25,7 +25,6 @@ RSpec.describe ProductsController, :type => :controller do
   # adjust the attributes here as well.
 
   let(:valid_attributes) {
-    {:sku => rand(10000..20000)}
   }
 
   let(:invalid_attributes) {
@@ -39,7 +38,7 @@ RSpec.describe ProductsController, :type => :controller do
 
   describe "GET index" do
     it "assigns all products as @products" do
-      product = create(:product_with_prices)
+      create_list(:product_with_prices, 20)
       get :index, {}, valid_session
       expect(response).to render_template('index')
     end
