@@ -3,6 +3,9 @@ ruby '2.2.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
+
+gem 'responders', '~> 2.0'
+gem 'oj'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
 # Use postgres database for Active Record
