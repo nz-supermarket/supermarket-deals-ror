@@ -13,17 +13,17 @@ module CountdownItemProcessor
     container = fetch_product_container(item)
     return if container.blank?
     link = container\
-           .at_css('a').attributes['href'].value
+           .at_css('a').attributes['href'].value.downcase
     img = container\
           .at_css('a').at_css('img')\
-          .attributes['src'].value
+          .attributes['src'].value.downcase
 
     logger = RakeLogger.new
 
     ActiveRecord::Base.connection_pool.with_connection do
-      return unless link.include?('Stockcode=') && link.index('&name=')
+      return unless link.include?('stockcode=') && link.index('&name=')
 
-      sku = link[(link.index('Stockcode=') + 10)..(link.index('&name=') - 1)]
+      sku = link[(link.index('stockcode=') + 10)..(link.index('&name=') - 1)]
       product = Product.where(sku: sku).first_or_initialize
 
       if product.id.nil?
@@ -63,7 +63,9 @@ module CountdownItemProcessor
       normal = (extract_price(thread, item, 'price', product, logger)).presence
     end
 
-    normal = NormalPrice.new(price: normal, product_id: product.id)
+    normal = NormalPrice.new(price: normal,
+                             product_id: product.id,
+                             date: Date.today)
 
     logger.log thread, 'Created normal price for product ' +
       product.id.to_s + '. ' if normal.save
@@ -76,7 +78,9 @@ module CountdownItemProcessor
                 extract_price(thread, item, 'special-price', product, logger)
               end
 
-    special = SpecialPrice.new(price: special, product_id: product.id)
+    special = SpecialPrice.new(price: special,
+                               product_id: product.id,
+                               date: Date.today)
 
     logger.log thread, 'Created special price for product ' +
       product.id.to_s + '. ' if special.save
@@ -124,9 +128,9 @@ module CountdownItemProcessor
   end
 
   def special_price?(item)
-    item\
-      .at_css('span.price')\
-      .attributes['class']\
+    item
+      .at_css('span.price')
+      .attributes['class']
       .value.include? 'special-price'
   end
 
