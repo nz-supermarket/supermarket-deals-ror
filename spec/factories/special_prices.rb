@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :special_price, class: 'SpecialPrice' do
     price       { generate(:decimals) }
-    date        { generate(:date) }
+    sequence(:date)  { |n| (n + n).days.ago }
     association :product
   end
 end
