@@ -2,6 +2,11 @@ class TodaysController < ApplicationController
   respond_to :json
 
   def index
-    respond_with LowestPrice.where("normal_date = :date or special_date = :date", date: Date.today).all.to_json
+    table = LowestPrice.arel_table
+    result = LowestPrice
+             .where(table[:normal_date].eq(Date.today)
+                      .or(table[:special_date].eq(Date.today)))
+    result = result.all.group_by(&:aisle)
+    respond_with result.to_json
   end
 end
