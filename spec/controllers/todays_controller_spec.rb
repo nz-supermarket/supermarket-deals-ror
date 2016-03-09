@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe TodaysController, :type => :controller do
-  before :all do
+  before :each do
     create_list(:product_with_prices, 30)
 
-    @today_size = (1..10).to_a.sample
+    @today_size = (1..5).to_a.sample
     @today_list = today_product_list([], @today_size)
 
     ActiveRecord::Base
@@ -22,23 +22,58 @@ RSpec.describe TodaysController, :type => :controller do
 
       expect(JSON.parse(response.body).count).to eq(@today_size)
     end
+
+    it 'should group the various product by aisle' do
+      size_per_aisle = 3
+      # create additional 10 product per aisle
+      Parallel
+        .each(@today_list,
+              in_threads: 5) do |id|
+        p = Product.where(id: id).first
+        aisle = p.aisle
+        today_product_list([], size_per_aisle, aisle: aisle)
+      end
+
+      ActiveRecord::Base
+        .connection
+        .execute('REFRESH MATERIALIZED VIEW lowest_prices')
+
+      get :index, format: :json
+
+      json_response = JSON.parse(response.body)
+
+      expect(json_response.count).to eq(@today_size)
+    end
   end
 
   private
 
-  def today_product_list(list, number)
-    (1..number).each do
-      today_product = create(:product_with_prices)
-      today_special = SpecialPrice
-                      .where(product_id: today_product.id,
-                             date: Date.today).first
+  def today_product_list(list, number, opts = nil)
+    Parallel
+      .each((1..number).to_a,
+            in_threads: number) do
+      ActiveRecord::Base.connection_pool.with_connection do
+        today_product = create_product(opts)
 
-      list << today_product.id
+        list << today_product.id
 
-      today_special_fix(today_special, today_product.id)
+        today_special = SpecialPrice
+                        .where(product_id: today_product.id,
+                               date: Date.today).first
+
+        today_special_fix(today_special, today_product.id)
+      end
     end
 
     list
+  end
+
+  def create_product(opts)
+    if opts.nil?
+      create(:product_with_prices)
+    else
+      create(:product_with_prices, opts)
+    end
   end
 
   def today_special_fix(special, product_id)
