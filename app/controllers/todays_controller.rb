@@ -4,11 +4,10 @@ class TodaysController < ApplicationController
   def index
     table = LowestPrice.arel_table
     result = LowestPrice
-             .where(table[:normal_date].eq(Date.today)
-                      .or(table[:special_date].eq(Date.today)))
-    result = result.all.group_by do |item|
+             .where(table[:normal_date].eq(1.days.ago)
+                      .or(table[:special_date].eq(1.days.ago)))
+    @products = result.all.group_by do |item|
       item.aisle.split(',').first(3).join(',')
     end
-    respond_with [result.to_json]
   end
 end
