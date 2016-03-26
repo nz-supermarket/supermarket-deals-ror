@@ -59,6 +59,9 @@ module CountdownItemProcessor
     if special_price?(item)
       normal = (extract_price(thread,
                               item, 'was-price', product, logger)).presence
+    elsif club_price?(item)
+      normal = (extract_price(thread,
+                              item, 'non-club-price', product, logger)).presence
     else
       normal = (extract_price(thread, item, 'price', product, logger)).presence
     end
@@ -88,11 +91,13 @@ module CountdownItemProcessor
 
   def extract_price(thread, item, fetch_param, product, logger = @logger)
     item = item.at_css('div.grid-stamp-price-container')
-    # do not process club price
-    return nil if item.at_css('div.club-price-container').present?
+    price_container = item
+                      .at_css('div.price-container') ||
+                      item
+                      .at_css('div.club-price-container')
     begin
       price = ''
-      container = item.at_css('div.price-container')\
+      container = price_container
                   .at_css("span.#{fetch_param}")
       if fetch_param.include? 'was-price'
         logger.log thread,
@@ -134,6 +139,10 @@ module CountdownItemProcessor
       .value.include? 'special-price'
   end
 
+  def club_price?(item)
+    item.at_css('div.club-price-container').present?
+  end
+
   def multi_buy?(item)
     item.css('div.multi-buy-container').present?
   end
@@ -143,6 +152,7 @@ module CountdownItemProcessor
                   :extract_price,
                   :extract_multi,
                   :special_price?,
+                  :club_price?,
                   :multi_buy?,
                   :fetch_product_container
 end
