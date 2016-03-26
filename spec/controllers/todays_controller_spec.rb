@@ -28,7 +28,7 @@ RSpec.describe TodaysController, :type => :controller do
       # create additional 10 product per aisle
       Parallel
         .each(@today_list,
-              in_threads: 5) do |id|
+              in_threads: 3) do |id|
         p = Product.where(id: id).first
         aisle = p.aisle
         today_product_list([], size_per_aisle, aisle: aisle)
