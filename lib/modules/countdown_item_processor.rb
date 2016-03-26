@@ -113,7 +113,7 @@ module CountdownItemProcessor
         logger.log thread,
                    'Normal price found for product ' + product.id.to_s + '. ',
                    'debug'
-        price = container.child.text.strip.delete('$')
+        price = container.child.text.gsub(/[ a-zA-Z$]+/, '')
       end
       return price
     rescue => e
