@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
   def index
     @table_size = Product.all.count
     start_date = NormalPrice.select(:date).order(:date).first.date
-    @counter = ((Time.now - start_date.to_time).to_i / 604_800).round
+    @counter = (Time.now - start_date.to_time).to_i
     respond_to do |format|
       format.html
       format.json { render json: ProductsDatatable.new(view_context) }
