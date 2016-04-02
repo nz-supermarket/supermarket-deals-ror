@@ -1,11 +1,14 @@
-<% set_meta_tags title: @product.name %>
-<% set_meta_tags description: @product.name + '. ' + @product.aisle %>
-<% set_meta_tags keywords: @product
-                           .aisle.split(',')
+<% set_meta_tags title: @product.name + ' | ' + @product.volume %>
+<% set_meta_tags description: @product.name + ', ' + @product.volume  + '. ' + @product.aisle %>
+<% set_meta_tags keywords: @product.aisle
+                           .split(',').map(&:strip)
+                           .append(@product.volume)
                            .append('lowest')
                            .append('price')
                            .append('discount')
                            .append('history chart')
+                           .append('price history')
+                           .append('price trend')
                            .append('nz') %>
 <p id="notice"><%= notice %></p>
 

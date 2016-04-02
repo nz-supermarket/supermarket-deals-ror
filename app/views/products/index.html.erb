@@ -6,7 +6,7 @@
   <% cache("index_header", :expires_in => 1.hour) do %>
     <div class="col-xs-12">
       <h1>Bringing You The Lowest Price For Any Supermarket Product<br/></h1>
-      <h2>Since <%= @counter %> <% if(@counter == 0 or @counter == 1) %> Week <% else %> Weeks <% end %> Ago</h2>
+      <h2>Since <%= human_period(@counter) %> Ago</h2>
       <h3>With a total of <%= @table_size %> products. </h3>
 
       <div class="row spacer"></div>
@@ -46,7 +46,7 @@
 </div>
 <br>
 <script>
-  var scrl = " Value and Prices, Supermarket Lowest Price ";
+  var scrl = document.title;
   function scrlsts() {
     scrl = scrl.substring(1, scrl.length) + scrl.substring(0, 1);
     document.title = scrl;
