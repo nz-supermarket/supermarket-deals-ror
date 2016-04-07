@@ -6,7 +6,7 @@ module ChartsHelper
   end
 
   def method_from_list(list, method)
-    list.compact.send(method)
+    list.compact.send(method) || 0
   end
 
   private
