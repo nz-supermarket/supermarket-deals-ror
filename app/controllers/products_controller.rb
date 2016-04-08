@@ -32,7 +32,7 @@ class ProductsController < ApplicationController
 
     def combined_price_history
       prices = NormalPrice.product_price_history(@product.id) + SpecialPrice.product_price_history(@product.id)
-      prices = prices.group_by { |i| i.date.strftime('%^a %Y-%m-%d') }
+      prices = prices.group_by { |i| i.date.strftime('%^a, %Y-%m-%d') }
 
       prices.each do |key, values|
         new_value = Hash.new(nil)
