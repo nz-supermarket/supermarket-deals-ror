@@ -18,7 +18,7 @@ module CountdownLinksProcessor
 
     Nokogiri::HTML(doc)\
       .at_css('div.single-level-navigation.filter-container')\
-      .css('a.browse-navigation-link')
+      .try(:css, 'a.browse-navigation-link')
   end
 
   def error?(doc)
