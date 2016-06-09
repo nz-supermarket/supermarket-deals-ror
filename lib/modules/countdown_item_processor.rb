@@ -72,21 +72,25 @@ module CountdownItemProcessor
 
     logger.log thread, 'Created normal price for product ' +
       product.id.to_s + '. ' if normal.save
+      
+    begin
+      return unless special_price?(item) || multi_buy?(item)
 
-    return unless special_price?(item) || multi_buy?(item)
+      special = if multi_buy?(item)
+                  extract_multi(thread, item, product, logger)
+                else
+                  extract_price(thread, item, 'special-price', product, logger)
+                end
 
-    special = if multi_buy?(item)
-                extract_multi(thread, item, product, logger)
-              else
-                extract_price(thread, item, 'special-price', product, logger)
-              end
+      special = SpecialPrice.new(price: special,
+                                product_id: product.id,
+                                date: Date.today)
 
-    special = SpecialPrice.new(price: special,
-                               product_id: product.id,
-                               date: Date.today)
-
-    logger.log thread, 'Created special price for product ' +
-      product.id.to_s + '. ' if special.save
+      logger.log thread, 'Created special price for product ' +
+        product.id.to_s + '. ' if special.save
+    rescue => e
+      logger.log thread, "Unable to extract get special price from #{item.to_inspect}, will ignore: #{e}", 'debug'
+    end
   end
 
   def extract_price(thread, item, fetch_param, product, logger = @logger)
