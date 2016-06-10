@@ -136,6 +136,15 @@ module CountdownItemProcessor
     value.to_d / quantity.to_d
   end
 
+  def extract_club(thread, item, product, logger = @logger)
+    value = item.at_css('span.club-price-wrapper').text.gsub(/[ a-zA-Z$]+/, '')
+
+    logger.log thread,
+               'Club price found for product ' + product.id.to_s + '. ',
+               'debug'
+    value.to_d
+  end
+
   def special_price?(item)
     item.at_css('span.price.special-price').present?
   end
@@ -152,6 +161,7 @@ module CountdownItemProcessor
                   :process_prices,
                   :extract_price,
                   :extract_multi,
+                  :extract_club,
                   :special_price?,
                   :club_price?,
                   :multi_buy?,
