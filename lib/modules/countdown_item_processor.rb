@@ -74,11 +74,13 @@ module CountdownItemProcessor
       product.id.to_s + '. ' if normal.save
       
     begin
-      return unless special_price?(item) || multi_buy?(item)
+      return unless special_price?(item) || multi_buy?(item) || club_price?(item)
 
       special = if multi_buy?(item)
                   extract_multi(thread, item, product, logger)
-                else
+                elsif club_price?(item)
+                  extract_club(thread, item, product, logger)
+                elsif special_price?(item)
                   extract_price(thread, item, 'special-price', product, logger)
                 end
 
