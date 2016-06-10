@@ -137,10 +137,7 @@ module CountdownItemProcessor
   end
 
   def special_price?(item)
-    item
-      .at_css('span.price')
-      .attributes['class']
-      .value.include? 'special-price'
+    item.at_css('span.price.special-price').present?
   end
 
   def club_price?(item)
