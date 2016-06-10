@@ -74,11 +74,13 @@ module CountdownItemProcessor
       product.id.to_s + '. ' if normal.save
       
     begin
-      return unless special_price?(item) || multi_buy?(item)
+      return unless special_price?(item) || multi_buy?(item) || club_price?(item)
 
       special = if multi_buy?(item)
                   extract_multi(thread, item, product, logger)
-                else
+                elsif club_price?(item)
+                  extract_club(thread, item, product, logger)
+                elsif special_price?(item)
                   extract_price(thread, item, 'special-price', product, logger)
                 end
 
@@ -136,11 +138,17 @@ module CountdownItemProcessor
     value.to_d / quantity.to_d
   end
 
+  def extract_club(thread, item, product, logger = @logger)
+    value = item.at_css('span.club-price-wrapper').text.gsub(/[ a-zA-Z$]+/, '')
+
+    logger.log thread,
+               'Club price found for product ' + product.id.to_s + '. ',
+               'debug'
+    value.to_d
+  end
+
   def special_price?(item)
-    item
-      .at_css('span.price')
-      .attributes['class']
-      .value.include? 'special-price'
+    item.at_css('span.price.special-price').present?
   end
 
   def club_price?(item)
@@ -155,6 +163,7 @@ module CountdownItemProcessor
                   :process_prices,
                   :extract_price,
                   :extract_multi,
+                  :extract_club,
                   :special_price?,
                   :club_price?,
                   :multi_buy?,
