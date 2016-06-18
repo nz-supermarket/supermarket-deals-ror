@@ -16,7 +16,8 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @prices = combined_price_history
+    @prices_history = combined_price_history
+    @day_of_week = weekly_price_history
   end
 
   private
@@ -30,8 +31,12 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:name, :volume, :sku, :special, :normal, :diff, :aisle, :discount)
     end
 
+    def price_history(klass)
+      klass.product_price_history(@product.id)
+    end
+
     def combined_price_history
-      prices = NormalPrice.product_price_history(@product.id) + SpecialPrice.product_price_history(@product.id)
+      prices = price_history(NormalPrice) + price_history(SpecialPrice)
       prices = prices.group_by { |i| i.date.strftime('%^a, %Y-%m-%d') }
 
       prices.each do |key, values|
@@ -47,5 +52,22 @@ class ProductsController < ApplicationController
 
         prices[key] = new_value
       end
+    end
+
+    def weekly_price_history
+      normal = price_history(NormalPrice)
+      special = price_history(SpecialPrice)
+
+      new_normal = []
+      normal.each do |value|
+        new_normal << { key: value.date.strftime('%A'), date: value.date, normal: value.price.try(:to_f) }
+      end
+
+      new_special = []
+      special.each do |value|
+        new_special << { key: value.date.strftime('%A'), date: value.date, special: value.price.try(:to_f) }
+      end
+
+      (new_normal + new_special).sort_by{|i| i[:key]}
     end
 end
