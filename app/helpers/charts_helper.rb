@@ -9,6 +9,11 @@ module ChartsHelper
     list.compact.send(method) || 0
   end
 
+  def week_process(list, key)
+    list.select{ |i| i[key].present? }
+        .map{ |i| { x: i[:key], y: i[key] } }
+  end
+
   private
 
   def price_extract(prices, method)
