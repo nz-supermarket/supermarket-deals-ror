@@ -26,6 +26,7 @@ module ChartsHelper
       .select { |i| i[key].present? }
       .map do |i|
         {
+          name: i[:date].strftime('%B'),
           x: (i[:date].strftime('%m').to_i - 1),
           y: i[key]
         }
