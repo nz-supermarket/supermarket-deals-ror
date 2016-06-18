@@ -60,12 +60,12 @@ class ProductsController < ApplicationController
 
       new_normal = []
       normal.each do |value|
-        new_normal << { key: value.date.strftime('%A'), date: value.date, normal: value.price.try(:to_f) }
+        new_normal << { key: value.date.strftime('%u'), date: value.date, normal: value.price.try(:to_f) }
       end
 
       new_special = []
       special.each do |value|
-        new_special << { key: value.date.strftime('%A'), date: value.date, special: value.price.try(:to_f) }
+        new_special << { key: value.date.strftime('%u'), date: value.date, special: value.price.try(:to_f) }
       end
 
       (new_normal + new_special).sort_by{|i| i[:key]}

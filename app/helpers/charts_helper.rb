@@ -10,8 +10,9 @@ module ChartsHelper
   end
 
   def week_process(list, key)
-    list.select{ |i| i[key].present? }
-        .map{ |i| { x: i[:key], y: i[key] } }
+    list
+      .select { |i| i[key].present? }
+      .map { |i| { name: i[:date].strftime('%A'), x: (i[:date].strftime('%u').to_i - 1), y: i[key] } }
   end
 
   private
