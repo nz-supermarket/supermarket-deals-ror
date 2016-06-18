@@ -53,6 +53,7 @@
 </p>
 
 <%= render partial: 'basic_chart', locals: { prices: @prices_history } %>
+<%= render partial: 'day_of_week_chart', locals: { day_of_week: @day_of_week } %>
 
 <%= javascript_include_tag 'https://code.highcharts.com/highcharts.js', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'https://code.highcharts.com/highcharts-more.js', 'data-turbolinks-track' => true %>
