@@ -21,7 +21,7 @@ $(function () {
             'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
     },
     xAxis: {
-      categories: <%= raw month_of_year.map{|i| i[:date].strftime('%B')}.uniq.to_json %>,
+      categories: <%= raw Date::MONTHNAMES.compact.to_json %>,
       title: {
         enabled: true,
         text: 'Month',
