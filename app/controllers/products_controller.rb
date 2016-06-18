@@ -18,6 +18,7 @@ class ProductsController < ApplicationController
   def show
     @prices_history = combined_price_history
     @day_of_week = weekly_price_history
+    @month_of_year = monthly_price_history
   end
 
   private
@@ -69,5 +70,22 @@ class ProductsController < ApplicationController
       end
 
       (new_normal + new_special).sort_by{|i| i[:key]}
+    end
+
+    def monthly_price_history
+      normal = price_history(NormalPrice)
+      special = price_history(SpecialPrice)
+
+      new_normal = []
+      normal.each do |value|
+        new_normal << { key: value.date.strftime('%m'), date: value.date, normal: value.price.try(:to_f) }
+      end
+
+      new_special = []
+      special.each do |value|
+        new_special << { key: value.date.strftime('%m'), date: value.date, special: value.price.try(:to_f) }
+      end
+
+      (new_normal + new_special).sort_by{|i| i[:key].to_i}
     end
 end

@@ -21,6 +21,17 @@ module ChartsHelper
       end
   end
 
+  def month_process(list, key)
+    list
+      .select { |i| i[key].present? }
+      .map do |i|
+        {
+          x: (i[:date].strftime('%m').to_i - 1),
+          y: i[key]
+        }
+      end
+  end
+
   private
 
   def price_extract(prices, method)
