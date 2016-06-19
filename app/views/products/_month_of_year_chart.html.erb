@@ -1,0 +1,91 @@
+<script type="text/javascript">
+
+$(function () {
+
+  $('#month-of-year-chart').highcharts({
+    chart: {
+      type: 'scatter',
+      zoomType: 'xy'
+    },
+    credits: {
+      enabled: false,
+    },
+    legend: {
+      enabled: true,
+    },
+    title: {
+      text: "Price Trend Each Month",
+    },
+    subtitle: {
+      text: document.ontouchstart === undefined ?
+            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
+    },
+    xAxis: {
+      categories: <%= raw Date::MONTHNAMES.compact.to_json %>,
+      title: {
+        enabled: true,
+        text: 'Month',
+        style: {
+            color: Highcharts.getOptions().colors[1]
+        }
+      },
+    },
+    yAxis: { // Primary yAxis
+      title: {
+        text: 'Prices',
+        style: {
+            color: Highcharts.getOptions().colors[1]
+        }
+      },
+    },
+    legend: {
+      layout: 'vertical',
+      align: 'left',
+      verticalAlign: 'top',
+      x: 100,
+      y: 70,
+      floating: true,
+      backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+      borderWidth: 1
+    },
+    plotOptions: {
+      scatter: {
+        marker: {
+          radius: 5,
+          states: {
+            hover: {
+              enabled: true,
+              lineColor: 'rgb(100,100,100)'
+            }
+          }
+        },
+        states: {
+          hover: {
+            marker: {
+              enabled: false
+            }
+          }
+        },
+        tooltip: {
+          headerFormat: '<b>{series.name}</b><br>',
+          pointFormat: '{point.name}, {point.y}'
+        }
+      }
+    },
+    series: [
+    {
+      type: 'scatter',
+      name: 'Normal Prices',
+      data: <%= raw month_process(month_of_year, :normal).to_json %>,
+      color: 'rgba(119, 152, 191, .5)',
+    },
+    {
+      type: 'scatter',
+      name: 'Special Prices',
+      data: <%= raw month_process(month_of_year, :special).to_json %>,
+      color: 'rgba(223, 83, 83, .5)',
+    }]
+  });
+});
+</script>
+<div id='month-of-year-chart' class="col-md-6"></div>
