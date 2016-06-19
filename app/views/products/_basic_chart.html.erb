@@ -14,14 +14,14 @@ $(function () {
       enabled: true,
     },
     title: {
-      text: "Price History of " + <%= raw @product.name.to_json %>,
+      text: "Price History",
     },
     subtitle: {
       text: document.ontouchstart === undefined ?
             'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
     },
     xAxis: {
-      categories: <%= raw @prices.keys.to_json %>,
+      categories: <%= raw prices.keys.to_json %>,
       crosshair: true,
     },
     yAxis: [
@@ -38,8 +38,8 @@ $(function () {
                 color: Highcharts.getOptions().colors[1]
             }
         },
-        min: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :min) - 1 %>,
-        max: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :max) + 1 %>
+        min: <%= raw method_from_list(combined_price_list(prices, :normal, :special), :min) - 1 %>,
+        max: <%= raw method_from_list(combined_price_list(prices, :normal, :special), :max) + 1 %>
       }, { // Secondary yAxis
         title: {
             text: 'Special Price History',
@@ -54,8 +54,8 @@ $(function () {
             }
         },
         opposite: true,
-        min: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :min) - 1 %>,
-        max: <%= raw method_from_list(combined_price_list(@prices, :normal, :special), :max) + 1 %>
+        min: <%= raw method_from_list(combined_price_list(prices, :normal, :special), :min) - 1 %>,
+        max: <%= raw method_from_list(combined_price_list(prices, :normal, :special), :max) + 1 %>
       }
     ],
     tooltip: {
@@ -64,7 +64,7 @@ $(function () {
     series: [
     {
       name: 'Normal Prices',
-      data: <%= raw @prices.values.map{ |i| i[:normal] }.to_json %>,
+      data: <%= raw prices.values.map{ |i| i[:normal] }.to_json %>,
       tooltip: {
         valuePrefix: '$ '
       }
@@ -72,7 +72,7 @@ $(function () {
     {
       name: 'Special Prices',
       yAxis: 1,
-      data: <%= raw @prices.values.map{ |i| i[:special] }.to_json %>,
+      data: <%= raw prices.values.map{ |i| i[:special] }.to_json %>,
       tooltip: {
         valuePrefix: '$ '
       }
