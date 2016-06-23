@@ -71,8 +71,7 @@ module CountdownItemProcessor
                              date: Date.today)
 
     if normal.price == 1
-      normal.price = NormalPrice.where(product_id: product.id,
-                                       date: Date.yesterday).first.price
+      normal.price = NormalPrice.where(product_id: product.id).order(:date).last.price
     end
 
     logger.log thread, 'Created normal price for product ' +
