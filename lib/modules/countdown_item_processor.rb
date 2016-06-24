@@ -71,12 +71,12 @@ module CountdownItemProcessor
                              date: Date.today)
 
     if normal.price == 1
-      normal.price = NormalPrice.where(product_id: product.id).order(:date).last.price
+      normal.price = NormalPrice.where(product_id: product.id).order(:date).last.try(:price)
     end
 
     logger.log thread, 'Created normal price for product ' +
       product.id.to_s + '. ' if normal.save
-      
+
     begin
       return unless special_price?(item) || multi_buy?(item) || club_price?(item)
 
