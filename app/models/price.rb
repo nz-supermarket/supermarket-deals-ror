@@ -6,6 +6,8 @@ class Price < ActiveRecord::Base
 
   validates_uniqueness_of :product_id, scope: :date
 
+  validates :price, presence: true
+
   def self.product_price_history(id)
     where(product_id: id).order(:date)
   end

@@ -74,8 +74,12 @@ module CountdownItemProcessor
       normal.price = NormalPrice.where(product_id: product.id).order(:date).last.try(:price)
     end
 
-    logger.log thread, 'Created normal price for product ' +
-      product.id.to_s + '. ' if normal.save
+    begin
+      logger.log thread, 'Created normal price for product ' +
+        product.id.to_s + '. ' if normal.save
+    rescue => e
+      logger.log thread, "Unable to extract normal price from #{product.inspect}, will ignore: #{e}", 'debug'
+    end
 
     begin
       return unless special_price?(item) || multi_buy?(item) || club_price?(item)
