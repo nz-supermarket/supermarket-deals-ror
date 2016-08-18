@@ -48,7 +48,6 @@ gem 'jbuilder'
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # datatable
-gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 
 # processes and thread
