@@ -27,6 +27,11 @@ gem 'connection_pool'
 
 # used for rake countdown task
 gem 'nokogiri'
+gem 'socksify'
+gem 'tor_requests'
+
+# provide better method chaining
+gem 'chainable_methods'
 
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass'
