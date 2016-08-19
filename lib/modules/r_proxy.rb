@@ -3,7 +3,7 @@ require 'open-uri'
 module RProxy
 
   def open_url_with_proxy(url)
-    Tor::HTTP.get(URI('http://google.com/')).body
+    Tor::HTTP.get(URI(url))
   rescue RuntimeError,
          SocketError,
          Errno::ETIMEDOUT,

@@ -4,9 +4,11 @@ task fetch_prices: :environment do
 
   time = Time.now
 
-  aisles = CountdownLinksProcessor\
-           .generate_aisle(CountdownAisleProcessor\
-              .home_doc_fetch, @cache)
+  lp = Countdown::LinksProcessor
+         .new(Countdown::HomePageFetcher
+                .nokogiri_open_url, @cache)
+
+  aisles = lp.generate_aisle
 
   if @cache.exist?('last')
     last_aisle = @cache.fetch('last')
@@ -21,7 +23,7 @@ task fetch_prices: :environment do
     .each_with_index(aisles.shuffle,
                      in_threads: 9,
                      in_process: 4) do |aisle, index|
-    CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
+    #CountdownAisleProcessor.grab_browse_aisle(aisle, @cache)
     @cache.write('last', aisle)
     Rails.logger.info "worker size left - #{aisles.size - index}"
     sleep rand(1.0..5.0)
@@ -56,15 +58,12 @@ def setup
   require 'nokogiri'
   require 'dalli'
   require 'parallel'
-  require "#{Rails.root}/lib/modules/cacher"
-  require "#{Rails.root}/lib/modules/countdown_aisle_processor"
-  require "#{Rails.root}/lib/modules/countdown_links_processor"
+  require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
+  require "#{Rails.root}/lib/modules/countdown/links_processor"
+
   require "#{Rails.root}/app/models/product"
   require "#{Rails.root}/app/models/normal_price"
   require "#{Rails.root}/app/models/special_price"
-
-  include Cacher
-  include CountdownLinksProcessor
 
   ActiveRecord::Base.connection_pool.checkout_timeout = 15
 
