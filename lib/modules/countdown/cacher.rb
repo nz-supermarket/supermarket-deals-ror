@@ -18,13 +18,13 @@ module Countdown
 
       # guard condition
       # do not write to cache if previous cache record exist
-      return cached_value if cached_value.present? && cached_value.match(/(\s500\s)/).nil? # match " 500 " for 500 error
+      return cached_value if cached_value.present? && cached_value.code.to_i == 200
 
       @cache.delete(val)
 
       sleep rand(1.0..10.0)
 
-      @cache.write(val, Nokogiri::HTML(RProxy.open_url_with_proxy(@home_url + val)).to_html, expires_in: 239.minutes)
+      @cache.write(val, RProxy.open_url_with_proxy(@home_url + val), expires_in: 239.minutes)
 
       @cache.fetch(val)
     end
