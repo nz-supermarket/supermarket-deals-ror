@@ -35,11 +35,11 @@ module Countdown
                 in_threads: 9) do |link|
           value = link.attr('href')
 
-          if value.split('/').count >= 5
+          if value.split('/').count > 5
             @result << value
             next
           end
-
+          
           retrieve_and_process(value)
         end
         return @result if @result.any?
@@ -59,8 +59,8 @@ module Countdown
 
         return nil if error?(Nokogiri::HTML(doc))
 
-        Nokogiri::HTML(doc)\
-          .at_css('div.single-level-navigation.filter-container')\
+        Nokogiri::HTML(doc)
+          .at_css('div.single-level-navigation.filter-container')
           .try(:css, 'a.browse-navigation-link')
       end
 

@@ -18,7 +18,7 @@ module Countdown
 
       # guard condition
       # do not write to cache if previous cache record exist
-      return cached_value if cached_value.present? && cached_value.code.to_i == 200
+      return cached_value if cached_value && cached_value.try(:code).to_i == 200
 
       @cache.delete(val)
 
