@@ -35,8 +35,9 @@ module Countdown
     end
 
     def process_next_page
-      pages = @noko_doc.css('li.page-number').css('a').map { |e| e.attr('href') }.uniq.drop(1)
-      pages.each do |page|
+      last_pages = @noko_doc.css('li.page-number').css('a').map { |e| e.attr('href') }.uniq.last
+      (2..last_pages.last.to_i).each do |i|
+        page = last_pages[0..last_pages.size - 2] + i.to_s
         resp = @cacher.retrieve_url(page)
 
         next if resp.code.to_i != 200
