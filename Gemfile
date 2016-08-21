@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-ruby '2.2.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
@@ -28,6 +27,11 @@ gem 'connection_pool'
 
 # used for rake countdown task
 gem 'nokogiri'
+gem 'socksify'
+gem 'tor_requests'
+
+# provide better method chaining
+gem 'chainable_methods'
 
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass'
@@ -49,7 +53,6 @@ gem 'jbuilder'
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # datatable
-gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 
 # processes and thread
@@ -58,8 +61,13 @@ gem 'parallel'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-gem 'unicorn'
+# Use rhebok as the app server
+gem 'rhebok'
+
+# message queuing
+gem 'redis-namespace'
+gem 'sidekiq'
+gem 'sidekiq-scheduler'
 
 # sitemap generator
 gem 'sitemap_generator'

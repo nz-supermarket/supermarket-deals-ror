@@ -1,17 +1,12 @@
 require 'nokogiri'
-require "#{Rails.root}/lib/modules/cacher"
 require "#{Rails.root}/lib/modules/rake_logger"
-require "#{Rails.root}/lib/modules/web_scrape"
+require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
 require "#{Rails.root}/lib/modules/countdown_item_processor"
 
 module CountdownAisleProcessor
-  extend Cacher
-  extend WebScrape
-
-  HOME_URL = 'https://shop.countdown.co.nz'
 
   def self.home_doc_fetch
-    nokogiri_open_url(HOME_URL)
+    nokogiri_open_url
   end
 
   def grab_browse_aisle(aisle, cache)

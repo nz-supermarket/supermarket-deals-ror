@@ -32,6 +32,25 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+  # Disable Rails's static asset server (Apache or nginx will already do this).
+  config.serve_static_files = true
+
+  # Compress JavaScripts and CSS.
+  config.assets.js_compressor = :uglifier
+  # config.assets.css_compressor = :sass
+
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+
+  config.assets.initialize_on_precompile = false
+
+  # Generate digests for assets URLs.
+  config.assets.digest = true
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+  config.cache_store = :mem_cache_store, 'memcache', { :namespace => 'supermarket', :pool_size => 5, :expires_in => 4.hours, :compress => true }
 end
