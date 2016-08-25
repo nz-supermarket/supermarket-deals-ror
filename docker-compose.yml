@@ -1,0 +1,25 @@
+version: '2'
+services:
+  memcache:
+    image: memcached
+  redis:
+    image: redis
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - '6379:6379'
+  web:
+    build: .
+    ports:
+      - '8000:8000'
+    depends_on:
+      - memcache
+      - redis
+    environment:
+      RAILS_ENV: development
+      RAILS_SERVE_STATIC_FILES: 'true'
+      HTTP_PORT: '8000'
+    volumes:
+      - .:/app
+    # Following is development configuration
+    command: /app/docker_start.sh
