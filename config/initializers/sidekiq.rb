@@ -1,7 +1,7 @@
 require 'sidekiq/scheduler'
 
 redis_conn = proc {
-  Redis.new(host: 'redis', port: '6379')
+  Redis.new(host: 'dokku-redis-supermarket', port: '6379')
 }
 
 Sidekiq.configure_server do |config|
