@@ -1,1 +1,2 @@
-web: bundle exec foreman start -f Procfile.real
+web: rackup -s Rhebok -O ConfigFile=config/rhebok.rb
+worker: sidekiq
