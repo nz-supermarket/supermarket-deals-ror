@@ -1,5 +1,5 @@
 class SitemapJob < ActiveJob::Base
-  queue_as :sitemap
+  queue_as :default
 
   def perform(*args)
     Rails.logger.info('***** Sitemap Refresh *****')
