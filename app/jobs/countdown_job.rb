@@ -16,6 +16,12 @@ class CountdownJob < ActiveJob::Base
 
     puts ''
 
+    ##############################
+    # can break things up here
+    # put aisles into queue
+    # get another job to perform things later
+    ##############################
+
     ap = Countdown::AisleProcessor
          .new(@cache)
 
