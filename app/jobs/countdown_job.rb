@@ -1,5 +1,5 @@
 class CountdownJob < ActiveJob::Base
-  queue_as :default
+  queue_as :countdown
 
   def perform(*args)
     Rails.logger.info('***** Countdown Fetch Price *****')
