@@ -1,4 +1,3 @@
-:pidfile: tmp/pids/sidekiq.pid
 :queues:
   - countdown
   - sitemap
