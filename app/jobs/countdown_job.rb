@@ -1,3 +1,12 @@
+require 'nokogiri'
+require 'dalli'
+require 'parallel'
+require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
+require "#{Rails.root}/lib/modules/countdown/links_processor"
+require "#{Rails.root}/lib/modules/countdown/aisle_processor"
+require "#{Rails.root}/app/models/product"
+require "#{Rails.root}/app/models/normal_price"
+require "#{Rails.root}/app/models/special_price"
 class CountdownJob < ActiveJob::Base
   queue_as :countdown
 
@@ -62,16 +71,6 @@ class CountdownJob < ActiveJob::Base
   ###################################################
 
   def setup
-    require 'nokogiri'
-    require 'dalli'
-    require 'parallel'
-    require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
-    require "#{Rails.root}/lib/modules/countdown/links_processor"
-    require "#{Rails.root}/lib/modules/countdown/aisle_processor"
-    require "#{Rails.root}/app/models/product"
-    require "#{Rails.root}/app/models/normal_price"
-    require "#{Rails.root}/app/models/special_price"
-
     ActiveRecord::Base.connection_pool.checkout_timeout = 15
 
     case Rails.env
