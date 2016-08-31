@@ -1,17 +1,17 @@
 countdown_fetcher_10:
   cron: "00 10 * * *"
-  queue: default
+  queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
 
 countdown_fetcher_17:
   cron: "00 17 * * *"
-  queue: default
+  queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
 
 sitemap:
   cron: "00 13 * * *"
-  queue: default
+  queue: sitemap
   class: SitemapJob
   description: "Refresh Sitemap"
