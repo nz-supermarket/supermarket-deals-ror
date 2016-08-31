@@ -1,2 +1,2 @@
 web: rackup -s Rhebok -O ConfigFile=config/rhebok.rb
-worker: sidekiq
+worker: sidekiq -C config/sidekiq.yml
