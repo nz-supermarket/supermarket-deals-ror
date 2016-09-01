@@ -1,4 +1,3 @@
-:concurrency: 3
 :queues:
   - countdown
   - sitemap
