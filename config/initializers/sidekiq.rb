@@ -5,7 +5,7 @@ redis_conn = proc {
 }
 
 Sidekiq.configure_server do |config|
-  config.redis = ConnectionPool.new(size: 5, &redis_conn)
+  config.redis = ConnectionPool.new(size: 2, &redis_conn)
   config.average_scheduled_poll_interval = 10
   config.on(:startup) do
     Sidekiq.schedule = YAML.load_file(File.expand_path("../../schedule.yml",__FILE__))
@@ -14,5 +14,5 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = ConnectionPool.new(size: 10, &redis_conn)
+  config.redis = ConnectionPool.new(size: 5, &redis_conn)
 end
