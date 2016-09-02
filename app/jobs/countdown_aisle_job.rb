@@ -17,7 +17,7 @@ class CountdownAisleJob < ActiveJob::Base
          .new(@cache)
 
     Parallel
-      .each_with_index(&args.shuffle,
+      .each_with_index(args.shuffle,
                        in_threads: 9,
                        in_process: 4) do |aisle, index|
       ap.grab_individual_aisle(aisle)
