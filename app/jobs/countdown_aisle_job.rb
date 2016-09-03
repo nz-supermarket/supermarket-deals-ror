@@ -17,11 +17,11 @@ class CountdownAisleJob < ActiveJob::Base
          .new(@cache)
 
     Parallel
-      .each_with_index(args.shuffle,
+      .each_with_index(args[0].shuffle,
                        in_threads: 9,
                        in_process: 4) do |aisle, index|
       ap.grab_individual_aisle(aisle)
-      Rails.logger.info "worker size left - #{args.size - index}"
+      Rails.logger.info "worker size left - #{args[0].size - index}"
       sleep rand(1.0..5.0)
       sleep rand(3.0..8.0) if (index % 10) == 0
       sleep rand(5.0..10.0) if (index % 20) == 0
