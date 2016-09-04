@@ -1,11 +1,7 @@
 require 'sidekiq/scheduler'
 
-redis_conn = proc {
-  Redis.new(url: ENV['REDIS_URL'])
-}
-
 Sidekiq.configure_server do |config|
-  config.redis = ConnectionPool.new(size: 2) { &redis_conn }
+  config.redis = ConnectionPool.new(size: 2) { Redis.new(url: ENV['REDIS_URL']) }
   config.average_scheduled_poll_interval = 10
   config.on(:startup) do
     Sidekiq.schedule = YAML.load_file(File.expand_path("../../schedule.yml",__FILE__))
@@ -14,5 +10,5 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = ConnectionPool.new(size: 5) { &redis_conn }
+  config.redis = ConnectionPool.new(size: 5) { Redis.new(url: ENV['REDIS_URL']) }
 end
