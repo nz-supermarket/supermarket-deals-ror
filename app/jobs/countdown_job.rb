@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'dalli'
-require 'parallel'
 require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
 require "#{Rails.root}/lib/modules/countdown/links_processor"
 class CountdownJob < ActiveJob::Base
@@ -15,11 +14,9 @@ class CountdownJob < ActiveJob::Base
          .new(Countdown::HomePageFetcher
               .nokogiri_open_url, @cache)
 
-    aisles = lp.generate_aisle
+    lp.generate_aisle
 
     puts ''
-
-    CountdownAisleJob.perform_later(aisles)
   end
 
   private
@@ -29,8 +26,6 @@ class CountdownJob < ActiveJob::Base
   ###################################################
 
   def setup
-    ActiveRecord::Base.connection_pool.checkout_timeout = 15
-
     case Rails.env
     when 'production'
       @cache = Rails.cache

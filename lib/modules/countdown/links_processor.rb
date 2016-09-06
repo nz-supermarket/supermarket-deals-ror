@@ -30,16 +30,14 @@ module Countdown
       end
 
       def process
-        Parallel
-          .each(@links,
-                in_threads: 9) do |link|
+        @links.each do |link|
           value = link.attr('href')
 
           if value.split('/').count > 5
-            @result << value
+            CountdownAisleJob.set(wait: rand(5.0..10.0).seconds).perform_later(value)
             next
           end
-          
+
           retrieve_and_process(value)
         end
         return @result if @result.any?
