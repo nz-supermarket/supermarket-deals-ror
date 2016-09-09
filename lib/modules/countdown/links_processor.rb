@@ -9,8 +9,7 @@ module Countdown
     end
 
     def generate_aisle
-      al = AisleLinks.new(cat_links_fetch, @cacher)
-      al.process.compact!.flatten!.uniq
+      AisleLinks.perform_async(cat_links_fetch, @cacher)
     end
 
     private
@@ -23,14 +22,11 @@ module Countdown
     end
 
     class AisleLinks
-      def initialize(links, cacher)
-        @links = links
-        @cacher = cacher
-        @result = []
-      end
+      include Sidekiq::Worker
+      sidekiq_options queue: :countdown
 
-      def process
-        @links.each do |link|
+      def perform(*args)
+        args[0].each do |link|
           value = link.attr('href')
 
           if value.split('/').count > 5
@@ -38,18 +34,16 @@ module Countdown
             next
           end
 
-          retrieve_and_process(value)
+          retrieve_and_process(value, args[1])
         end
-        return @result if @result.any?
       end
 
       private
 
-      def retrieve_and_process(value)
-        resp = @cacher.retrieve_url(value)
+      def retrieve_and_process(value, cache)
+        resp = cache.retrieve_url(value)
 
-        @result << AisleLinks.new(sub_links_fetch(resp.body), @cacher).process
-        return @result if @result.any?
+        AisleLinks.perform_in(rand(5.0..10.0).seconds, sub_links_fetch(resp.body), cache)
       end
 
       def sub_links_fetch(doc)
