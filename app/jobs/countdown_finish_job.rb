@@ -1,4 +1,5 @@
-class CountdownFinishJob < ActiveJob::Base
+class CountdownFinishJob
+  include Sidekiq::Worker
   queue_as :countdown
 
   def perform(*args)
