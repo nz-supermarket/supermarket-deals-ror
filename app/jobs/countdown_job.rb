@@ -4,7 +4,7 @@ require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
 require "#{Rails.root}/lib/modules/countdown/links_processor"
 class CountdownJob
   include Sidekiq::Worker
-  queue_as :countdown
+  sidekiq_options queue: :countdown
 
   def perform(*args)
     Rails.logger.info('***** Countdown Fetch Price *****')

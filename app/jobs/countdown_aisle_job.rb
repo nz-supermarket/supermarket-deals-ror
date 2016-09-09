@@ -3,7 +3,7 @@ require 'dalli'
 require "#{Rails.root}/lib/modules/countdown/aisle_processor"
 class CountdownAisleJob
   include Sidekiq::Worker
-  queue_as :countdown
+  sidekiq_options queue: :countdown
 
   def perform(*args)
     Rails.logger.info('***** Countdown Aisle *****')
