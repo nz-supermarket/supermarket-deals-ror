@@ -54,7 +54,7 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
-  config.cache_store = :dalli_store, "#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}", { :namespace => 'supermarket', :pool_size => 10, :expires_in => 4.hours, :compress => true }
+  config.cache_store = :dalli_store, "#{ENV["MEMCACHE_HOST"]}:#{ENV["MEMCACHE_PORT"]}", { :namespace => 'supermarket', :pool_size => 20, :expires_in => 4.hours, :compress => true }
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
