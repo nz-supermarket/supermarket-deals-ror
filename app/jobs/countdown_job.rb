@@ -2,9 +2,9 @@ require 'nokogiri'
 require 'dalli'
 require "#{Rails.root}/lib/modules/countdown/home_page_fetcher"
 require "#{Rails.root}/lib/modules/countdown/links_processor"
-class CountdownJob < ActiveJob::Base
+class CountdownJob
+  include Sidekiq::Worker
   queue_as :countdown
-  sidekiq_options backtrace: 10
 
   def perform(*args)
     Rails.logger.info('***** Countdown Fetch Price *****')
