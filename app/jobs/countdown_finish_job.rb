@@ -1,6 +1,6 @@
 class CountdownFinishJob
   include Sidekiq::Worker
-  queue_as :countdown
+  sidekiq_options queue: :countdown
 
   def perform(*args)
     Rails.logger.info "New Product count: #{today_count(Product)}"
