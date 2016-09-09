@@ -104,17 +104,17 @@ module Countdown
                     .at_css("span.#{fetch_param}")
         if fetch_param.include? 'was-price'
           @logger.log Parallel.worker_number,
-                      'Was price found for product ' + product.id.to_s + '. ',
+                      'Was price found for product ' + @product.id.to_s + '. ',
                       'debug'
           price = container.child.text.gsub('was', '').strip.delete('$')
         elsif fetch_param.include? 'special-price'
           @logger.log Parallel.worker_number,
-                      'Special price found for product ' + product.id.to_s + '. ',
+                      'Special price found for product ' + @product.id.to_s + '. ',
                       'debug'
           price = container.child.text.strip.delete('$')
         else
           @logger.log Parallel.worker_number,
-                      'Normal price found for product ' + product.id.to_s + '. ',
+                      'Normal price found for product ' + @product.id.to_s + '. ',
                       'debug'
           price = container.child.text.gsub(/[ a-zA-Z$]+/, '')
         end
