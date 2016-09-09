@@ -34,7 +34,7 @@ module Countdown
           value = link.attr('href')
 
           if value.split('/').count > 5
-            CountdownAisleJob.set(wait: rand(5.0..10.0).seconds).perform_later(value)
+            CountdownAisleJob.perform_in(rand(5.0..10.0).seconds, value)
             next
           end
 
