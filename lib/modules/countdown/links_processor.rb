@@ -26,7 +26,7 @@ module Countdown
       sidekiq_options queue: :countdown
 
       def perform(*args)
-        args[0].each do |link|
+        Nokogiri::HTML(args[0]).each do |link|
           value = link.attr('href')
 
           if value.split('/').count > 5
