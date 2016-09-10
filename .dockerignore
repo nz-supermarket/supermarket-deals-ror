@@ -1,0 +1,4 @@
+test
+.git*
+rspec
+redis_data

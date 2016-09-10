@@ -22,4 +22,4 @@ services:
     volumes:
       - .:/app
     # Following is development configuration
-    command: /app/docker_start.sh
+    command: foreman start
