@@ -9,6 +9,7 @@ module Countdown
     end
 
     def generate_aisle
+      puts cat_links_fetch.class
       AisleLinks.perform_async(cat_links_fetch, @cacher)
     end
 
@@ -43,6 +44,7 @@ module Countdown
       def retrieve_and_process(value, cache)
         resp = cache.retrieve_url(value)
 
+        puts sub_links_fetch(resp.body).class
         AisleLinks.perform_in(rand(5.0..10.0).seconds, sub_links_fetch(resp.body), cache)
       end
 
