@@ -28,6 +28,7 @@ module Countdown
 
       def perform(*args)
         puts args[0].class
+        puts args[0]
         Nokogiri::HTML(args[0]).each do |link|
           value = link.attr('href')
 
