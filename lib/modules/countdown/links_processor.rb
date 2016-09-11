@@ -10,7 +10,7 @@ module Countdown
 
     def generate_aisle
       cat_links_fetch.each do |link|
-        AisleLinks.perform_async(link, @cacher)
+        AisleLinks.perform_async(link.attr('href'), @cacher)
       end
     end
 
@@ -28,17 +28,11 @@ module Countdown
       sidekiq_options queue: :countdown
 
       def perform(*args)
-        puts args[0]
-        Nokogiri::HTML::Document.parse(args[0]).each do |link|
-          value = link.attr('href')
-
-          if value.split('/').count > 5
-            CountdownAisleJob.perform_in(rand(5.0..10.0).seconds, value)
-            next
-          end
-
-          retrieve_and_process(value, args[1])
+        if args[0].split('/').count > 5
+          CountdownAisleJob.perform_in(rand(5.0..10.0).seconds, args[0])
         end
+
+        retrieve_and_process(args[0], args[1])
       end
 
       private
@@ -47,7 +41,7 @@ module Countdown
         resp = cache.retrieve_url(value)
 
         sub_links_fetch(resp.body).each do |link|
-          AisleLinks.perform_in(rand(5.0..10.0).seconds, link, cache)
+          AisleLinks.perform_in(rand(5.0..10.0).seconds, link.attr('href'), cache)
         end
       end
 
