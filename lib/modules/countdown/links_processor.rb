@@ -10,7 +10,7 @@ module Countdown
 
     def generate_aisle
       cat_links_fetch.each do |link|
-        AisleLinks.perform_async(link.attr('href'), @cacher)
+        AisleLinks.perform_async(link.attr('href'))
       end
     end
 
@@ -32,16 +32,16 @@ module Countdown
           CountdownAisleJob.perform_in(rand(5.0..10.0).seconds, args[0])
         end
 
-        retrieve_and_process(args[0], args[1])
+        retrieve_and_process(args[0])
       end
 
       private
 
-      def retrieve_and_process(value, cache)
-        resp = cache.retrieve_url(value)
+      def retrieve_and_process(value)
+        resp = RProxy.open_url_with_proxy('https://shop.countdown.co.nz' + value)
 
         sub_links_fetch(resp.body).each do |link|
-          AisleLinks.perform_in(rand(5.0..10.0).seconds, link.attr('href'), cache)
+          AisleLinks.perform_in(rand(5.0..10.0).seconds, link.attr('href'))
         end
       end
 
