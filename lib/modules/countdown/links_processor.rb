@@ -17,7 +17,6 @@ module Countdown
     private
 
     def cat_links_fetch
-      print '.'
       @document.at_css('div.toolbar-links-children')
         .at_css('div.row-fluid.mrow-fluid')
         .css('a.toolbar-slidebox-link')
@@ -46,8 +45,6 @@ module Countdown
       end
 
       def sub_links_fetch(doc)
-        print '.'
-
         return nil if error?(Nokogiri::HTML(doc))
 
         Nokogiri::HTML(doc)

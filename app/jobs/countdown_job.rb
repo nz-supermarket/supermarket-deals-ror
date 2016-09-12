@@ -16,8 +16,6 @@ class CountdownJob
               .nokogiri_open_url, @cache)
 
     lp.generate_aisle
-
-    puts ''
   end
 
   private
