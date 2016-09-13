@@ -1,5 +1,6 @@
 :concurrency: 45
 :timeout: 300
 :queues:
-  - countdown
-  - sitemap
+  - [countdown, 10]
+  - [sitemap, 20]
+  - [countdownitem, 5]
