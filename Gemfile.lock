@@ -250,6 +250,8 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       redis (~> 3.2, >= 3.2.1)
       sinatra (>= 1.4.7)
+    sidekiq-failures (0.4.5)
+      sidekiq (>= 2.16.0)
     sidekiq-scheduler (2.0.8)
       multi_json (~> 1)
       redis (~> 3)
@@ -338,6 +340,7 @@ DEPENDENCIES
   rubocop
   sass-rails
   sidekiq
+  sidekiq-failures
   sidekiq-scheduler
   sitemap_generator
   socksify

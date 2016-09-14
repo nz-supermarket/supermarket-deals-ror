@@ -68,6 +68,7 @@ gem 'rhebok'
 gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
+gem 'sidekiq-failures'
 
 # sitemap generator
 gem 'sitemap_generator'
