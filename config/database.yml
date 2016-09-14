@@ -8,11 +8,12 @@ default: &default
   adapter: postgresql
   pool: 150
   timeout: 10000
-  host: localhost
+  host: <%= ENV['DB_HOST'] %>
 
 development:
   <<: *default
   database: deals_development
+  user: postgres
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
