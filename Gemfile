@@ -68,6 +68,7 @@ gem 'rhebok'
 gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
+gem 'sidekiq-failures'
 
 # sitemap generator
 gem 'sitemap_generator'
@@ -80,8 +81,11 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rubocop', require: false
 
-  # mini-profiler to analyze time taken for fetching of data visually on the page
-  gem 'rack-mini-profiler', require: false
+  # performance analyzer
+  gem 'peek'
+  gem 'peek-sidekiq'
+  gem 'peek-dalli'
+  gem 'peek-pg'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
