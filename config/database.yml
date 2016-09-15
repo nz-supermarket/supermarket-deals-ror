@@ -6,7 +6,7 @@
 #
 default: &default
   adapter: postgresql
-  pool: 150
+  pool: 300
   timeout: 10000
   host: <%= ENV['DB_HOST'] %>
 
