@@ -19,6 +19,8 @@ services:
       RAILS_ENV: development
       RAILS_SERVE_STATIC_FILES: 'true'
       HTTP_PORT: '8000'
+      REDIS_URL: 'redis://redis:6379'
+      DB_HOST: '192.168.20.9'
     volumes:
       - .:/app
     # Following is development configuration
