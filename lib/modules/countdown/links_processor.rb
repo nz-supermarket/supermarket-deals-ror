@@ -28,7 +28,7 @@ module Countdown
 
       def perform(*args)
         if args[0].split('/').count > 5
-          CountdownAisleJob.perform_in(rand(1.0..3.0).minutes, args[0])
+          CountdownAisleJob.perform_in(rand(10.0..30.0).minutes, args[0])
         end
 
         retrieve_and_process(args[0])
@@ -40,7 +40,7 @@ module Countdown
         resp = RProxy.open_url_with_proxy('https://shop.countdown.co.nz' + value)
 
         sub_links_fetch(resp.body).each do |link|
-          AisleLinks.perform_in(rand(20.0..50.0).seconds, link.attr('href'))
+          AisleLinks.perform_in(rand(10.0..60.0).seconds, link.attr('href'))
         end
       end
 
