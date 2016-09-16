@@ -88,7 +88,7 @@ module Countdown
     def start_processing(ip, items)
       Parallel
         .each(items,
-              in_threads: 5) do |item|
+              in_threads: 4) do |item|
         ip.process_item(item)
       end
     end
