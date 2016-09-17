@@ -29,6 +29,8 @@ module Countdown
       def perform(*args)
         if args[0].split('/').count > 5
           CountdownAisleJob.perform_in(rand(10.0..30.0).minutes, args[0])
+          Rails.logger.info(" ***** #{args[0]} Finished ***** ")
+          return
         end
 
         retrieve_and_process(args[0])
