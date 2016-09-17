@@ -38,6 +38,8 @@ module Countdown
       last_pages = @noko_doc.css('li.page-number').css('a').map { |e| e.attr('href') }.uniq.last
       (2..last_pages.last.to_i).each do |i|
         page = last_pages[0..last_pages.size - 2] + i.to_s
+
+        sleep(rand(10.0..30.0).seconds)
         resp = @cacher.retrieve_url(page)
 
         next if resp.code.to_i != 200
