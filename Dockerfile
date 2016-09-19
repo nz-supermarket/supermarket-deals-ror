@@ -25,6 +25,7 @@ RUN apk add --no-cache ${PACKAGES}
 # Install Nginx.
 RUN apk add --no-cache nginx
 RUN mkdir -p /run/nginx/
+CMD ["nginx", "-c", "/app/nginx.conf"]
 
 WORKDIR /app
 COPY [".", "/app"]
