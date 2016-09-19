@@ -1,5 +1,4 @@
-host '0.0.0.0'
-port ENV['HTTP_PORT']
+path '/tmp/rhebok.sock'
 oobgc true
 max_workers ENV['WEB_CONCURRENCY'] || 5
 timeout 30

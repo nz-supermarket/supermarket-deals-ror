@@ -11,7 +11,7 @@ services:
   web:
     build: .
     ports:
-      - '8000:8000'
+      - '5000:5000'
     depends_on:
       - memcache
       - redis
@@ -21,6 +21,7 @@ services:
       HTTP_PORT: '8000'
       REDIS_URL: 'redis://redis:6379'
       DB_HOST: '192.168.20.9'
+      MEMCACHE_URL: 'memcache'
     volumes:
       - .:/app
     # Following is development configuration
