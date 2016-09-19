@@ -24,11 +24,7 @@ RUN apk add --no-cache ${PACKAGES}
 
 # Install Nginx.
 RUN apk add --no-cache nginx
-
-# Add configuration to set daemon mode off
-CMD ["nginx", "-g", "daemon off;"]
-# Add default nginx config
-ADD nginx.conf /etc/nginx/sites-enabled/default
+RUN mkdir -p /run/nginx/
 
 WORKDIR /app
 COPY [".", "/app"]
