@@ -22,6 +22,7 @@ config/newrelic.yml
 ## Environment normalisation:
 /.bundle
 /vendor/bundle
+redis_data/dump.rdb
 
 # these should all be checked in to normalise the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
