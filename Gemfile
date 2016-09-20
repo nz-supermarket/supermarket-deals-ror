@@ -30,9 +30,6 @@ gem 'nokogiri'
 gem 'socksify'
 gem 'tor_requests'
 
-# provide better method chaining
-gem 'chainable_methods'
-
 # Use bootstrap for style and formatting
 gem 'bootstrap-sass'
 
@@ -61,8 +58,8 @@ gem 'parallel'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use rhebok as the app server
-gem 'rhebok'
+# Use puma killer for puma
+gem 'puma_worker_killer'
 
 # message queuing
 gem 'redis-namespace'
