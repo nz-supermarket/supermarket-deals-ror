@@ -1,4 +1,4 @@
-threads 1,16
+threads 16,32
 workers 2
 preload_app!
 pidfile 'tmp/pids/puma.pid'
