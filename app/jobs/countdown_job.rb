@@ -7,6 +7,8 @@ class CountdownJob
   sidekiq_options queue: :countdown
 
   def perform(*args)
+    sleep(rand(1.0..50.0).minutes)
+
     Rails.logger.info('***** Countdown Fetch Price *****')
 
     setup
