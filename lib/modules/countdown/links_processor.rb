@@ -18,8 +18,8 @@ module Countdown
 
     def cat_links_fetch
       @document.at_css('div.toolbar-links-children')
-        .at_css('div.row-fluid.mrow-fluid')
-        .css('a.toolbar-slidebox-link')
+               .at_css('div.row-fluid.mrow-fluid')
+               .css('a.toolbar-slidebox-link')
     end
 
     class AisleLinks
@@ -50,8 +50,8 @@ module Countdown
         return nil if error?(Nokogiri::HTML(doc))
 
         Nokogiri::HTML(doc)
-          .at_css('div.single-level-navigation.filter-container')
-          .try(:css, 'a.browse-navigation-link')
+                .at_css('div.single-level-navigation.filter-container')
+                .try(:css, 'a.browse-navigation-link')
       end
 
       def error?(doc)
