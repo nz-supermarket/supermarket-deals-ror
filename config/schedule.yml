@@ -1,11 +1,11 @@
 countdown_fetcher:
-  cron: "00 10 * * *"
+  cron: "00 8 * * *"
   queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
 
 countdown_finish:
-  cron: "30 15 * * *"
+  cron: "30 12 * * *"
   queue: countdown
   class: CountdownFinishJob
   description: "Finish fetch prices from countdown"

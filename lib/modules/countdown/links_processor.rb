@@ -18,8 +18,8 @@ module Countdown
 
     def cat_links_fetch
       @document.at_css('div.toolbar-links-children')
-        .at_css('div.row-fluid.mrow-fluid')
-        .css('a.toolbar-slidebox-link')
+               .at_css('div.row-fluid.mrow-fluid')
+               .css('a.toolbar-slidebox-link')
     end
 
     class AisleLinks
@@ -27,21 +27,31 @@ module Countdown
       sidekiq_options queue: :countdown
 
       def perform(*args)
-        if args[0].split('/').count > 5
-          CountdownAisleJob.perform_in(rand(10.0..30.0).minutes, args[0])
-          Rails.logger.info(" ***** #{args[0]} Finished ***** ")
-          return
-        end
+        @doc = get_doc(args[0])
 
-        retrieve_and_process(args[0])
+        return if start_process_items(args[0])
+
+        process_remaining
       end
 
       private
 
-      def retrieve_and_process(value)
-        resp = RProxy.open_url_with_proxy('https://shop.countdown.co.nz' + value)
+      def get_doc(value)
+        RProxy.open_url_with_proxy('https://shop.countdown.co.nz' + value)
+      end
 
-        sub_links_fetch(resp.body).each do |link|
+      def start_process_items(value)
+        sub_links_fetch(@doc.body).each do |link|
+          next if link.attr('href') != value
+          CountdownAisleJob.perform_in(rand(10.0..30.0).minutes, value)
+          Rails.logger.info(" ***** #{value} Finished ***** ")
+          return true
+        end
+        false
+      end
+
+      def process_remaining
+        sub_links_fetch(@doc.body).each do |link|
           AisleLinks.perform_in(rand(10.0..60.0).seconds, link.attr('href'))
         end
       end
@@ -50,8 +60,8 @@ module Countdown
         return nil if error?(Nokogiri::HTML(doc))
 
         Nokogiri::HTML(doc)
-          .at_css('div.single-level-navigation.filter-container')
-          .try(:css, 'a.browse-navigation-link')
+                .at_css('div.single-level-navigation.filter-container')
+                .try(:css, 'a.browse-navigation-link')
       end
 
       def error?(doc)
