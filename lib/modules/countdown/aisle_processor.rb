@@ -14,7 +14,12 @@ module Countdown
     def grab_individual_aisle(aisle)
       resp = @cacher.retrieve_url(aisle)
 
-      return if resp.code.to_i != 200
+      if resp.code.to_i != 200
+        Rails.logger.error(
+          "*** ERROR: Retrieve url failed: #{resp.body} ***"
+        )
+        return
+      end
 
       convert_and_process(resp.body)
 
