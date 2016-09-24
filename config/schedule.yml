@@ -1,5 +1,5 @@
 countdown_fetcher:
-  cron: "00 8 * * *"
+  cron: "45 7 * * *"
   queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
