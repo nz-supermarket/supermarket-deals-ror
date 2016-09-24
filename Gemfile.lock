@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/schneems/puma_worker_killer.git
+  revision: ddd53269fe5e44099a3d9383d144b65c744fc221
+  specs:
+    puma_worker_killer (0.0.6)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7, < 4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -185,9 +193,6 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     puma (3.6.0)
-    puma_worker_killer (0.0.6)
-      get_process_mem (~> 0.2)
-      puma (>= 2.7, < 4)
     rack (2.0.1)
     rack-protection (1.5.3)
       rack
@@ -352,7 +357,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
-  puma_worker_killer
+  puma_worker_killer!
   rails
   rails_12factor
   redis-namespace
