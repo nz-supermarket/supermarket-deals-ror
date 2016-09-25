@@ -59,7 +59,7 @@ gem 'parallel'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use puma killer for puma
-gem 'puma_worker_killer', github: 'schneems/puma_worker_killer'
+gem 'puma_worker_killer', github: 'schneems/puma_worker_killer', ref: 'ddd5326'
 
 # message queuing
 gem 'redis-namespace'
