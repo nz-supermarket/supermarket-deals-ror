@@ -41,10 +41,10 @@ module Countdown
       end
 
       def start_process_items(value)
-        return false if value.chars.count('/') <= 3
+        return false if value.chars.count('/') < 4
         sub_links_fetch(@doc.body).each do |link|
           next if link.attr('href') != value
-          CountdownAisleJob.perform_in(rand(10.0..30.0).minutes, value)
+          CountdownAisleJob.perform_in(rand(1.0..5.0).minutes, value)
           Rails.logger.info(" ***** #{value} Finished ***** ")
           return true
         end
