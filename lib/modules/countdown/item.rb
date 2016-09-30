@@ -73,55 +73,39 @@ module Countdown
         normal.price = NormalPrice.where(product_id: @product.id).order(:date).last.try(:price)
       end
 
-      begin
-        @logger.log Parallel.worker_number, 'Created normal price for product ' +
-          @product.id.to_s + '. ' if normal.save
-      rescue => e
-        @logger.log Parallel.worker_number,
-                    "Unable to extract normal price from #{@product.inspect}, will ignore: #{e}",
-                    'debug'
-      end
+      @logger.log Parallel.worker_number, 'Created normal price for product ' +
+        @product.id.to_s + '. ' if normal.save
 
-      begin
-        return unless special_price? || multi_buy? || club_price?
-        special = SpecialPrice.new(price: special_price,
-                                   product_id: @product.id,
-                                   date: Date.today)
+      return unless special_price? || multi_buy? || club_price?
+      special = SpecialPrice.new(price: special_price,
+                                 product_id: @product.id,
+                                 date: Date.today)
 
-        @logger.log Parallel.worker_number, 'Created special price for product ' +
-          @product.id.to_s + '. ' if special.save
-      rescue => e
-        @logger.log Parallel.worker_number,
-                    "Unable to extract get special price from #{@product.to_inspect}, will ignore: #{e}",
-                    'debug'
-      end
+      @logger.log Parallel.worker_number, 'Created special price for product ' +
+        @product.id.to_s + '. ' if special.save
     end
 
     def extract_price(fetch_param)
-      begin
-        price = ''
-        container = price_container
-                    .at_css("span.#{fetch_param}")
-        if fetch_param.include? 'was-price'
-          @logger.log Parallel.worker_number,
-                      'Was price found for product ' + @product.id.to_s + '. ',
-                      'debug'
-          price = container.child.text.gsub('was', '').strip.delete('$')
-        elsif fetch_param.include? 'special-price'
-          @logger.log Parallel.worker_number,
-                      'Special price found for product ' + @product.id.to_s + '. ',
-                      'debug'
-          price = container.child.text.strip.delete('$')
-        else
-          @logger.log Parallel.worker_number,
-                      'Normal price found for product ' + @product.id.to_s + '. ',
-                      'debug'
-          price = container.child.text.gsub(/[ a-zA-Z$]+/, '')
-        end
-        return price.to_d
-      rescue => e
-        @logger.log Parallel.worker_number, "Unable to extract price, will ignore: #{e}", 'debug'
+      price = ''
+      container = price_container
+                  .at_css("span.#{fetch_param}")
+      if fetch_param.include? 'was-price'
+        @logger.log Parallel.worker_number,
+                    'Was price found for product ' + @product.id.to_s + '. ',
+                    'debug'
+        price = container.child.text.gsub('was', '').strip.delete('$')
+      elsif fetch_param.include? 'special-price'
+        @logger.log Parallel.worker_number,
+                    'Special price found for product ' + @product.id.to_s + '. ',
+                    'debug'
+        price = container.child.text.strip.delete('$')
+      else
+        @logger.log Parallel.worker_number,
+                    'Normal price found for product ' + @product.id.to_s + '. ',
+                    'debug'
+        price = container.child.text.gsub(/[ a-zA-Z$]+/, '')
       end
+      return price.to_d
     end
 
     def normal_price
