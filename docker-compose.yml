@@ -2,10 +2,13 @@ version: '2'
 services:
   memcache:
     image: memcached
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
   redis:
     image: redis
     volumes:
       - ./redis_data:/data
+      - /etc/localtime:/etc/localtime:ro
     ports:
       - '6379:6379'
   web:
@@ -20,9 +23,10 @@ services:
       RAILS_SERVE_STATIC_FILES: 'true'
       HTTP_PORT: '8000'
       REDIS_URL: 'redis://redis:6379'
-      DB_HOST: '192.168.20.9'
+      DB_HOST: '192.168.20.13'
       MEMCACHE_URL: 'memcache'
     volumes:
       - .:/app
+      - /etc/localtime:/etc/localtime:ro
     # Following is development configuration
     command: foreman start

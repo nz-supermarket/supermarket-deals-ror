@@ -31,5 +31,5 @@ COPY [".", "/app"]
 ENV BUNDLE_GEMFILE /app/Gemfile
 
 RUN mkdir -p tmp/pids
-RUN bundle install --jobs=15
-RUN bundle exec rake assets:clean && bundle exec rake assets:precompile --jobs=15
+RUN bundle install --jobs=4
+RUN bundle exec rake assets:clean && bundle exec rake assets:precompile --jobs=4
