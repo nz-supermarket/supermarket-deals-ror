@@ -149,8 +149,14 @@ module Countdown
     end
 
     def price_container
-      @item.at_css('div.grid-stamp-price-container').at_css('div.price-container') ||
-        @item.at_css('div.grid-stamp-price-container').at_css('div.club-price-container')
+      @item
+      .at_css('div.grid-stamp-price-container')
+      .at_css('div.price-container')
+      .at_css('div.product-price') ||
+        @item
+        .at_css('div.grid-stamp-price-container')
+        .at_css('div.club-price-container')
+        .at_css('div.product-price')
     end
 
     def special_price?
