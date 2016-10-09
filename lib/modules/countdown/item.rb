@@ -112,7 +112,7 @@ module Countdown
       if special_price?
         extract_price('was-price')
       elsif club_price?
-        extract_price('non-club-price')
+        extract_price('grid-non-club-price')
       else
         extract_price('price')
       end
@@ -149,8 +149,10 @@ module Countdown
     end
 
     def price_container
-      @item.at_css('div.grid-stamp-price-container').at_css('div.price-container') ||
-        @item.at_css('div.grid-stamp-price-container').at_css('div.club-price-container')
+      container = @item
+                  .at_css('div.grid-stamp-price-container')
+      container.at_css('div.price-container') ||
+        container.at_css('div.club-price-container')
     end
 
     def special_price?
