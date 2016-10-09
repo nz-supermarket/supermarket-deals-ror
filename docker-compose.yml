@@ -25,6 +25,7 @@ services:
       REDIS_URL: 'redis://redis:6379'
       DB_HOST: '192.168.20.13'
       MEMCACHE_URL: 'memcache'
+      PAGER: 'more'
     volumes:
       - .:/app
       - /etc/localtime:/etc/localtime:ro
