@@ -1,4 +1,4 @@
-:concurrency: 50
+:concurrency: 40
 :timeout: 300
 :queues:
   - [countdown, 2]
