@@ -112,7 +112,7 @@ module Countdown
       if special_price?
         extract_price('was-price')
       elsif club_price?
-        extract_price('non-club-price')
+        extract_price('grid-non-club-price')
       else
         extract_price('price')
       end
