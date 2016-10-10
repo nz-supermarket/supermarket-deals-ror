@@ -1,17 +1,17 @@
 countdown_fetcher:
-  cron: "45 7 * * *"
+  cron: "45 7 * * * Pacific/Auckland"
   queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
 
 countdown_finish:
-  cron: "30 12 * * *"
+  cron: "30 12 * * * Pacific/Auckland"
   queue: countdown
   class: CountdownFinishJob
   description: "Finish fetch prices from countdown"
 
 sitemap:
-  cron: "00 13 * * *"
+  cron: "00 13 * * * Pacific/Auckland"
   queue: sitemap
   class: SitemapJob
   description: "Refresh Sitemap"
