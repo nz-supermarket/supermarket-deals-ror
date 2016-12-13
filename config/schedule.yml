@@ -1,11 +1,11 @@
 countdown_fetcher:
-  cron: "45 7 * * * Pacific/Auckland"
+  cron: "45 1 * * * Pacific/Auckland"
   queue: countdown
   class: CountdownJob
   description: "Fetch prices from countdown"
 
 countdown_finish:
-  cron: "30 12 * * * Pacific/Auckland"
+  cron: "30 8 * * * Pacific/Auckland"
   queue: countdown
   class: CountdownFinishJob
   description: "Finish fetch prices from countdown"

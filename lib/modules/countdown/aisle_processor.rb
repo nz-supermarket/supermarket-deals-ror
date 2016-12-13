@@ -18,7 +18,7 @@ module Countdown
         Rails.logger.error(
           "*** ERROR: Retrieve url failed: #{resp.body} ***"
         )
-        return
+        raise Net::HTTPBadResponse "#{resp.body}"
       end
 
       convert_and_process(resp.body)
