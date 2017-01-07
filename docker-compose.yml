@@ -11,7 +11,13 @@ services:
       - /etc/localtime:/etc/localtime:ro
     ports:
       - '6379:6379'
+  tor:
+    image: jess/tor-proxy
+    ports:
+      - '9050:9050'
   web:
+    tty: true
+    stdin_open: true
     build: .
     ports:
       - '5000:5000'
@@ -21,10 +27,12 @@ services:
     environment:
       RAILS_ENV: development
       RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_LOG_TO_STDOUT: 'true'
       HTTP_PORT: '8000'
       REDIS_URL: 'redis://redis:6379'
-      DB_HOST: '192.168.20.13'
+      DB_HOST: '192.168.178.21'
       MEMCACHE_URL: 'memcache'
+      TOR_IP: 'tor'
       PAGER: 'more'
     volumes:
       - .:/app
