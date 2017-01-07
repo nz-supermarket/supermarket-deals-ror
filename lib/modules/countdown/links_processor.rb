@@ -69,6 +69,15 @@ module Countdown
         return true if doc.blank? || doc.title.blank?
         doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
       end
+
+      def sub_aisle_exist?(value, doc)
+        return false if sub_links_fetch(doc.body).first.nil?
+        sub_path_count(sub_links_fetch(doc.body).first.attr('href')) > sub_path_count(value)
+      end
+
+      def sub_path_count(path)
+        path.split('/').count
+      end
     end
 
     private_constant :AisleLinks
