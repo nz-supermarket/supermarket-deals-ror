@@ -29,12 +29,9 @@ module Countdown
       def perform(*args)
         @doc = get_doc(args[0])
 
-        # if current window url has less slash than the first item in the list, 
-        # there is sub aisle
+        start_process_items(args[0])
 
-        return if start_process_items(args[0])
-
-        process_remaining
+        process_remaining if sub_aisle_exist?(args[0], @doc)
       end
 
       private
@@ -44,14 +41,11 @@ module Countdown
       end
 
       def start_process_items(value)
-        return false if value.chars.count('/') < 4
         sub_links_fetch(@doc.body).each do |link|
           next if link.attr('href') != value
           CountdownAisleJob.perform_in(rand(1.0..5.0).minutes, value)
           Rails.logger.info(" ***** #{value} Finished ***** ")
-          return true
         end
-        false
       end
 
       def process_remaining
@@ -71,6 +65,15 @@ module Countdown
       def error?(doc)
         return true if doc.blank? || doc.title.blank?
         doc.title.strip.eql? 'Shop Error - Countdown NZ Ltd'
+      end
+
+      def sub_aisle_exist?(value, doc)
+        return false if sub_links_fetch(doc.body).first.nil?
+        sub_path_count(sub_links_fetch(doc.body).first.attr('href')) > sub_path_count(value)
+      end
+
+      def sub_path_count(path)
+        path.split('/').count
       end
     end
 
