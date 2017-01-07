@@ -29,12 +29,9 @@ module Countdown
       def perform(*args)
         @doc = get_doc(args[0])
 
-        # if current window url has less slash than the first item in the list, 
-        # there is sub aisle
+        start_process_items(args[0])
 
-        return if start_process_items(args[0])
-
-        process_remaining
+        process_remaining if sub_aisle_exist?(args[0], @doc)
       end
 
       private
