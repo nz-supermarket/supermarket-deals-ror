@@ -34,6 +34,7 @@ services:
       MEMCACHE_URL: 'memcache'
       TOR_IP: 'tor'
       PAGER: 'more'
+      TZ: 'Pacific/Auckland'
     volumes:
       - .:/app
       - /etc/localtime:/etc/localtime:ro
