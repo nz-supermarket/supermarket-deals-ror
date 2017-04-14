@@ -13,6 +13,8 @@ services:
       - '6379:6379'
   tor:
     image: jess/tor-proxy
+    volumes:
+      - ./torrc.default:/etc/tor/torrc.default
     ports:
       - '9050:9050'
   web:
@@ -30,13 +32,12 @@ services:
       RAILS_LOG_TO_STDOUT: 'true'
       HTTP_PORT: '8000'
       REDIS_URL: 'redis://redis:6379'
-      DB_HOST: '192.168.178.21'
+      DB_HOST: '192.168.1.3'
       MEMCACHE_URL: 'memcache'
       TOR_IP: 'tor'
       PAGER: 'more'
       TZ: 'Pacific/Auckland'
     volumes:
       - .:/app
-      - /etc/localtime:/etc/localtime:ro
     # Following is development configuration
     command: foreman start
