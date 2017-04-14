@@ -41,15 +41,15 @@ module Countdown
 
     def href
       @link ||= @item.at_css('a')
-                .attributes['href']
-                .value.downcase
+                     .attributes['href']
+                     .value.downcase
     end
 
     def img_href
       @img ||= @item.at_css('a')
-               .at_css('img')
-               .attributes['src']
-               .value.downcase
+                    .at_css('img')
+                    .attributes['src']
+                    .value.downcase
     end
 
     def sku
@@ -144,7 +144,7 @@ module Countdown
     def extract_multi
       value = price_container.at_css('span.multi-buy-award-value').text
       quantity = price_container.at_css('span.multi-buy-award-quantity')\
-                 .text.gsub(' for', '')
+                                .text.gsub(' for', '')
 
       @logger.log Parallel.worker_number,
                   'Multi buy price found for product ' + @product.id.to_s + '. ',
