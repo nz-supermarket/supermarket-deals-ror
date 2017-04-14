@@ -2,15 +2,17 @@ require "#{Rails.root}/lib/modules/rake_logger"
 
 module Countdown
   class Item
-    def initialize(item, aisle)
-      @item = item.css('div.grid-stamp-pull-top').first ||
-              item.css('div.details-container').first
-      @aisle = aisle
-      @logger = RakeLogger.new
-    end
+    include Sidekiq::Worker
+    sidekiq_options queue: :countdownitem
 
-    def process
+    def perform(*args)
+
+      @logger = RakeLogger.new
+      @aisle = args[1]
+      process_html(args[0])
+
       return if @item.nil?
+
       ActiveRecord::Base.connection_pool.with_connection do
         return unless href.include?('stockcode=') && href.index('&name=')
 
@@ -25,6 +27,17 @@ module Countdown
     end
 
     private
+
+    def process_html(html)
+      item = Nokogiri::HTML(html)
+      @item = item.css('div.grid-stamp-pull-top').first ||
+              item.css('div.details-container').first
+
+      if item.css('div.next-page-item')
+        Countdown::LinksProcessor::AisleLinks
+          .perform_async('https://shop.countdown.co.nz' + item.css('a').attr('href'))
+      end
+    end
 
     def href
       @link ||= @item.at_css('a')
