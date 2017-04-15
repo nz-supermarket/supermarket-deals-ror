@@ -196,7 +196,7 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     public_suffix (2.0.5)
-    puma (3.8.2)
+    puma (3.6.2)
     rack (2.0.1)
     rack-protection (1.5.3)
       rack
@@ -365,6 +365,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry-byebug
+  puma (~> 3.6.0)
   puma_worker_killer!
   rails
   rails_12factor
