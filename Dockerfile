@@ -1,4 +1,4 @@
-FROM scardon/ruby-node-alpine:2.2.5
+FROM scardon/ruby-node-alpine:2.3.3
 
 MAINTAINER Daniel Leong
 
