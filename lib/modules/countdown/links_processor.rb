@@ -76,7 +76,5 @@ module Countdown
         path.split('/').count
       end
     end
-
-    private_constant :AisleLinks
   end
 end
