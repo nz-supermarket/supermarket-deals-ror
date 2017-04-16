@@ -35,7 +35,10 @@ module Countdown
 
       if item.css('div.next-page-item')
         Countdown::LinksProcessor::AisleLinks
-          .perform_async('https://shop.countdown.co.nz' + item.css('a').attr('href'))
+          .perform_async(
+            'https://shop.countdown.co.nz' + 
+            item.at_css('div.next-page-item').css('a').attr('href')
+          )
       end
     end
 
