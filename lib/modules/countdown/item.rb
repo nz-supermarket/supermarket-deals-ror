@@ -10,6 +10,7 @@ module Countdown
       @logger = RakeLogger.new
       @aisle = args[1]
       process_html(args[0])
+      @today = args[2]
 
       return if @item.nil?
 
@@ -33,7 +34,7 @@ module Countdown
       @item = item.css('div.grid-stamp-pull-top').first ||
               item.css('div.details-container').first
 
-      if item.css('div.next-page-item')
+      if item.css('div.next-page-item').any?
         Countdown::LinksProcessor::AisleLinks
           .perform_async(
             item.at_css('div.next-page-item').css('a').attr('href')
@@ -82,7 +83,7 @@ module Countdown
     def process_prices
       normal = NormalPrice.new(price: normal_price,
                                product_id: @product.id,
-                               date: Date.today)
+                               date: @today)
 
       if normal.price == 1
         normal.price = NormalPrice.where(product_id: @product.id).order(:date).last.try(:price)
@@ -94,7 +95,7 @@ module Countdown
       return unless special_price? || multi_buy? || club_price?
       special = SpecialPrice.new(price: special_price,
                                  product_id: @product.id,
-                                 date: Date.today)
+                                 date: @today)
 
       @logger.log Parallel.worker_number, 'Created special price for product ' +
         @product.id.to_s + '. ' if special.save
