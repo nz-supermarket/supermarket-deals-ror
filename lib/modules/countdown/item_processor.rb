@@ -7,7 +7,12 @@ module Countdown
     end
 
     def process_item(item)
-      Countdown::Item.perform_in(rand(10.0..20.0).minutes, item.to_html, @aisle_name)
+      Countdown::Item.perform_in(
+        rand(10.0..20.0).minutes, 
+        item.to_html, 
+        @aisle_name,
+        Date.today
+      )
     end
   end
 end
