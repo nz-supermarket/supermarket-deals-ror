@@ -33,7 +33,7 @@ module Countdown
       @item = item.css('div.grid-stamp-pull-top').first ||
               item.css('div.details-container').first
 
-      if item.css('div.next-page-item')
+      if item.css('div.next-page-item').any?
         Countdown::LinksProcessor::AisleLinks
           .perform_async(
             item.at_css('div.next-page-item').css('a').attr('href')
