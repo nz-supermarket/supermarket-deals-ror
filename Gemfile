@@ -66,7 +66,7 @@ gem 'puma_worker_killer', github: 'schneems/puma_worker_killer', ref: 'ddd5326'
 gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
-gem 'sidekiq-statistic'
+gem 'sidekiq-statistic', git: 'https://github.com/davydovanton/sidekiq-statistic.git', branch: 'master'
 gem 'sidekiq-failures'
 
 # sitemap generator
