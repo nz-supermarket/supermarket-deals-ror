@@ -109,7 +109,8 @@ module Countdown
         @logger.log Parallel.worker_number,
                     'Was price found for product ' + @product.id.to_s + '. ',
                     'debug'
-        price = container.child.text.gsub('was', '').strip.delete('$')
+        price = container&.child&.text&.gsub('was', '')&.strip&.delete('$') || 
+                NormalPrice.where(product_id: @product.id).order(:date).last.try(:price)
       elsif fetch_param.include? 'special-price'
         @logger.log Parallel.worker_number,
                     'Special price found for product ' + @product.id.to_s + '. ',
