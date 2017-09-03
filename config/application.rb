@@ -17,13 +17,6 @@ module SupermarketDealsRor
       g.helper_specs false
     end
 
-    config.peek.adapter = :sidekiq, {
-      client: Redis.new(url: ENV['REDIS_URL'])
-    }
-    config.peek.adapter = :memcache, {
-      client: Dalli::Client.new(ENV['MEMCACHE_URL'])
-    }
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
