@@ -9,6 +9,7 @@ gem 'oj'
 # gem 'sqlite3'
 # Use postgres database for Active Record
 gem 'pg'
+gem 'activerecord-cockroachdb-adapter'
 # Use SCSS for stylesheets
 gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
