@@ -3,7 +3,6 @@ require 'sidekiq-scheduler/web'
 
 Rails.application.routes.draw do
   mount Sidekiq::Web => '/sidekiq'
-  mount Peek::Railtie => '/peek'
   
   resources :products
   resources :todays, only: [:index]
