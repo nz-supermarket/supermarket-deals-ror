@@ -12,8 +12,12 @@ default: &default
 
 development:
   <<: *default
-  database: deals_development
+  adapter: cockroachdb
+  database: supermarket
   user: postgres
+  host: localhost
+  port: 26257
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -23,7 +27,7 @@ test: &test
   database: deals_test
 
 production:
-  adapter: postgresql
+  adapter: cockroachdb
   encoding: unicode
   url: <%= ENV['DATABASE_URL'] %>
 
