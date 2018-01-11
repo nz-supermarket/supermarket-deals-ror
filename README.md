@@ -19,5 +19,3 @@ Few features I could think of right now in comparison to the old project:
 * Might be looking into data warehousing product prices from New Zealand supermarkets (would include vast varieties of supermarket). 
 * Might also include historical chart regarding product prices, better price trend view for each product. 
 
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/cpr1vW48H3EHMrtJDjCRnhz4/Daniel-ltw/supermarket-deals-ror'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/cpr1vW48H3EHMrtJDjCRnhz4/Daniel-ltw/supermarket-deals-ror.svg' /></a>
