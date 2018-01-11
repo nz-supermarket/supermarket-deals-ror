@@ -1,5 +1,3 @@
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/cpr1vW48H3EHMrtJDjCRnhz4/Daniel-ltw/supermarket-deals-ror'>  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/cpr1vW48H3EHMrtJDjCRnhz4/Daniel-ltw/supermarket-deals-ror.svg' /></a>
-
 supermarket-deals-ror
 =====================
 
