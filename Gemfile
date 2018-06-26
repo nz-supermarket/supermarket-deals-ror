@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Bundle edge Rails instead: gem 'rails', '>= 5.0.2', github: 'rails/rails'
 gem 'rails'
 
 gem 'responders', '~> 2.0'
@@ -10,7 +10,7 @@ gem 'oj'
 # Use postgres database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
-gem 'sass-rails'
+gem 'sass-rails', '>= 5.0.6'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 # Use CoffeeScript for .js.coffee assets and views
