@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Bundle edge Rails instead: gem 'rails', '>= 5.0.7.1', github: 'rails/rails'
 gem 'rails'
 
 gem 'responders', '~> 2.0'
