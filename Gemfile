@@ -31,7 +31,7 @@ gem 'socksify'
 gem 'tor_requests'
 
 # Use bootstrap for style and formatting
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '>= 3.4.0'
 
 # Analytics with New Relic
 gem 'newrelic_rpm'
