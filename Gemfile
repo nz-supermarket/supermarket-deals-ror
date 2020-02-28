@@ -58,7 +58,7 @@ gem 'parallel'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-gem 'puma', '~> 3.6.0'
+gem 'puma', '~> 3.12.3'
 # Use puma killer for puma
 gem 'puma_worker_killer', github: 'schneems/puma_worker_killer', ref: 'ddd5326'
 
