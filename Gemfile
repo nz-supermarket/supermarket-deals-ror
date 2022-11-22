@@ -22,7 +22,7 @@ gem 'rails_12factor', group: :production
 # dependencies
 gem 'foreman'
 
-gem 'dalli', '~> 2.7'
+gem 'dalli', '~> 3.2'
 gem 'connection_pool'
 
 # used for rake countdown task
